@@ -5,18 +5,7 @@ import model.Participant;
 
 import java.util.List;
 
-/**
- * Singleton Reader Class for inputting csv files
- */
 public class Reader {
-    private static Reader reader;
-
-    private Reader(){}
-
-    public static Reader getInstance() {
-        return reader;
-    }
-
     /**
      * //todo: Parviz
      */
