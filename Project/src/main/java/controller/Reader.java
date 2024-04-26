@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Singleton Reader Class for inputting csv files
+ * Reader Class for inputting csv files
  */
 public class Reader {
     private static final String teilnehmerCSV = "src/main/resources/teilnehmerliste.csv";
