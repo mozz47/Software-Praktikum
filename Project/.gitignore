@@ -10,5 +10,6 @@
 /out/
 target/
 *.xml
+!pom.xml
 *.jar
 *.class
