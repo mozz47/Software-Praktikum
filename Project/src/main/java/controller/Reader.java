@@ -35,7 +35,7 @@ public class Reader {
             for (CSVRecord csvRecord : csvParser) {
                 if (firstIteration) { //skip first iteration, because has no data, only header
                     firstIteration = false;
-                    System.out.println("Current working directory: " + System.getProperty("user.dir"));
+                    //System.out.println("Current working directory: " + System.getProperty("user.dir"));
                     continue;
                 }
                 //READING OF DATA
@@ -104,7 +104,7 @@ public class Reader {
             for (CSVRecord csvRecord : csvParser) {
                 if (firstIteration) { //skip first iteration, because has no data, only header
                     firstIteration = false;
-                    System.out.println("Current working directory: " + System.getProperty("user.dir"));
+                    //System.out.println("Current working directory: " + System.getProperty("user.dir"));
                     continue;
                 }
                 String get_longitude = csvRecord.get(0);
