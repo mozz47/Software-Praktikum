@@ -23,12 +23,10 @@ class MainTest {
     @Test
     public void testPrintOutputWithSingleParticipant() {
         List<Participant> participants = new ArrayList<>();
-        Kitchen k1 = new Kitchen();
-        k1.story = 0;
-        k1.latitude = 12.123;
-        k1.longitude = 43.123;
+        Kitchen k1 = new Kitchen(12.123, 43.123);
         Participant p1 = new Participant();
-        p1.id = 0;
+        p1.story = 0;
+        p1.id = "0";
         p1.name = "Chris";
         p1.foodPreference = FoodPreference.NONE;
         p1.age = 27;
@@ -38,14 +36,14 @@ class MainTest {
         p1.kitchen = k1;
         p1.partner = null;
         participants.add(p1);
-        Location partyLocation = k1;
+        Location partyLocation = new Location(11.111, 12.222);
 
         Main.printInput(participants, partyLocation);
 
         assertEquals("""
                 Teilnehmer:\r
-                Participant{id=0, name='Chris', foodPreference=NONE, age=27, sex=MALE, hasKitchen=true, mightHaveKitchen=false, kitchen=Kitchen{story=0, longitude=43.123, latitude=12.123}, partner=null}\r
+                Participant{id=0, name='Chris', foodPreference=NONE, age=27, sex=MALE, hasKitchen=true, mightHaveKitchen=false, kitchen=Kitchen{longitude=12.123, latitude=43.123}, partner=null, story=0}\r
                 Party Koordinaten:\r
-                Kitchen{story=0, longitude=43.123, latitude=12.123}""", outputStreamCaptor.toString().trim());
+                Location{longitude=11.111, latitude=12.222}""", outputStreamCaptor.toString().trim());
     }
 }

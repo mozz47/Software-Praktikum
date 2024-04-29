@@ -10,8 +10,13 @@ public class Main {
         List<Participant> participants = Reader.getParticipants();
         Location partyLocation = Reader.getPartyLocation();
 
+        assert participants != null;
+        for (Participant p : participants) {
+            System.out.println(p);
+        }
+
         // print human-readable version
-        //printInput(participants, partyLocation);
+        printInput(participants, partyLocation);
 
     }
 

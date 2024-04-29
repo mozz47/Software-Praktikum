@@ -26,15 +26,13 @@ public class Reader {
      * @return List of all Participants
      */
     public static List<Participant> getParticipants() {
-        //TODO: Parviz: 
+        //TODO: Parviz: Not finding teilnehmerCSV
         List<Participant> participantList = new ArrayList<>();
 
         try (java.io.Reader fileReader = new FileReader(teilnehmerCSV);
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT)) {
-            int index = 0;
             boolean firstIteration = true;
             for (CSVRecord csvRecord : csvParser) {
-                index++;
                 if (firstIteration) { //skip first iteration, because has no data, only header
                     firstIteration = false;
                     System.out.println("Current working directory: " + System.getProperty("user.dir"));
@@ -52,40 +50,43 @@ public class Reader {
                 boolean hasKitchen;
                 boolean mightHaveKitchen;
 
-                String get_has_kitchen = csvRecord.get(7);
-                String get_kitchen_story = csvRecord.get(8);
+                String get_has_kitchen = csvRecord.get(6);
                 int kitchenstory = (csvRecord.get(7).isEmpty()) ? 0 : (int) Double.parseDouble(csvRecord.get(7)); //if empty, story = 0
-                String get_kitchen_longitude = csvRecord.get(9);
-                String get_kitchen_latitude = csvRecord.get(10);
-                String get_id_2 = csvRecord.get(11);
-                String get_name_2 = csvRecord.get(12);
-                String get_age_2 = csvRecord.get(13);
-                String get_sex_2 = csvRecord.get(14);
+                String get_kitchen_longitude = csvRecord.get(8);
+                String get_kitchen_latitude = csvRecord.get(9);
+                String get_id_2 = csvRecord.get(10);
+                String get_name_2 = csvRecord.get(11);
+                String get_age_2 = csvRecord.get(12);
+                String get_sex_2 = csvRecord.get(13);
 
-                if (get_has_kitchen.equals("no") && get_kitchen_story.isEmpty()) { //has no kitchen aka story empty and == "no"
+                if (get_has_kitchen.equals("no")) { //has no kitchen aka story empty and == "no"
                    mightHaveKitchen = false;
                    hasKitchen = false;
-
-                } else if (get_has_kitchen.equals("maybe")) { //maybe has kitchen
-                    mightHaveKitchen = true;
-                    hasKitchen = false;
-
-                } else if (get_has_kitchen.equals("yes")) { //has kitchen
-                    mightHaveKitchen = false;
-                    hasKitchen = true;
-
-                } else if () { //has kitchenstory but has no kitchen, aka partner has a kitchen
-                    hasKitchen = true;
-                    mightHaveKitchen = false;
-
+                   kitchen = null;
+                } else {
+                    if (get_has_kitchen.equals("maybe")) { //maybe has kitchen
+                        mightHaveKitchen = true;
+                        hasKitchen = false;
+                    } else { //has kitchen
+                        mightHaveKitchen = false;
+                        hasKitchen = true;
+                    }
+                    kitchen = new Kitchen(Double.parseDouble(get_kitchen_longitude), Double.parseDouble(get_kitchen_latitude));
                 }
 
-                //TODO read rest of data
-
-                //CREATING PARTICIPANT
-                Participant participant = new Participant();
+                //CREATING PARTICIPANT (and partner)
+                Participant p1 = new Participant(id, name, foodPreference, age, sex, hasKitchen, mightHaveKitchen, kitchen, kitchenstory, null);
+                Participant p2;
+                //add Participant(s) to List
+                participantList.add(p1);
+                if (!get_id_2.isEmpty()) { //if partner avaialable
+                    p2 = new Participant(get_id_2, get_name_2, foodPreference, (int) Double.parseDouble(get_age_2), Sex.valueOf(get_sex_2.toUpperCase()), false, false, null, kitchenstory, p1);
+                    p1.partner = p2;
+                    participantList.add(p2);
+                }
 
             }
+            return participantList;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -94,10 +95,27 @@ public class Reader {
     }
 
     /**
-     * //todo: Parviz
+     * //Read partylocation from partylocation.csv
      */
     public static Location getPartyLocation() {
-        //todo: Parviz
+        try (java.io.Reader fileReader = new FileReader(partylocationCSV);
+             CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT)) {
+            boolean firstIteration = true;
+            for (CSVRecord csvRecord : csvParser) {
+                if (firstIteration) { //skip first iteration, because has no data, only header
+                    firstIteration = false;
+                    System.out.println("Current working directory: " + System.getProperty("user.dir"));
+                    continue;
+                }
+                String get_longitude = csvRecord.get(0);
+                String get_latitude = csvRecord.get(1);
+
+                return new Location(Double.parseDouble(get_longitude), Double.parseDouble(get_latitude));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return null;
     }
