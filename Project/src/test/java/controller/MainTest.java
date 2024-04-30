@@ -42,7 +42,7 @@ class MainTest {
 
         assertEquals("""
                 Teilnehmer:\r
-                Participant{id=0, name='Chris', foodPreference=NONE, age=27, sex=MALE, hasKitchen=true, mightHaveKitchen=false, kitchen=Kitchen{story=0longitude=12.123, latitude=43.123}, partner=null, story=0}\r
+                Participant{id=0, name='Chris', foodPreference=NONE, age=27, sex=MALE, hasKitchen=true, mightHaveKitchen=false, kitchen=Kitchen{story=0, longitude=12.123, latitude=43.123}, partner=null, story=0}\r
                 Party Koordinaten:\r
                 Location{longitude=11.111, latitude=12.222}""", outputStreamCaptor.toString().trim());
     }

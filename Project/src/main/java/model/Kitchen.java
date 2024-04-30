@@ -13,7 +13,7 @@ public class Kitchen extends Location{
     public String toString() {
         return "Kitchen{" +
                 "story=" + story +
-                "longitude=" + longitude +
+                ", longitude=" + longitude +
                 ", latitude=" + latitude +
                 '}';
     }
