@@ -1,124 +1,110 @@
 package controller;
 
 import model.*;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 
-import java.io.FileReader;
-import java.io.IOException;
-
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Reader Class for csv files
  */
 public class Reader {
-    private static final String teilnehmerCSV = "src/main/resources/teilnehmerliste.csv";
-    private static final String partylocationCSV = "src/main/resources/partylocation.csv";
-
-    Reader() {}
-
+    private static final String TEILNEHMER_CSV = "/teilnehmerliste.csv";
+    private static final String PARTY_LOCATION_CSV = "/partylocation.csv";
 
     /**
      * Reads all the Info of participants from the .csv file, creates participant and adds each one to list
      * @return List of all Participants
      */
     public static List<Participant> getParticipants() {
-        //TODO: Parviz: Not finding teilnehmerCSV
         List<Participant> participantList = new ArrayList<>();
 
-        try (java.io.Reader fileReader = new FileReader(teilnehmerCSV);
-             CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT)) {
-            boolean firstIteration = true;
-            for (CSVRecord csvRecord : csvParser) {
-                if (firstIteration) { //skip first iteration, because has no data, only header
-                    firstIteration = false;
-                    //System.out.println("Current working directory: " + System.getProperty("user.dir"));
-                    continue;
+        try (InputStream inputStream = Reader.class.getResourceAsStream(TEILNEHMER_CSV)) {
+            assert inputStream != null;
+            try (Scanner scanner = new Scanner(inputStream)) {
+
+                // skip header line
+                if (scanner.hasNextLine()) {
+                    scanner.nextLine();
                 }
-                //READING OF DATA
-                String id = csvRecord.get(1); //hashCode
-                String name = csvRecord.get(2);
-                FoodPreference foodPreference = FoodPreference.valueOf(csvRecord.get(3).toUpperCase());
-                Integer age = Integer.parseInt(csvRecord.get(4));
-                Sex sex = Sex.valueOf(csvRecord.get(5).toUpperCase());
 
-                //if kitchen available add, else null
-                Kitchen kitchen;
-                boolean hasKitchen;
-                boolean mightHaveKitchen;
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    String[] parts = line.split(",", -1);  // negative limit to keep empty strings
 
-                String get_has_kitchen = csvRecord.get(6);
-                int kitchenstory = (csvRecord.get(7).isEmpty()) ? 0 : (int) Double.parseDouble(csvRecord.get(7)); //if empty, story = 0
-                String get_kitchen_longitude = csvRecord.get(8);
-                String get_kitchen_latitude = csvRecord.get(9);
-                String get_id_2 = csvRecord.get(10);
-                String get_name_2 = csvRecord.get(11);
-                String get_age_2 = csvRecord.get(12);
-                String get_sex_2 = csvRecord.get(13);
-
-                if (get_has_kitchen.equals("no")) { //has no kitchen aka story empty and == "no"
-                   mightHaveKitchen = false;
-                   hasKitchen = false;
-                   kitchen = null;
-                } else {
-                    if (get_has_kitchen.equals("maybe")) { //maybe has kitchen
-                        mightHaveKitchen = true;
-                        hasKitchen = false;
-                    } else { //has kitchen
-                        mightHaveKitchen = false;
-                        hasKitchen = true;
+                    //READING OF DATA
+                    String id = parts[1];
+                    String name = parts[2];
+                    FoodPreference foodPreference = FoodPreference.valueOf(parts[3].toUpperCase());
+                    int age = (int) Double.parseDouble(parts[4]);
+                    Sex sex = Sex.valueOf(parts[5].toUpperCase());
+                    boolean hasKitchen = parts[6].equals("yes");
+                    boolean mightHaveKitchen = parts[6].equals("maybe");
+                    int kitchen_story = parts[7].isEmpty() ? -1 : (int) Double.parseDouble(parts[7]); //if empty, story = -1
+                    double kitchen_longitude = 0;
+                    double kitchen_latitude = 0;
+                    if (hasKitchen || mightHaveKitchen) {
+                        kitchen_longitude = Double.parseDouble(parts[8]);
+                        kitchen_latitude = Double.parseDouble(parts[9]);
                     }
-                    kitchen = new Kitchen(Double.parseDouble(get_kitchen_longitude), Double.parseDouble(get_kitchen_latitude));
-                }
+                    Kitchen kitchen = new Kitchen(kitchen_story, kitchen_longitude, kitchen_latitude);
 
-                //CREATING PARTICIPANT (and partner)
-                Participant p1 = new Participant(id, name, foodPreference, age, sex, hasKitchen, mightHaveKitchen, kitchen, kitchenstory, null);
-                Participant p2;
-                //add Participant(s) to List
-                participantList.add(p1);
-                if (!get_id_2.isEmpty()) { //if partner avaialable
-                    p2 = new Participant(get_id_2, get_name_2, foodPreference, (int) Double.parseDouble(get_age_2), Sex.valueOf(get_sex_2.toUpperCase()), false, false, null, kitchenstory, p1);
-                    p1.partner = p2;
-                    participantList.add(p2);
-                }
+                    // create instance of 1st Participant
+                    Participant p1 = new Participant(id, name, foodPreference, age, sex, hasKitchen, mightHaveKitchen, kitchen, 0, null);
 
+                    participantList.add(p1); // add him to list
+
+                    if (parts.length > 10 && !parts[10].isEmpty()) {
+                        // manage 2nd Participant
+                        String id_2 = parts[10];
+                        String name_2 = parts[11];
+                        int age_2 = (int) Double.parseDouble(parts[12]);
+                        Sex sex_2 = Sex.valueOf(parts[13].toUpperCase());
+
+                        // create instance
+                        Participant p2 = new Participant(id_2, name_2, foodPreference, age_2, sex_2, false, false, kitchen, 0, p1);
+
+                        p1.partner = p2; // adding p2 as partner to p1
+
+                        participantList.add(p2); // add p2 to list
+                    }
+                }
+                return participantList;
             }
-            return participantList;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
     /**
-     * //Read partylocation from partylocation.csv
+     * Reads party location from partylocation.csv
      */
     public static Location getPartyLocation() {
-        try (java.io.Reader fileReader = new FileReader(partylocationCSV);
-             CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT)) {
-            boolean firstIteration = true;
-            for (CSVRecord csvRecord : csvParser) {
-                if (firstIteration) { //skip first iteration, because has no data, only header
-                    firstIteration = false;
-                    //System.out.println("Current working directory: " + System.getProperty("user.dir"));
-                    continue;
+        try (InputStream inputStream = Reader.class.getResourceAsStream(PARTY_LOCATION_CSV)) {
+            assert inputStream != null;
+            try (Scanner scanner = new Scanner(inputStream)) {
+
+                // skip header line
+                if (scanner.hasNextLine()) {
+                    scanner.nextLine();
                 }
-                String get_longitude = csvRecord.get(0);
-                String get_latitude = csvRecord.get(1);
 
-                return new Location(Double.parseDouble(get_longitude), Double.parseDouble(get_latitude));
+                if (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    String[] parts = line.split(",");
+                    String longitude = parts[0];
+                    String latitude = parts[1];
+                    return new Location(Double.parseDouble(longitude), Double.parseDouble(latitude));
+                }
+
             }
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
     }
-
-
 }
