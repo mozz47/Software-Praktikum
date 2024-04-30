@@ -1,6 +1,13 @@
-.idea/
+# global .gitignore (there is a project-specific one in the project folder)
+# java
 *.class
 *.jar
-*.xml
+# intelliJ
+.idea/
 /out/
+# maven
+*.iws
+*.iml
+*.ipr
+*.xml
 target/

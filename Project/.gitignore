@@ -1,15 +1,6 @@
+# project-specific .gitignore (there is a global one in the root folder)
+# maven
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
-### IntelliJ IDEA ###
-.idea/
-*.iws
-*.iml
-*.ipr
-/out/
-target/
-*.xml
 !pom.xml
-*.jar
-*.class
