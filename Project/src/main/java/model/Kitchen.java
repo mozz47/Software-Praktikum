@@ -9,6 +9,9 @@ public class Kitchen extends Location{
     }
 
 
+    /**
+     * returns human-readable string version of the kitchen story and location
+     */
     @Override
     public String toString() {
         return "Kitchen{" +

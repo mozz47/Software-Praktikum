@@ -5,6 +5,10 @@ import model.*;
 import java.util.List;
 
 public class Main {
+
+    /**
+     * main method for main execution order of the program
+     */
     public static void main(String[] args) {
         // Read Input
         List<Participant> participants = Reader.getParticipants();
@@ -17,6 +21,11 @@ public class Main {
 
     }
 
+    /**
+     * prints human-readable version of the participant and party location data
+     * @param participants list of participants
+     * @param partyLocation after dinner party location
+     */
     static void printInput(List<Participant> participants, Location partyLocation) {
         System.out.println("Teilnehmer:");
         for (Participant p : participants) {
