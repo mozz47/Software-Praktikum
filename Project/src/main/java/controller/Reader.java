@@ -42,7 +42,7 @@ public class Reader {
                     Sex sex = Sex.valueOf(parts[5].toUpperCase());
                     boolean hasKitchen = parts[6].equals("yes");
                     boolean mightHaveKitchen = parts[6].equals("maybe");
-                    int kitchen_story = parts[7].isEmpty() ? -1 : (int) Double.parseDouble(parts[7]); //if empty, story = -1
+                    int kitchen_story = parts[7].isEmpty() ? 0 : (int) Double.parseDouble(parts[7]); //if empty, story = 0
                     double kitchen_longitude = 0;
                     double kitchen_latitude = 0;
                     if (hasKitchen || mightHaveKitchen) {
