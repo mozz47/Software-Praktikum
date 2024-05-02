@@ -27,12 +27,22 @@ class ReaderTest {
     void testSecondPersonKitchen() {
         List<Participant> participants = Reader.getParticipants();
         Participant secondPerson = participants.get(1);
-        System.out.println(secondPerson);
         assertTrue(secondPerson.hasKitchen);
         assertFalse(secondPerson.mightHaveKitchen);
         assertEquals(1, secondPerson.story);
         assertEquals(8.718914539788807, secondPerson.kitchen.longitude);
         assertEquals(50.590899839788804, secondPerson.kitchen.latitude);
+    }
+
+    @Test
+    void testFirstPersonKitchen() {
+        List<Participant> participants = Reader.getParticipants();
+        Participant secondPerson = participants.get(0);
+        assertFalse(secondPerson.hasKitchen);
+        assertTrue(secondPerson.mightHaveKitchen);
+        assertEquals(3, secondPerson.story);
+        assertEquals(8.673368271555807, secondPerson.kitchen.longitude);
+        assertEquals(50.5941282715558, secondPerson.kitchen.latitude);
     }
 
 
