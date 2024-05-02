@@ -52,7 +52,7 @@ public class Reader {
                     Kitchen kitchen = new Kitchen(kitchen_story, kitchen_longitude, kitchen_latitude);
 
                     // create instance of 1st Participant
-                    Participant p1 = new Participant(id, name, foodPreference, age, sex, hasKitchen, mightHaveKitchen, kitchen, 0, null);
+                    Participant p1 = new Participant(id, name, foodPreference, age, sex, hasKitchen, mightHaveKitchen, kitchen, kitchen_story, null);
 
                     participantList.add(p1); // add him to list
 
@@ -64,7 +64,7 @@ public class Reader {
                         Sex sex_2 = Sex.valueOf(parts[13].toUpperCase());
 
                         // create instance
-                        Participant p2 = new Participant(id_2, name_2, foodPreference, age_2, sex_2, false, false, kitchen, 0, p1);
+                        Participant p2 = new Participant(id_2, name_2, foodPreference, age_2, sex_2, false, false, kitchen, kitchen_story, p1);
 
                         p1.partner = p2; // adding p2 as partner to p1
 

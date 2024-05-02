@@ -24,6 +24,20 @@ class ReaderTest {
     }
 
     @Test
+    void testSecondPersonKitchen() {
+        List<Participant> participants = Reader.getParticipants();
+        Participant secondPerson = participants.get(1);
+        System.out.println(secondPerson);
+        assertTrue(secondPerson.hasKitchen);
+        assertFalse(secondPerson.mightHaveKitchen);
+        assertEquals(1, secondPerson.story);
+        assertEquals(8.718914539788807, secondPerson.kitchen.longitude);
+        assertEquals(50.590899839788804, secondPerson.kitchen.latitude);
+    }
+
+
+
+    @Test
     void testSixthParticipantHasPartner() {
         List<Participant> participants = Reader.getParticipants();
         assertNotNull(participants.get(5).partner);
@@ -38,8 +52,8 @@ class ReaderTest {
     @Test
     void testGetPartyLocation() {
         Location testLocation = Reader.getPartyLocation();
-        assertEquals(testLocation.longitude, 8.6746166676233);
-        assertEquals(testLocation.latitude, 50.5909317660173);
+        assertEquals(8.6746166676233, testLocation.longitude);
+        assertEquals(50.5909317660173, testLocation.latitude);
 
     }
 }
