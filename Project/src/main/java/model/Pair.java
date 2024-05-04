@@ -3,8 +3,20 @@ package model;
 public class Pair {
     public Participant participant1;
     public Participant participant2;
-    private boolean registeredAsPair;
-    private static int MAX_AGE_GAP = 10; // the maximum age difference for a valid pair in years
+    private final boolean registeredAsPair;
+    private static final int MAX_AGE_GAP = 10; // the maximum age difference for a valid pair in years
+
+    /**
+     * main constructor of Pair
+     * @param participant1 partner of participant 2
+     * @param participant2 partner of participant 1
+     * @param registeredAsPair whether they registered together
+     */
+    public Pair(Participant participant1, Participant participant2, boolean registeredAsPair) {
+        this.participant1 = participant1;
+        this.participant2 = participant2;
+        this.registeredAsPair = registeredAsPair;
+    }
 
     /**
      * returns age difference of the two participant in absolute terms
