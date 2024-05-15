@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Reader Class for csv files
+ * Utility class for reading data from CSV files.
  */
 public class Reader {
     private static final String TEILNEHMER_CSV = "/teilnehmerliste.csv";

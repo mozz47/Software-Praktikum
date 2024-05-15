@@ -1,4 +1,8 @@
 package model;
+
+/**
+ * Represents a participant in a group, with various attributes such as name, age, food preference, etc.
+ */
 public class Participant {
     public int story;
     public String id;

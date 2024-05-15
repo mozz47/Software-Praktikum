@@ -7,7 +7,7 @@ import java.util.List;
 public class Main {
 
     /**
-     * main method for main execution order of the program
+     * Main method for main execution order of the program.
      */
     public static void main(String[] args) {
         // Read Input
@@ -18,7 +18,6 @@ public class Main {
         printInput(participants, partyLocation);
 
         //collect Participants who already have a partner in pairList
-
     }
 
     /**

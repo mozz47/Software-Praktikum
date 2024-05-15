@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * Represents a pair of participants.
+ * A pair consists of two participants, who may or may not have registered together.
+ */
 public class Pair {
     public Participant participant1;
     public Participant participant2;

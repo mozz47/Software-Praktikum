@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * Represents a geographic location by its longitude and latitude coordinates.
+ */
 public class Location {
 
     public double longitude;
