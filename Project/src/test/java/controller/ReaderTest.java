@@ -45,8 +45,6 @@ class ReaderTest {
         assertEquals(50.5941282715558, secondPerson.kitchen.latitude);
     }
 
-
-
     @Test
     void testSixthParticipantHasPartner() {
         List<Participant> participants = Reader.getParticipants();
@@ -64,6 +62,5 @@ class ReaderTest {
         Location testLocation = Reader.getPartyLocation();
         assertEquals(8.6746166676233, testLocation.longitude);
         assertEquals(50.5909317660173, testLocation.latitude);
-
     }
 }
