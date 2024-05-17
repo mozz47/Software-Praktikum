@@ -1,16 +1,16 @@
 package view;
 
-import model.Participant;
+import model.Pair;
 
 import javax.swing.*;
 import java.awt.*;
 
-class ParticipantListCellRenderer extends DefaultListCellRenderer {
+class PairListCellRenderer extends DefaultListCellRenderer {
     @Override
     public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-        if (value instanceof Participant participant) {
-            setText(participant.name); // Set the text to the desired parameter of Participant to show up in list
+        if (value instanceof Pair pair) {
+            setText(pair.shortName()); // Set the text to the desired parameter of Participant to show up in list
         }
         return this;
     }

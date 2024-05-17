@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Main GUI class of the project. Opens a window with all important GUI elements.
+ */
 public class MainFrame extends JFrame {
     private final ParticipantPanel participantPanel;
     private final PairPanel pairPanel;
@@ -21,6 +24,9 @@ public class MainFrame extends JFrame {
     private ResourceBundle messages;
     private String consoleTextToken;
 
+    /**
+     * MainFrame constructor to initialize the GUI of the program.
+     */
     public MainFrame() {
         setTitle("Language Switcher");
         setSize(800, 600);
@@ -37,6 +43,24 @@ public class MainFrame extends JFrame {
         }
         participantPanel = new ParticipantPanel(participantListModel, messages);
 
+        List<Pair> placeHolderPairDataModel = getPlaceholderPairModelList(placeHolderParticipantsDataModel);
+        DefaultListModel<Pair> pairListModel = new DefaultListModel<>();
+        for (Pair pair : placeHolderPairDataModel) {
+            pairListModel.addElement(pair);
+        }
+        pairPanel = new PairPanel(pairListModel, messages);
+
+        controlPanel = new ControlPanel(this, messages);
+        infoConsolePanel = new InfoConsolePanel(messages, messages.getString(consoleTextToken));
+
+        addComponents();
+    }
+
+    /**
+     * !!!!!!!!!!!! THIS IS JUST A PLACEHOLDER TO SHOW SOME PAIRS IN THE GUI !!!!!!!!!!!!!!!!!!!
+     * todo: replace with actual data model
+     */
+    private static List<Pair> getPlaceholderPairModelList(List<Participant> placeHolderParticipantsDataModel) {
         List<Pair> placeHolderPairDataModel = new ArrayList<>();
         Participant p1 = placeHolderParticipantsDataModel.get(0);
         Participant p2 = placeHolderParticipantsDataModel.get(1);
@@ -46,18 +70,12 @@ public class MainFrame extends JFrame {
         Pair pair2 = new Pair(p3, p4, true);
         placeHolderPairDataModel.add(pair1);
         placeHolderPairDataModel.add(pair2);
-        DefaultListModel<Pair> pairListModel = new DefaultListModel<>();
-        for (Pair pair : placeHolderPairDataModel) {
-            pairListModel.addElement(pair);
-        }
-        pairPanel = new PairPanel(pairListModel, messages);
-
-        controlPanel = new ControlPanel(messages);
-        infoConsolePanel = new InfoConsolePanel(messages, messages.getString(consoleTextToken));
-
-        addComponents();
+        return placeHolderPairDataModel;
     }
 
+    /**
+     * add listPanels to the center of the main frame
+     */
     private void addComponents() {
         JPanel centerPanel = new JPanel(new GridLayout(1, 2));
         centerPanel.add(participantPanel);
@@ -68,7 +86,10 @@ public class MainFrame extends JFrame {
         add(infoConsolePanel, BorderLayout.SOUTH);
     }
 
-    private void toggleLanguage() {
+    /**
+     * Toggles the language between english and german for most GUI elements.
+     */
+    public void toggleLanguage() {
         if (isEnglish) {
             messages = ResourceBundle.getBundle("languages.messages", Locale.GERMAN);
         } else {
@@ -83,6 +104,9 @@ public class MainFrame extends JFrame {
         isEnglish = !isEnglish;
     }
 
+    /**
+     * Test-main() method for GUI testing.
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MainFrame().setVisible(true));
     }

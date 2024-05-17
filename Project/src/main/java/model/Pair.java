@@ -11,7 +11,7 @@ public class Pair {
     private static final int MAX_AGE_GAP = 10; // the maximum age difference for a valid pair in years
 
     /**
-     * main constructor of Pair
+     * Main constructor of Pair.
      * @param participant1 partner of participant 2
      * @param participant2 partner of participant 1
      * @param registeredAsPair whether they registered together
@@ -23,14 +23,14 @@ public class Pair {
     }
 
     /**
-     * returns age difference of the two participant in absolute terms
+     * Returns age difference of the two participant in absolute terms.
      */
     public int getAgeDifference() {
         return Math.abs(participant1.age - participant2.age);
     }
 
     /**
-     * returns the main food preference of a pair according to criteria 6.1
+     * Returns the main food preference of a pair according to criteria 6.1.
      * @return FoodPreference main food preference of the pair
      */
     public FoodPreference getMainFoodPreference() {
@@ -70,7 +70,7 @@ public class Pair {
     }
 
     /**
-     * returns human-readable string version of the pair
+     * Returns human-readable string version of the pair.
      */
     @Override
     public String toString() {
@@ -78,5 +78,12 @@ public class Pair {
                 "participant1=" + participant1 +
                 ", participant2=" + participant2 +
                 '}';
+    }
+
+    /**
+     * Returns a short String representation of the pair.
+     */
+    public String shortName() {
+        return "(" + participant1.name + ", " + participant2.name + ")";
     }
 }
