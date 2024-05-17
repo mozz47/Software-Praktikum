@@ -5,30 +5,17 @@ import model.Pair;
 import model.Participant;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class MainFrame extends JFrame {
-    private final JPanel listPanel;
-    private final JScrollPane participantScrollPane;
-    private final JList<Participant> participantJList;
-    private DefaultListModel<Participant> participantListModel;
-    private final JList<Pair> pairJList;
-    private final JList<Participant> runnerUpsJList; // Nachrücker
-    // todo missing cluster JList
-    private final JLabel greetingLabel;
-
-    private final JPanel rightButtonPanel;
-    private final JButton readCSVButton;
-    private final JButton autoAssignButton;
-    private final JButton outputCSVButton;
-    private final JButton switchButton;
-
-    private final JPanel infoConsolePanel;
-    private final JLabel infoConsoleLabel;
+    private final ParticipantPanel participantPanel;
+    private final PairPanel pairPanel;
+    private final ControlPanel controlPanel;
+    private final InfoConsolePanel infoConsolePanel;
 
     private boolean isEnglish = true;
     private ResourceBundle messages;
@@ -40,69 +27,58 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Load default English messages
         messages = ResourceBundle.getBundle("languages.messages", Locale.ENGLISH);
-
         consoleTextToken = "infoConsoleStartUp";
-        String infoConsoleText = messages.getString(consoleTextToken);
 
-        listPanel = new JPanel(new FlowLayout());
-        //todo replace placeholder with managed data
         List<Participant> placeHolderParticipantsDataModel = Reader.getParticipants();
-        participantListModel = new DefaultListModel<>();
-        assert placeHolderParticipantsDataModel != null;
+        DefaultListModel<Participant> participantListModel = new DefaultListModel<>();
         for (Participant participant : placeHolderParticipantsDataModel) {
             participantListModel.addElement(participant);
         }
-        participantJList = new JList<>(participantListModel);
-        participantJList.setCellRenderer(new ParticipantListCellRenderer());
-        participantScrollPane = new JScrollPane(participantJList);
-        listPanel.add(participantScrollPane);
-        TitledBorder titledBorder = BorderFactory.createTitledBorder("Participants");
-        listPanel.setBorder(titledBorder);
-        pairJList = null; //todo pairJList
-        runnerUpsJList = null; //todo runnerUpsJList
-        greetingLabel = new JLabel(messages.getString("greeting"));
-        listPanel.add(greetingLabel);
-        add(listPanel, BorderLayout.CENTER);
+        participantPanel = new ParticipantPanel(participantListModel, messages);
 
-        rightButtonPanel = new JPanel();
-        rightButtonPanel.setLayout(new BoxLayout(rightButtonPanel, BoxLayout.Y_AXIS));
-        switchButton = new JButton(messages.getString("switchLangButton"));
-        switchButton.addActionListener(e -> toggleLanguage());
-        rightButtonPanel.add(switchButton);
-        readCSVButton = new JButton(messages.getString("readCSVButton"));
-        // todo read csv button
-        rightButtonPanel.add(readCSVButton);
-        autoAssignButton = new JButton(messages.getString("autoAssignButton"));
-        // todo auto assign button
-        rightButtonPanel.add(autoAssignButton);
-        outputCSVButton = new JButton(messages.getString("outputCSVButton"));
-        // todo output csv button
-        rightButtonPanel.add(outputCSVButton);
-        add(rightButtonPanel, BorderLayout.EAST);
+        List<Pair> placeHolderPairDataModel = new ArrayList<>();
+        Participant p1 = placeHolderParticipantsDataModel.get(0);
+        Participant p2 = placeHolderParticipantsDataModel.get(1);
+        Participant p3 = placeHolderParticipantsDataModel.get(2);
+        Participant p4 = placeHolderParticipantsDataModel.get(3);
+        Pair pair1 = new Pair(p1, p2, true);
+        Pair pair2 = new Pair(p3, p4, true);
+        placeHolderPairDataModel.add(pair1);
+        placeHolderPairDataModel.add(pair2);
+        DefaultListModel<Pair> pairListModel = new DefaultListModel<>();
+        for (Pair pair : placeHolderPairDataModel) {
+            pairListModel.addElement(pair);
+        }
+        pairPanel = new PairPanel(pairListModel, messages);
 
-        infoConsolePanel = new JPanel();
-        infoConsoleLabel = new JLabel(infoConsoleText);
-        infoConsolePanel.add(infoConsoleLabel);
+        controlPanel = new ControlPanel(messages);
+        infoConsolePanel = new InfoConsolePanel(messages, messages.getString(consoleTextToken));
+
+        addComponents();
+    }
+
+    private void addComponents() {
+        JPanel centerPanel = new JPanel(new GridLayout(1, 2));
+        centerPanel.add(participantPanel);
+        centerPanel.add(pairPanel);
+
+        add(centerPanel, BorderLayout.CENTER);
+        add(controlPanel, BorderLayout.EAST);
         add(infoConsolePanel, BorderLayout.SOUTH);
     }
 
     private void toggleLanguage() {
         if (isEnglish) {
-            // Load German messages
             messages = ResourceBundle.getBundle("languages.messages", Locale.GERMAN);
         } else {
-            // Load English messages
             messages = ResourceBundle.getBundle("languages.messages", Locale.ENGLISH);
         }
 
-        greetingLabel.setText(messages.getString("greeting"));
-        switchButton.setText(messages.getString("switchLangButton"));
-        readCSVButton.setText(messages.getString("readCSVButton"));
-        autoAssignButton.setText(messages.getString("autoAssignButton"));
-        outputCSVButton.setText(messages.getString("outputCSVButton"));
-        infoConsoleLabel.setText(messages.getString(consoleTextToken));
+        participantPanel.setBorder(BorderFactory.createTitledBorder(messages.getString("participants")));
+        pairPanel.setBorder(BorderFactory.createTitledBorder(messages.getString("pairs")));
+        controlPanel.updateLanguage(messages);
+        infoConsolePanel.updateLanguage(messages, messages.getString(consoleTextToken));
 
         isEnglish = !isEnglish;
     }
