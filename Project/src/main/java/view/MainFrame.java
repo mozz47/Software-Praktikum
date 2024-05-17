@@ -28,7 +28,7 @@ public class MainFrame extends JFrame {
      * MainFrame constructor to initialize the GUI of the program.
      */
     public MainFrame() {
-        setTitle("Language Switcher");
+        setTitle("Spinfood Assignment Manager");
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
