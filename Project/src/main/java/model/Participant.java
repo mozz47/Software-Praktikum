@@ -15,6 +15,8 @@ public class Participant {
     public Kitchen kitchen;  // geographical location
     public Participant partner;  // pair-partner
 
+    public Cluster cluster;
+
     /**
      * main constructor of Participant
      * @param id presumably unique hash-code for every participant (maybe we should replace this with a simple int)
