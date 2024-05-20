@@ -1,5 +1,6 @@
 package view;
 
+import controller.PairController;
 import controller.Reader;
 import model.Group;
 import model.Pair;
@@ -13,7 +14,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class spinfoodFrame extends JFrame {
-    private static final int MAX_CONSOLE_LINES = 4;
+    private static final int MAX_CONSOLE_LINES = 8;
     private static ResourceBundle resourceBundle;
     private JLabel participantsLabel;
     private JButton autoAssignButton;
@@ -28,10 +29,11 @@ public class spinfoodFrame extends JFrame {
     private JScrollPane groupPane;
     private JScrollPane participantsPane;
     private JScrollPane pairsPane;
-    private JList<Pair> pairJList;
-    private JList<Participant> participantJList;
+    private JList<String> pairJList;
+    private JList<String> participantJList;
     private JList<Group> groupJList;
-    private DefaultListModel<Participant> participantListModel;
+    private DefaultListModel<String> participantListModel;
+    private DefaultListModel<String> pairListModel;
 
 
     public spinfoodFrame() {
@@ -46,6 +48,13 @@ public class spinfoodFrame extends JFrame {
         participantJList.setModel(participantListModel);
         participantsPane.setViewportView(participantJList);
 
+        // Initialize pair list model
+        pairListModel = new DefaultListModel<>();
+        // Initialize pair list and set model
+        pairJList.setModel(pairListModel);
+        pairsPane.setViewportView(pairJList);
+
+
         // Add languages to comboBoxLang for language selection
         comboBoxLang.addItem("English");
         comboBoxLang.addItem("Deutsch");
@@ -54,12 +63,13 @@ public class spinfoodFrame extends JFrame {
         comboBoxLang.addActionListener(e -> updateLanguage());
 
         readCSVButton.addActionListener(e -> {
-            // Get List from Reader-Controller
-            List<Participant> participants = Reader.getParticipants();
 
-            if (participants != null) {
-                displayParticipants(participants);
+            if (Reader.getParticipants() != null) {
+                displayParticipants(Reader.getParticipants());
+                displayPairs(PairController.getRegisteredTogetherPairs());
+
                 printToConsole(resourceBundle.getString("infoConsoleFileRead"));
+                printToConsole(resourceBundle.getString("registeredAsPairsMessage"));
             } else {
                 printToConsole(resourceBundle.getString("errorFileRead"));
             }
@@ -114,11 +124,46 @@ public class spinfoodFrame extends JFrame {
     }
 
     private void displayParticipants(List<Participant> participants) {
-        // Clear the existing model
-        participantListModel.clear();
-        // Add all participants to the list model
-        for (Participant participant : participants) {
-            participantListModel.addElement(participant);
+        if(participantListModel.isEmpty()) {
+            // Add all participant-Strings to the list model
+            for (Participant participant : participants) {
+                participantListModel.addElement(getShortRepresentation(participant));
+            }
+        }
+    }
+
+    private void displayPairs(List<Pair> pairs) {
+        if(pairListModel.isEmpty()) {
+            // Add all pair-Strings to the list model
+            for (Pair pair : pairs) {
+                pairListModel.addElement(pair.shortString());
+            }
+        }
+    }
+    //TODO move to Participant.java
+    private String getShortRepresentation(Participant participant) {
+        if (participant.partner == null) {
+            return participant.name + "(" +
+                    "foodPreference=" + participant.foodPreference +
+                    ", age=" + participant.age +
+                    ", sex=" + participant.sex +
+                    ", hasKitchen=" + participant.hasKitchen +
+                    ", mightHaveKitchen=" + participant.mightHaveKitchen +
+                    ", kitchen=" + participant.kitchen +
+                    ", partner=null" +
+                    ", story=" + participant.story +
+                    ')';
+        } else {
+            return participant.name + "(" +
+                    "foodPreference=" + participant.foodPreference +
+                    ", age=" + participant.age +
+                    ", sex=" + participant.sex +
+                    ", hasKitchen=" + participant.hasKitchen +
+                    ", mightHaveKitchen=" + participant.mightHaveKitchen +
+                    ", kitchen=" + participant.kitchen +
+                    ", partner=" + participant.name + //or else stackoverflow-error because of recursive call to each other
+                    ", story=" + participant.story +
+                    ')';
         }
     }
 

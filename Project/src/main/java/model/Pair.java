@@ -23,10 +23,12 @@ public class Pair {
     }
 
     /**
-     * Returns age difference of the two participant in absolute terms.
+     * Returns age difference of the two participant in terms of age ranges.
      */
     public int getAgeDifference() {
-        return Math.abs(participant1.age - participant2.age);
+        int ageRange1 = participant1.getAgeRange();
+        int ageRange2 = participant2.getAgeRange();
+        return Math.abs(ageRange1 - ageRange2);
     }
 
     /**
@@ -56,11 +58,21 @@ public class Pair {
      * Checks if the pair is valid. If a pair has registered together, it is automatically considered valid.
      */
     public boolean isValid() {
-        boolean haveSimilarAge = MAX_AGE_GAP <= getAgeDifference();
+        boolean haveSimilarAge = getAgeDifference() <= MAX_AGE_GAP;
         boolean haveAKitchen = getKitchenAmount() >= 1;
-        // todo check if live in same house
+        //boolean differentHouse = !sameHouse(); //TODO sameHouse
+        //return registeredAsPair || (haveSimilarAge && haveAKitchen && differentHouse);
         return registeredAsPair || (haveSimilarAge && haveAKitchen);
     }
+
+    //TODO check same house but if created Pair from Algo, some participants might have no kitchen!
+    /*
+    private boolean sameHouse() {
+        return participant1.kitchenLongitude == participant2.kitchenLongitude &&
+                participant1.kitchenLatitude == participant2.kitchenLatitude &&
+                participant1.kitchenStory == participant2.kitchenStory;
+    }
+     */
 
     /**
      * counts number of kitchens in pair
@@ -77,13 +89,14 @@ public class Pair {
         return "Pair{" +
                 "participant1=" + participant1 +
                 ", participant2=" + participant2 +
+                ", registeredAsPair=" + registeredAsPair +
                 '}';
     }
 
     /**
      * Returns a short String representation of the pair.
      */
-    public String shortName() {
+    public String shortString() {
         return "(" + participant1.name + ", " + participant2.name + ")";
     }
 }
