@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 
 public class spinfoodFrame extends JFrame {
     private static final int MAX_CONSOLE_LINES = 8;
-    private static ResourceBundle resourceBundle;
+    private static final ResourceBundle resourceBundle= ResourceBundle.getBundle("languages.messages", Locale.getDefault());
     private JLabel participantsLabel;
     private JButton autoAssignButton;
     private JButton readCSVButton;
@@ -89,7 +89,12 @@ public class spinfoodFrame extends JFrame {
 
         // Add Action Listener for the autoAssignButton, use Algorithm
         autoAssignButton.addActionListener(e -> {
-            //TODO
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    new CriteriaRegulator(resourceBundle);
+                }
+            });
         });
 
         // Add Action Listener for the outputCSVButton, choose DIR to save CSV
@@ -109,7 +114,7 @@ public class spinfoodFrame extends JFrame {
                     Locale.setDefault(Locale.GERMAN);
                     break;
             }
-            resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.getDefault());
+
 
             // Now update texts with correct language
             participantsLabel.setText(resourceBundle.getString("participants"));
