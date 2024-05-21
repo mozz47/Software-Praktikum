@@ -43,6 +43,28 @@ public class Participant {
         this.story = story;
     }
 
+    public int getAgeRange() {
+        if (age <= 17) {
+            return 0;
+        } else if (age <= 23) {
+            return 1;
+        } else if (age <= 27) {
+            return 2;
+        } else if (age <= 30) {
+            return 3;
+        } else if (age <= 35) {
+            return 4;
+        } else if (age <= 41) {
+            return 5;
+        } else if (age <= 46) {
+            return 6;
+        } else if (age <= 56) {
+            return 7;
+        } else {
+            return 8;
+        }
+    }
+
     /**
      * parameterless constructor mainly for testing
      */
@@ -81,4 +103,6 @@ public class Participant {
                     '}';
         }
     }
+
+    
 }

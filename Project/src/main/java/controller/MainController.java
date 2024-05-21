@@ -1,23 +1,37 @@
 package controller;
 
 import model.*;
+import view.spinfoodFrame;
 
+import javax.swing.*;
 import java.util.List;
 
-public class Main {
+public class MainController {
 
     /**
-     * Main method for main execution order of the program.
+     * MainController method for main execution order of the program.
      */
     public static void main(String[] args) {
+
         // Read Input
         List<Participant> participants = Reader.getParticipants();
         Location partyLocation = Reader.getPartyLocation();
+
 
         // print human-readable version
         printInput(participants, partyLocation);
 
         //collect Participants who already have a partner in pairList
+
+
+        //Start GUI
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new spinfoodFrame();
+            }
+        });
+
     }
 
     /**
