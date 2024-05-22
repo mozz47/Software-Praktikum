@@ -9,10 +9,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Window for ranking the 5 criteria that are not mandatory. The criteria will be displayed in a list and can be dragged
+ * and dropped by the user to sort them by importance or preference before starting the automatic assignment algorithm.
+ */
 public class CriteriaRankingFrame extends JFrame {
 
+    /**
+     * Constructor for the CriteriaRankingFrame. Creates a list of the 5 criteria and displays them in a JList.
+     * @param resourceBundle
+     */
     public CriteriaRankingFrame(ResourceBundle resourceBundle) {
-        // todo Initialize the underlying data models
         // temporary placeholder data
         List<Criterion> data1 = new ArrayList<>();
         data1.add(Criterion.Criterion_06_Food_Preference);
@@ -43,9 +50,10 @@ public class CriteriaRankingFrame extends JFrame {
         // Create OK Button
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
-            System.out.println("data1");
+            // todo start algorithm
+            System.out.println("Ranked criteria:");
             for (Criterion s : data1) {
-                System.out.println(s.toString());
+                System.out.println(resourceBundle.getString(s.getToken()));
             }
             dispose();
         });
@@ -75,6 +83,10 @@ public class CriteriaRankingFrame extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Test method for the CriteriaRankingFrame.
+     * @param args
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new CriteriaRankingFrame(ResourceBundle.getBundle("languages.messages", Locale.ENGLISH)));
     }
