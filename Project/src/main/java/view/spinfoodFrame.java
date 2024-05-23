@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 
 public class spinfoodFrame extends JFrame {
     private static final int MAX_CONSOLE_LINES = 8;
-    private static final ResourceBundle resourceBundle= ResourceBundle.getBundle("languages.messages", Locale.GERMAN);
+    private static ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.GERMAN);
     private JLabel participantsLabel;
     private JButton autoAssignButton;
     private JButton readCSVButton;
@@ -114,7 +114,7 @@ public class spinfoodFrame extends JFrame {
                     Locale.setDefault(Locale.GERMAN);
                     break;
             }
-
+            resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.getDefault());
 
             // Now update texts with correct language
             participantsLabel.setText(resourceBundle.getString("participants"));
