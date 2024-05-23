@@ -14,23 +14,18 @@ public class MainController {
     public static void main(String[] args) {
 
         // Read Input
-        List<Participant> participants = Reader.getParticipants();
-        Location partyLocation = Reader.getPartyLocation();
+        //List<Participant> participants = Reader.getParticipants();
+        //Location partyLocation = Reader.getPartyLocation();
 
 
         // print human-readable version
-        printInput(participants, partyLocation);
+        //printInput(participants, partyLocation);
 
         //collect Participants who already have a partner in pairList
 
 
         //Start GUI
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new spinfoodFrame();
-            }
-        });
+        new spinfoodFrame();
 
     }
 

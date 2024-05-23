@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 
 public class spinfoodFrame extends JFrame {
     private static final int MAX_CONSOLE_LINES = 8;
-    private static ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.getDefault());
+    private static final ResourceBundle resourceBundle= ResourceBundle.getBundle("languages.messages", Locale.GERMAN);
     private JLabel participantsLabel;
     private JButton autoAssignButton;
     private JButton readCSVButton;
@@ -56,8 +56,8 @@ public class spinfoodFrame extends JFrame {
 
 
         // Add languages to comboBoxLang for language selection
-        comboBoxLang.addItem("English");
         comboBoxLang.addItem("Deutsch");
+        comboBoxLang.addItem("English");
 
         // Add an action listener to the comboBoxLang to change the language
         comboBoxLang.addActionListener(e -> updateLanguage());
@@ -92,7 +92,7 @@ public class spinfoodFrame extends JFrame {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    new CriteriaRegulator(resourceBundle);
+                    new CriteriaRankingFrame(resourceBundle);
                 }
             });
         });
@@ -114,7 +114,6 @@ public class spinfoodFrame extends JFrame {
                     Locale.setDefault(Locale.GERMAN);
                     break;
             }
-            resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.getDefault());
 
 
             // Now update texts with correct language
