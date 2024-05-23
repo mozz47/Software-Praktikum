@@ -11,7 +11,7 @@ public class Pair {
     private static final int MAX_AGE_GAP = 10; // the maximum age difference for a valid pair in years
 
     /**
-     * main constructor of Pair
+     * Main constructor of Pair.
      * @param participant1 partner of participant 2
      * @param participant2 partner of participant 1
      * @param registeredAsPair whether they registered together
@@ -23,14 +23,16 @@ public class Pair {
     }
 
     /**
-     * returns age difference of the two participant in absolute terms
+     * Returns age difference of the two participant in terms of age ranges.
      */
     public int getAgeDifference() {
-        return Math.abs(participant1.age - participant2.age);
+        int ageRange1 = participant1.getAgeRange();
+        int ageRange2 = participant2.getAgeRange();
+        return Math.abs(ageRange1 - ageRange2);
     }
 
     /**
-     * returns the main food preference of a pair according to criteria 6.1
+     * Returns the main food preference of a pair according to criteria 6.1.
      * @return FoodPreference main food preference of the pair
      */
     public FoodPreference getMainFoodPreference() {
@@ -56,11 +58,21 @@ public class Pair {
      * Checks if the pair is valid. If a pair has registered together, it is automatically considered valid.
      */
     public boolean isValid() {
-        boolean haveSimilarAge = MAX_AGE_GAP <= getAgeDifference();
+        boolean haveSimilarAge = getAgeDifference() <= MAX_AGE_GAP;
         boolean haveAKitchen = getKitchenAmount() >= 1;
-        // todo check if live in same house
+        //boolean differentHouse = !sameHouse(); //TODO sameHouse
+        //return registeredAsPair || (haveSimilarAge && haveAKitchen && differentHouse);
         return registeredAsPair || (haveSimilarAge && haveAKitchen);
     }
+
+    //TODO check same house but if created Pair from Algo, some participants might have no kitchen!
+    /*
+    private boolean sameHouse() {
+        return participant1.kitchenLongitude == participant2.kitchenLongitude &&
+                participant1.kitchenLatitude == participant2.kitchenLatitude &&
+                participant1.kitchenStory == participant2.kitchenStory;
+    }
+     */
 
     /**
      * counts number of kitchens in pair
@@ -70,13 +82,21 @@ public class Pair {
     }
 
     /**
-     * returns human-readable string version of the pair
+     * Returns human-readable string version of the pair.
      */
     @Override
     public String toString() {
         return "Pair{" +
                 "participant1=" + participant1 +
                 ", participant2=" + participant2 +
+                ", registeredAsPair=" + registeredAsPair +
                 '}';
+    }
+
+    /**
+     * Returns a short String representation of the pair.
+     */
+    public String shortString() {
+        return "(" + participant1.name + ", " + participant2.name + ")";
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MainTest {
+class MainControllerTest {
     private final PrintStream standardOut = System.out;  // to test console output
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();  // to test console output
 
@@ -38,7 +38,7 @@ class MainTest {
         participants.add(p1);
         Location partyLocation = new Location(11.111, 12.222);
 
-        Main.printInput(participants, partyLocation);
+        MainController.printInput(participants, partyLocation);
 
         assertEquals("""
                 Teilnehmer:\r
