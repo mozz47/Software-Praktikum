@@ -1,9 +1,8 @@
 package controller;
 
 import model.*;
-import view.spinfoodFrame;
+import view.SpinfoodFrame;
 
-import javax.swing.*;
 import java.util.List;
 
 public class MainController {
@@ -26,7 +25,7 @@ public class MainController {
 
         //Start GUI
         //better with SwingUtilities.invokeLater(), because it will not block threads
-        SwingUtilities.invokeLater(spinfoodFrame::new);
+        new SpinfoodFrame();
     }
 
 

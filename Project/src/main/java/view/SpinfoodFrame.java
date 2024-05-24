@@ -1,6 +1,5 @@
 package view;
 
-import controller.PairController;
 import controller.Reader;
 import model.Group;
 import model.Pair;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class spinfoodFrame extends JFrame implements PairDisplayCallback {
+public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private static final int MAX_CONSOLE_LINES = 8;
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.GERMAN);
     private JLabel participantsLabel;
@@ -36,7 +35,7 @@ public class spinfoodFrame extends JFrame implements PairDisplayCallback {
     private DefaultListModel<String> pairListModel;
 
 
-    public spinfoodFrame() {
+    public SpinfoodFrame() {
         // Initialize components from the .form file
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,9 +62,9 @@ public class spinfoodFrame extends JFrame implements PairDisplayCallback {
         comboBoxLang.addActionListener(e -> updateLanguage());
 
         readCSVButton.addActionListener(e -> {
-
-            if (Reader.getParticipants() != null) {
-                displayParticipants(Reader.getParticipants());
+            List<Participant> participants = Reader.getParticipants();
+            if (participants != null) {
+                displayParticipants(participants);
 
                 printToConsole(resourceBundle.getString("infoConsoleFileRead"));
 
@@ -92,7 +91,7 @@ public class spinfoodFrame extends JFrame implements PairDisplayCallback {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    new CriteriaRankingFrame(resourceBundle, spinfoodFrame.this);
+                    new CriteriaRankingFrame(resourceBundle, SpinfoodFrame.this);
                 }
             });
         });
