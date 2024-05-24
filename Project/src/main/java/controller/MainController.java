@@ -23,9 +23,6 @@ public class MainController {
         // Read Input
         event.participants = Reader.getTestParticipants();
         event.partyLocation = Reader.getTestPartyLocation();
-
-        // print human-readable version
-        event.printInput();
     }
 
     /**
@@ -47,6 +44,11 @@ public class MainController {
      * Start GUI / main event loop.
      */
     private static void run() {
+        // print human-readable version of input
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
+        System.out.println("Human-readable version of input data:");
+        event.printInput();
+
         //Start GUI
         //better with SwingUtilities.invokeLater(), because it will not block threads
         new SpinfoodFrame();

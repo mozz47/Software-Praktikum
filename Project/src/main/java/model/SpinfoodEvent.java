@@ -9,12 +9,14 @@ public class SpinfoodEvent {
     private static SpinfoodEvent event;  // Singleton instance
 
     public List<Participant> participants;
-    public List<Participant> successors;
     public Location partyLocation;
+
     private List<Pair> pairList;
     private List<Pair> pairListOld;
     private List<Group> groupList;
     private List<Group> groupListOld;
+    private List<Participant> successors;
+    private List<Participant> successorsOld;
 
     /**
      * private constructor to prevent creating instances from outside the class
@@ -43,6 +45,7 @@ public class SpinfoodEvent {
 
     /**
      * Updates the pair list, saving the current one in pairListOld.
+     *
      * @param pairList new pair list
      */
     public void updatePairList(List<Pair> pairList) {
@@ -52,11 +55,88 @@ public class SpinfoodEvent {
 
     /**
      * Updates the group list, saving the current one in pairListOld.
+     *
      * @param groupList new group list
      */
     public void updateGroupList(List<Group> groupList) {
         this.groupListOld = this.groupList;
         this.groupList = groupList;
+    }
+
+    /**
+     * Updates the successors list, saving the current one in successorsOld.
+     *
+     * @param successors new successors list
+     */
+    public void updateSuccessors(List<Participant> successors) {
+        this.successorsOld = this.successors;
+        this.successors = successors;
+    }
+
+    /**
+     * Loads the old pair list.
+     */
+    private void loadOldPairList() {
+        List<Pair> temp = this.pairList;
+        this.pairList = this.pairListOld;
+        this.pairListOld = temp;
+    }
+
+    /**
+     * Loads the old group list.
+     */
+    private void loadOldGroupList() {
+        List<Group> temp = this.groupList;
+        this.groupList = this.groupListOld;
+        this.groupListOld = temp;
+    }
+
+    /**
+     * Loads the old successors list.
+     */
+    private void loadOldSuccessors() {
+        List<Participant> temp = this.successors;
+        this.successors = this.successorsOld;
+        this.successorsOld = temp;
+    }
+
+    /**
+     * Restores the old pair list, group list and successors list.
+     */
+    public void restoreOldEvent() throws IllegalStateException {
+        if (this.pairListOld == null || this.groupListOld == null || this.successorsOld == null) {
+            throw new IllegalStateException("Old pair list, group list and successors can't be null");
+        }
+        loadOldPairList();
+        loadOldGroupList();
+        loadOldSuccessors();
+    }
+
+    /**
+     * Getter for the pair list.
+     *
+     * @return pair list
+     */
+    public List<Pair> getPairList() {
+        return pairList;
+    }
+
+    /**
+     * Getter for the group list.
+     *
+     * @return group list
+     */
+    public List<Group> getGroupList() {
+        return groupList;
+    }
+
+    /**
+     * Getter for the successors list.
+     *
+     * @return successors list
+     */
+    public List<Participant> getSuccessors() {
+        return successors;
     }
 
     /**
