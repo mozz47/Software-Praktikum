@@ -25,9 +25,10 @@ public class MainController {
 
 
         //Start GUI
-        new spinfoodFrame();
-
+        //better with SwingUtilities.invokeLater(), because it will not block threads
+        SwingUtilities.invokeLater(spinfoodFrame::new);
     }
+
 
     /**
      * prints human-readable version of the participant and party location data

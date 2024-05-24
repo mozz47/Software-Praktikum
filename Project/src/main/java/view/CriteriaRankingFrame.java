@@ -1,6 +1,8 @@
 package view;
 
+import controller.PairController;
 import model.Criterion;
+import model.PairList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,12 +16,15 @@ import java.util.ResourceBundle;
  * and dropped by the user to sort them by importance or preference before starting the automatic assignment algorithm.
  */
 public class CriteriaRankingFrame extends JFrame {
+    private final PairDisplayCallback callback;
 
     /**
      * Constructor for the CriteriaRankingFrame. Creates a list of the 5 criteria and displays them in a JList.
+     *
      * @param resourceBundle
      */
-    public CriteriaRankingFrame(ResourceBundle resourceBundle) {
+    public CriteriaRankingFrame(ResourceBundle resourceBundle, PairDisplayCallback callback) {
+        this.callback = callback;
         // temporary placeholder data
         List<Criterion> data1 = new ArrayList<>();
         data1.add(Criterion.Criterion_06_Food_Preference);
@@ -50,12 +55,19 @@ public class CriteriaRankingFrame extends JFrame {
         // Create OK Button
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
-            // todo start algorithm
             System.out.println("Ranked criteria:");
             for (Criterion s : data1) {
                 System.out.println(resourceBundle.getString(s.getToken()));
             }
             dispose();
+            PairList pairList = PairController.getPairList(data1);
+            callback.displayPairs(pairList.getPairList());
+            callback.printToConsole(resourceBundle.getString("createdPairsWithAlgorithm"));
+
+            //starting of algorithm for groups
+            //GroupController.getAllGroups(data1);
+            //todo
+
         });
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.add(okButton, BorderLayout.CENTER);
@@ -88,7 +100,7 @@ public class CriteriaRankingFrame extends JFrame {
      * @param args
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new CriteriaRankingFrame(ResourceBundle.getBundle("languages.messages", Locale.ENGLISH)));
+        //SwingUtilities.invokeLater(() -> new CriteriaRankingFrame(ResourceBundle.getBundle("languages.messages", Locale.ENGLISH)));
     }
 
 }

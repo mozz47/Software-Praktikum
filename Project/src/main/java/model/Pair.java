@@ -8,7 +8,7 @@ public class Pair {
     public Participant participant1;
     public Participant participant2;
     private final boolean registeredAsPair;
-    private static final int MAX_AGE_GAP = 10; // the maximum age difference for a valid pair in years
+    private static final int MAX_AGE_GAP = 10; // the maximum age difference for a valid pair in years -useless for now
 
     /**
      * Main constructor of Pair.
@@ -58,27 +58,44 @@ public class Pair {
      * Checks if the pair is valid. If a pair has registered together, it is automatically considered valid.
      */
     public boolean isValid() {
-        boolean haveSimilarAge = getAgeDifference() <= MAX_AGE_GAP;
         boolean haveAKitchen = getKitchenAmount() >= 1;
-        //boolean differentHouse = !sameHouse(); //TODO sameHouse
-        //return registeredAsPair || (haveSimilarAge && haveAKitchen && differentHouse);
-        return registeredAsPair || (haveSimilarAge && haveAKitchen);
+
+        return registeredAsPair || (haveAKitchen && !sameHouse() && isValidFoodPreference());
     }
 
-    //TODO check same house but if created Pair from Algo, some participants might have no kitchen!
-    /*
-    private boolean sameHouse() {
-        return participant1.kitchenLongitude == participant2.kitchenLongitude &&
-                participant1.kitchenLatitude == participant2.kitchenLatitude &&
-                participant1.kitchenStory == participant2.kitchenStory;
+    private boolean isValidFoodPreference() {
+        FoodPreference fp1 = participant1.foodPreference;
+        FoodPreference fp2 = participant2.foodPreference;
+        // Fleischliebhaber darf nicht mit Veganer oder Vegetarier gepaart werden
+        if (fp1 == FoodPreference.MEAT && (fp2 == FoodPreference.VEGAN || fp2 == FoodPreference.VEGGIE)) {
+            return false;
+        } else if (fp2 == FoodPreference.MEAT && (fp1 == FoodPreference.VEGAN || fp1 == FoodPreference.VEGGIE)) {
+            return false;
+        }
+        return true;
     }
+
+    /**
+     * !!!!ONLY USE IF AT LEAST ONE HAS KITCHEN!!!!
+     * @return true if both participants have the same house
      */
+    public boolean sameHouse() {
+        if ((this.participant1.hasKitchen || this.participant1.mightHaveKitchen)
+                && !(this.participant2.hasKitchen || this.participant2.mightHaveKitchen)) { //if 1 has/maybe has kitchen and 2 not
+            return false;
+        } else if (!(this.participant1.hasKitchen || this.participant1.mightHaveKitchen)
+                && (this.participant2.hasKitchen || this.participant2.mightHaveKitchen)) { // if 1 has no kitchen and 2 has/maybe has
+            return false;
+        } else { // both have/maybe have kitchen
+            return participant1.kitchen.longitude == participant2.kitchen.longitude && participant1.kitchen.latitude == participant2.kitchen.latitude;
+        }
+    }
 
     /**
      * counts number of kitchens in pair
      */
-    private int getKitchenAmount() {
-        return (participant1.hasKitchen ? 1 : 0) + (participant2.hasKitchen ? 1 : 0);
+    int getKitchenAmount() {
+        return (participant1.hasKitchen || participant1.mightHaveKitchen ? 1 : 0) + (participant2.hasKitchen || participant2.mightHaveKitchen ? 1 : 0);
     }
 
     /**
@@ -99,4 +116,5 @@ public class Pair {
     public String shortString() {
         return "(" + participant1.name + ", " + participant2.name + ")";
     }
+
 }

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class spinfoodFrame extends JFrame {
+public class spinfoodFrame extends JFrame implements PairDisplayCallback {
     private static final int MAX_CONSOLE_LINES = 8;
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.GERMAN);
     private JLabel participantsLabel;
@@ -66,10 +66,9 @@ public class spinfoodFrame extends JFrame {
 
             if (Reader.getParticipants() != null) {
                 displayParticipants(Reader.getParticipants());
-                displayPairs(PairController.getRegisteredTogetherPairs());
 
                 printToConsole(resourceBundle.getString("infoConsoleFileRead"));
-                printToConsole(resourceBundle.getString("registeredAsPairsMessage"));
+
             } else {
                 printToConsole(resourceBundle.getString("errorFileRead"));
             }
@@ -77,6 +76,7 @@ public class spinfoodFrame extends JFrame {
 
         // Initialize the UI with the default language texts
         updateLanguage();
+
 
         // Set JFrame properties
         setTitle(resourceBundle.getString("title"));
@@ -92,7 +92,7 @@ public class spinfoodFrame extends JFrame {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    new CriteriaRankingFrame(resourceBundle);
+                    new CriteriaRankingFrame(resourceBundle, spinfoodFrame.this);
                 }
             });
         });
@@ -137,12 +137,12 @@ public class spinfoodFrame extends JFrame {
         }
     }
 
-    private void displayPairs(List<Pair> pairs) {
-        if(pairListModel.isEmpty()) {
-            // Add all pair-Strings to the list model
-            for (Pair pair : pairs) {
-                pairListModel.addElement(pair.shortString());
-            }
+    @Override
+    public void displayPairs(List<Pair> pairs) {
+        pairListModel.clear();
+        // Add all pair-Strings to the list model
+        for (Pair pair : pairs) {
+            pairListModel.addElement(pair.shortString());
         }
     }
     //TODO move to Participant.java
@@ -172,7 +172,8 @@ public class spinfoodFrame extends JFrame {
         }
     }
 
-    private void printToConsole(String message) {
+    @Override
+    public void printToConsole(String message) {
         StyledDocument doc = consolePane.getStyledDocument();
         try {
             // Check the number of lines and remove the oldest if necessary
