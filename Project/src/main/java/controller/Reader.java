@@ -126,7 +126,7 @@ public class Reader {
     /**
      * Reads party location from partylocation.csv
      */
-    public static Location getPartyLocation(String PARTY_LOCATION_CSV) {
+    private static Location getPartyLocation(String PARTY_LOCATION_CSV) {
         try {
             assert PARTY_LOCATION_CSV != null;
             try (InputStream inputStream = new FileInputStream(PARTY_LOCATION_CSV)) {
