@@ -1,5 +1,6 @@
 package controller;
 
+import com.sun.tools.javac.Main;
 import model.*;
 
 import java.util.*;
@@ -9,10 +10,11 @@ import java.util.*;
  */
 public class PairController {
     public static List<Pair> getRegisteredTogetherPairs() {
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
         List<Pair> pairList = new ArrayList<>();
         HashSet<String> processedParticipantsIds = new HashSet<>();
 
-        for (Participant participant : Objects.requireNonNull(Reader.getTestParticipants())) {
+        for (Participant participant : Objects.requireNonNull(event.participants)) {
 
             if (processedParticipantsIds.contains(participant.id)) { //already processed with previous Participant
                 continue;
@@ -31,9 +33,10 @@ public class PairController {
     }
 
     public static List<Participant> getRegisteredAloneParticipants() {
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
         List<Participant> pairList = new ArrayList<>();
 
-        for (Participant participant : Objects.requireNonNull(Reader.getTestParticipants())) {
+        for (Participant participant : Objects.requireNonNull(event.participants)) {
 
             if (participant.partner == null) {
                 pairList.add(participant);
@@ -129,6 +132,7 @@ public class PairController {
 
     public static void main(String[] args) {
         // Pairs für Teilnehmer, die sich alleine angemeldet haben
+        MainController.initializeWithoutFileChooser(); // startEvent
 
         List<Pair> allPairs = getGeneratedPairs(List.of(
                 Criterion.Criterion_06_Food_Preference,
