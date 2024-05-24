@@ -5,7 +5,10 @@ import model.*;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -14,16 +17,34 @@ import java.util.Scanner;
  * Utility class for reading data from CSV files.
  */
 public class Reader {
-    //private static final String TEILNEHMER_CSV = "/teilnehmerliste.csv";
-    //private static final String PARTY_LOCATION_CSV = "/partylocation.csv";
+
+    /**
+     * Reads all the Info of participants from the test teilnemerliste.csv file, creates participant and adds each one to list
+     * @return List of all Participants
+     */
+    public static List<Participant> getTestParticipants() {
+        String relativePath = "/teilnehmerliste.csv";
+
+        // conversion from relative to absolute path
+        String absolutePath = getAbsolutePath(relativePath);
+
+        return getParticipants(absolutePath);
+    }
+
+    /**
+     * Reads all the Info of participants from a selected .csv file, creates participant and adds each one to list
+     * @return List of all Participants
+     */
+    public static List<Participant> getParticipants() {
+        return getParticipants(getFilePath("Select Teilnehmer.csv"));
+    }
 
     /**
      * Reads all the Info of participants from the .csv file, creates participant and adds each one to list
      * @return List of all Participants
      */
-    public static List<Participant> getParticipants() {
+    private static List<Participant> getParticipants(String TEILNEHMER_CSV) {
         List<Participant> participantList = new ArrayList<>();
-        String TEILNEHMER_CSV = getFilePath("Select Teilnehmer.csv");
         try {
             assert TEILNEHMER_CSV != null;
             try (InputStream inputStream = new FileInputStream(TEILNEHMER_CSV)) {
@@ -85,10 +106,27 @@ public class Reader {
     }
 
     /**
-     * Reads party location from partylocation.csv
+     * Reads all the Info of participants from the test partylocation.csv file, creates participant and adds each one to list
+     * @return List of all Participants
+     */
+    public static Location getTestPartyLocation() {
+        String relativePath = "/partylocation.csv";
+        String absolutePath = getAbsolutePath(relativePath);
+        return getPartyLocation(absolutePath);
+    }
+
+    /**
+     * Reads all the Info of participants from a selected .csv file, creates participant and adds each one to list
+     * @return List of all Participants
      */
     public static Location getPartyLocation() {
-        String PARTY_LOCATION_CSV = getFilePath("Select PartyLocation.csv");
+        return getPartyLocation(getFilePath("Select PartyLocation.csv"));
+    }
+
+    /**
+     * Reads party location from partylocation.csv
+     */
+    public static Location getPartyLocation(String PARTY_LOCATION_CSV) {
         try {
             assert PARTY_LOCATION_CSV != null;
             try (InputStream inputStream = new FileInputStream(PARTY_LOCATION_CSV)) {
@@ -116,8 +154,13 @@ public class Reader {
         return null;
     }
 
+    /**
+     * Retrieves the absolute path of a selected file using a file chooser dialog.
+     *
+     * @param  fileChooserTitle  the title to be displayed in the file chooser dialog
+     * @return                  the absolute path of the selected file, or null if the file selection was canceled
+     */
     private static String getFilePath(String fileChooserTitle) {
-        System.out.println(fileChooserTitle);
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle(fileChooserTitle);
         int result = fileChooser.showOpenDialog(null);
@@ -128,5 +171,29 @@ public class Reader {
             System.out.println("File selection was canceled.");
             return null;
         }
+    }
+
+    /**
+     * Returns the absolute path of the given relative path
+     * @param relativePath relative path
+     * @return absolute path
+     */
+    private static String getAbsolutePath(String relativePath) {
+        URL resourceUrl = Reader.class.getResource(relativePath);
+        if (resourceUrl == null) {
+            try {
+                throw new FileNotFoundException("Resource not found: " + relativePath);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        File file = null;
+        try {
+            file = new File(resourceUrl.toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        String absolutePath = file.getAbsolutePath();
+        return absolutePath;
     }
 }

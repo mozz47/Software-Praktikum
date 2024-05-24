@@ -12,7 +12,7 @@ public class PairController {
         List<Pair> pairList = new ArrayList<>();
         HashSet<String> processedParticipantsIds = new HashSet<>();
 
-        for (Participant participant : Objects.requireNonNull(Reader.getParticipants())) {
+        for (Participant participant : Objects.requireNonNull(Reader.getTestParticipants())) {
 
             if (processedParticipantsIds.contains(participant.id)) { //already processed with previous Participant
                 continue;
@@ -33,7 +33,7 @@ public class PairController {
     public static List<Participant> getRegisteredAloneParticipants() {
         List<Participant> pairList = new ArrayList<>();
 
-        for (Participant participant : Objects.requireNonNull(Reader.getParticipants())) {
+        for (Participant participant : Objects.requireNonNull(Reader.getTestParticipants())) {
 
             if (participant.partner == null) {
                 pairList.add(participant);
