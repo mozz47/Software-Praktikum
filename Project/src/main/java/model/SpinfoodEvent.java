@@ -6,15 +6,15 @@ import java.util.List;
  * Singleton class to store Spinfood Event
  */
 public class SpinfoodEvent {
-    private static SpinfoodEvent event;
+    private static SpinfoodEvent event;  // Singleton instance
 
     public List<Participant> participants;
     public List<Participant> successors;
     public Location partyLocation;
-    public List<Pair> pairList;
-    public List<Pair> pairListOld;
-    public List<Group> groupsList;
-    public List<Group> groupsListOld;
+    private List<Pair> pairList;
+    private List<Pair> pairListOld;
+    private List<Group> groupList;
+    private List<Group> groupListOld;
 
     /**
      * private constructor to prevent creating instances from outside the class
@@ -24,9 +24,9 @@ public class SpinfoodEvent {
         this.successors = null;
         this.partyLocation = null;
         this.pairList = null;
-        this.groupsList = null;
+        this.groupList = null;
         this.pairListOld = null;
-        this.groupsListOld = null;
+        this.groupListOld = null;
     }
 
     /**
@@ -41,6 +41,23 @@ public class SpinfoodEvent {
         return event;
     }
 
+    /**
+     * Updates the pair list, saving the current one in pairListOld.
+     * @param pairList new pair list
+     */
+    public void updatePairList(List<Pair> pairList) {
+        this.pairListOld = this.pairList;
+        this.pairList = pairList;
+    }
+
+    /**
+     * Updates the group list, saving the current one in pairListOld.
+     * @param groupList new group list
+     */
+    public void updateGroupList(List<Group> groupList) {
+        this.groupListOld = this.groupList;
+        this.groupList = groupList;
+    }
 
     /**
      * prints human-readable version of the participant and party location data
