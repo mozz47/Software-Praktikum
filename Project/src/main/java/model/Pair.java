@@ -5,10 +5,17 @@ package model;
  * A pair consists of two participants, who may or may not have registered together.
  */
 public class Pair {
+    private static final int MAX_AGE_GAP = 10; // the maximum age difference for a valid pair in years -useless for now
+
+    private static int idCounter = 0;
+
+    public int id;
     public Participant participant1;
     public Participant participant2;
-    private final boolean registeredAsPair;
-    private static final int MAX_AGE_GAP = 10; // the maximum age difference for a valid pair in years -useless for now
+    public final boolean registeredAsPair;
+    public boolean p2sKitchenIsUsed; //todo: initialize in constructor/Reader
+
+    public Cluster cluster;
 
     /**
      * Main constructor of Pair.
@@ -18,6 +25,8 @@ public class Pair {
      * @param registeredAsPair whether they registered together
      */
     public Pair(Participant participant1, Participant participant2, boolean registeredAsPair) {
+        idCounter++;
+        this.id = idCounter;
         this.participant1 = participant1;
         this.participant2 = participant2;
         this.registeredAsPair = registeredAsPair;
@@ -99,6 +108,14 @@ public class Pair {
     }
 
     /**
+     * Returns the Kitchen that is used in the pair.
+     * @return Kitchen
+     */
+    public Kitchen getKitchen() {
+        return p2sKitchenIsUsed ? participant2.kitchen : participant1.kitchen;
+    }
+
+    /**
      * Returns human-readable string version of the pair.
      */
     @Override
@@ -112,5 +129,4 @@ public class Pair {
     public String shortString() {
         return "(" + participant1.name + ", " + participant2.name + ")";
     }
-
 }
