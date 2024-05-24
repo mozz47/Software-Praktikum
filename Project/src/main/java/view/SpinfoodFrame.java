@@ -87,14 +87,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         printToConsole(resourceBundle.getString("infoConsoleStartUp"));
 
         // Add Action Listener for the autoAssignButton, use Algorithm
-        autoAssignButton.addActionListener(e -> {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    new CriteriaRankingFrame(resourceBundle, SpinfoodFrame.this);
-                }
-            });
-        });
+        autoAssignButton.addActionListener(e -> SwingUtilities.invokeLater(() -> new CriteriaRankingFrame(resourceBundle, SpinfoodFrame.this)));
 
         // Add Action Listener for the outputCSVButton, choose DIR to save CSV
         outputCSVButton.addActionListener(e -> {
