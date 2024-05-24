@@ -11,36 +11,19 @@ public class MainController {
      * MainController method for main execution order of the program.
      */
     public static void main(String[] args) {
+        // Create Spinfood Event
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
 
         // Read Input
-        //List<Participant> participants = Reader.getParticipants();
-        //Location partyLocation = Reader.getPartyLocation();
-
+        event.participants = Reader.getParticipants();
+        event.partyLocation = Reader.getPartyLocation();
 
         // print human-readable version
-        //printInput(participants, partyLocation);
-
-        //collect Participants who already have a partner in pairList
-
+        event.printInput();
 
         //Start GUI
         //better with SwingUtilities.invokeLater(), because it will not block threads
         new SpinfoodFrame();
-    }
-
-
-    /**
-     * prints human-readable version of the participant and party location data
-     * @param participants list of participants
-     * @param partyLocation after dinner party location
-     */
-    static void printInput(List<Participant> participants, Location partyLocation) {
-        System.out.println("Teilnehmer:");
-        for (Participant p : participants) {
-            System.out.println(p);
-        }
-        System.out.println("Party Koordinaten:");
-        System.out.println(partyLocation);
     }
 
 }

@@ -11,12 +11,17 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MainControllerTest {
+class SpinfoodEventTest {
     private final PrintStream standardOut = System.out;  // to test console output
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();  // to test console output
 
     @BeforeEach
     public void setUp() {
+        // reset event
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
+        event = null;
+
+        // reset console output
         System.setOut(new PrintStream(outputStreamCaptor));
     }
 
@@ -38,7 +43,10 @@ class MainControllerTest {
         participants.add(p1);
         Location partyLocation = new Location(11.111, 12.222);
 
-        MainController.printInput(participants, partyLocation);
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
+        event.participants = participants;
+        event.partyLocation = partyLocation;
+        event.printInput();
 
         assertEquals("""
                 Teilnehmer:\r
