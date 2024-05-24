@@ -121,7 +121,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     }
 
     private void displayParticipants(List<Participant> participants) {
-        if(participantListModel.isEmpty()) {
+        if (participantListModel.isEmpty()) {
             // Add all participant-Strings to the list model
             for (Participant participant : participants) {
                 participantListModel.addElement(getShortRepresentation(participant));
@@ -137,6 +137,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             pairListModel.addElement(pair.shortString());
         }
     }
+
     //TODO move to Participant.java
     private String getShortRepresentation(Participant participant) {
         if (participant.partner == null) {

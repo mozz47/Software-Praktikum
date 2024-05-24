@@ -3,8 +3,6 @@ package controller;
 import model.*;
 import view.SpinfoodFrame;
 
-import java.util.List;
-
 public class MainController {
 
     /**

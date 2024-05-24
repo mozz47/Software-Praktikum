@@ -97,6 +97,7 @@ public class CriteriaRankingFrame extends JFrame {
 
     /**
      * Test method for the CriteriaRankingFrame.
+     *
      * @param args
      */
     public static void main(String[] args) {

@@ -31,6 +31,7 @@ public class SpinfoodEvent {
 
     /**
      * public method to get the instance of SpinfoodEvent singleton
+     *
      * @return SpinfoodEvent
      */
     public static SpinfoodEvent getInstance() {

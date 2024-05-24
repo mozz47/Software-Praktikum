@@ -20,6 +20,7 @@ public class Reader {
 
     /**
      * Reads all the Info of participants from the test teilnemerliste.csv file, creates participant and adds each one to list
+     *
      * @return List of all Participants
      */
     public static List<Participant> getTestParticipants() {
@@ -33,6 +34,7 @@ public class Reader {
 
     /**
      * Reads all the Info of participants from a selected .csv file, creates participant and adds each one to list
+     *
      * @return List of all Participants
      */
     public static List<Participant> getParticipants() {
@@ -41,6 +43,7 @@ public class Reader {
 
     /**
      * Reads all the Info of participants from the .csv file, creates participant and adds each one to list
+     *
      * @return List of all Participants
      */
     private static List<Participant> getParticipants(String TEILNEHMER_CSV) {
@@ -107,6 +110,7 @@ public class Reader {
 
     /**
      * Reads all the Info of participants from the test partylocation.csv file, creates participant and adds each one to list
+     *
      * @return List of all Participants
      */
     public static Location getTestPartyLocation() {
@@ -117,6 +121,7 @@ public class Reader {
 
     /**
      * Reads all the Info of participants from a selected .csv file, creates participant and adds each one to list
+     *
      * @return List of all Participants
      */
     public static Location getPartyLocation() {
@@ -157,8 +162,8 @@ public class Reader {
     /**
      * Retrieves the absolute path of a selected file using a file chooser dialog.
      *
-     * @param  fileChooserTitle  the title to be displayed in the file chooser dialog
-     * @return                  the absolute path of the selected file, or null if the file selection was canceled
+     * @param fileChooserTitle the title to be displayed in the file chooser dialog
+     * @return the absolute path of the selected file, or null if the file selection was canceled
      */
     private static String getFilePath(String fileChooserTitle) {
         JFileChooser fileChooser = new JFileChooser();
@@ -175,6 +180,7 @@ public class Reader {
 
     /**
      * Returns the absolute path of the given relative path
+     *
      * @param relativePath relative path
      * @return absolute path
      */

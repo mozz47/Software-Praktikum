@@ -11,8 +11,9 @@ public class Location {
     /**
      * Location constructor
      * (if longitude and latitude are both 0, the Location is probably invalid)
+     *
      * @param longitude double value of longitude
-     * @param latitude double value of longitude
+     * @param latitude  double value of longitude
      */
     public Location(double longitude, double latitude) {
         this.longitude = longitude;

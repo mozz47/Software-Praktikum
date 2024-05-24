@@ -1,6 +1,5 @@
 package controller;
 
-import com.sun.tools.javac.Main;
 import model.*;
 
 import java.util.*;
@@ -9,6 +8,10 @@ import java.util.*;
  * Class to handle Pairs
  */
 public class PairController {
+
+    private static boolean[] used;
+    private static List<Participant> successors;
+
     public static List<Pair> getRegisteredTogetherPairs() {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         List<Pair> pairList = new ArrayList<>();
@@ -44,9 +47,6 @@ public class PairController {
         }
         return pairList;
     }
-
-    private static boolean[] used;
-    private static List<Participant> successors;
 
     private static List<Pair> getGeneratedPairs(List<Criterion> criterions) {
         List<Participant> participants = getRegisteredAloneParticipants();
@@ -132,16 +132,18 @@ public class PairController {
 
     public static void main(String[] args) {
         // Pairs für Teilnehmer, die sich alleine angemeldet haben
-        MainController.initializeWithoutFileChooser(); // startEvent
+        MainController.initializeWithoutFileChooser(); // load test event
 
-        List<Pair> allPairs = getGeneratedPairs(List.of(
-                Criterion.Criterion_06_Food_Preference,
-                Criterion.Criterion_07_Age_Difference,
-                Criterion.Criterion_08_Sex_Diversity,
-                Criterion.Criterion_10_Group_Amount,
-                Criterion.Criterion_09_Path_Length));
+        List<Criterion> criteria = new ArrayList<>();
+        criteria.add(Criterion.Criterion_06_Food_Preference);
+        criteria.add(Criterion.Criterion_07_Age_Difference);
+        criteria.add(Criterion.Criterion_08_Sex_Diversity);
+        criteria.add(Criterion.Criterion_10_Group_Amount);
+        criteria.add(Criterion.Criterion_09_Path_Length);
 
-        System.out.println("Pairs (registered alone): ");
+        List<Pair> allPairs = getGeneratedPairs(criteria);
+
+        System.out.println("Pairs: ");
         for (Pair pair : allPairs) {
             System.out.println(pair.shortString());
         }

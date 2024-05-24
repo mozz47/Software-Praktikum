@@ -19,16 +19,17 @@ public class Participant {
 
     /**
      * main constructor of Participant
-     * @param id presumably unique hash-code for every participant (maybe we should replace this with a simple int)
-     * @param name full name of the participant
-     * @param foodPreference enum
-     * @param age int age
-     * @param sex enum
-     * @param hasKitchen boolean
+     *
+     * @param id               presumably unique hash-code for every participant (maybe we should replace this with a simple int)
+     * @param name             full name of the participant
+     * @param foodPreference   enum
+     * @param age              int age
+     * @param sex              enum
+     * @param hasKitchen       boolean
      * @param mightHaveKitchen boolean, false if hasKitchen is already true
-     * @param kitchen Kitchen instance with longitude, latitude and story
-     * @param story int (redundant?)
-     * @param partner Participant instance of partner
+     * @param kitchen          Kitchen instance with longitude, latitude and story
+     * @param story            int (redundant?)
+     * @param partner          Participant instance of partner
      */
     public Participant(String id, String name, FoodPreference foodPreference, int age, Sex sex, boolean hasKitchen, boolean mightHaveKitchen, Kitchen kitchen, int story, Participant partner) {
         this.id = id;
@@ -68,7 +69,8 @@ public class Participant {
     /**
      * parameterless constructor mainly for testing
      */
-    public Participant() {}
+    public Participant() {
+    }
 
     /**
      * returns human-readable string version of the participant
@@ -104,5 +106,5 @@ public class Participant {
         }
     }
 
-    
+
 }

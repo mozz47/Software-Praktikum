@@ -12,8 +12,9 @@ public class Pair {
 
     /**
      * Main constructor of Pair.
-     * @param participant1 partner of participant 2
-     * @param participant2 partner of participant 1
+     *
+     * @param participant1     partner of participant 2
+     * @param participant2     partner of participant 1
      * @param registeredAsPair whether they registered together
      */
     public Pair(Participant participant1, Participant participant2, boolean registeredAsPair) {
@@ -33,6 +34,7 @@ public class Pair {
 
     /**
      * Returns the main food preference of a pair according to criteria 6.1.
+     *
      * @return FoodPreference main food preference of the pair
      */
     public FoodPreference getMainFoodPreference() {
@@ -41,8 +43,7 @@ public class Pair {
         if (fp1 == fp2) {
             return fp1;
         }
-        if ((fp1 == FoodPreference.MEAT && fp2 == FoodPreference.NONE) ||
-                (fp2 == FoodPreference.MEAT && fp1 == FoodPreference.NONE)) {
+        if ((fp1 == FoodPreference.MEAT && fp2 == FoodPreference.NONE) || (fp2 == FoodPreference.MEAT && fp1 == FoodPreference.NONE)) {
             return FoodPreference.MEAT;
         }
         if (fp1 == FoodPreference.VEGAN || fp2 == FoodPreference.VEGAN) {
@@ -77,14 +78,13 @@ public class Pair {
 
     /**
      * !!!!ONLY USE IF AT LEAST ONE HAS KITCHEN!!!!
+     *
      * @return true if both participants have the same house
      */
     public boolean sameHouse() {
-        if ((this.participant1.hasKitchen || this.participant1.mightHaveKitchen)
-                && !(this.participant2.hasKitchen || this.participant2.mightHaveKitchen)) { //if 1 has/maybe has kitchen and 2 not
+        if ((this.participant1.hasKitchen || this.participant1.mightHaveKitchen) && !(this.participant2.hasKitchen || this.participant2.mightHaveKitchen)) { //if 1 has/maybe has kitchen and 2 not
             return false;
-        } else if (!(this.participant1.hasKitchen || this.participant1.mightHaveKitchen)
-                && (this.participant2.hasKitchen || this.participant2.mightHaveKitchen)) { // if 1 has no kitchen and 2 has/maybe has
+        } else if (!(this.participant1.hasKitchen || this.participant1.mightHaveKitchen) && (this.participant2.hasKitchen || this.participant2.mightHaveKitchen)) { // if 1 has no kitchen and 2 has/maybe has
             return false;
         } else { // both have/maybe have kitchen
             return participant1.kitchen.longitude == participant2.kitchen.longitude && participant1.kitchen.latitude == participant2.kitchen.latitude;
@@ -103,11 +103,7 @@ public class Pair {
      */
     @Override
     public String toString() {
-        return "Pair{" +
-                "participant1=" + participant1 +
-                ", participant2=" + participant2 +
-                ", registeredAsPair=" + registeredAsPair +
-                '}';
+        return "Pair{" + "participant1=" + participant1 + ", participant2=" + participant2 + ", registeredAsPair=" + registeredAsPair + '}';
     }
 
     /**
