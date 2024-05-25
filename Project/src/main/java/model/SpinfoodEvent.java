@@ -11,11 +11,11 @@ public class SpinfoodEvent {
     public List<Participant> participants;
     public Location partyLocation;
 
-    private List<Pair> pairList;
+    private List<Pair> pairList;  // private to manage the old pair list
     private List<Pair> pairListOld;
-    private List<Group> groupList;
+    private List<Group> groupList;  // private to manage the old group list
     private List<Group> groupListOld;
-    private List<Participant> successors;
+    private List<Participant> successors;  // private to manage the old successors
     private List<Participant> successorsOld;
 
     /**
