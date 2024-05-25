@@ -35,9 +35,6 @@ public class MainController {
         // Read Input
         event.participants = Reader.getParticipants();
         event.partyLocation = Reader.getPartyLocation();
-
-        // print human-readable version
-        event.printInput();
     }
 
     /**
@@ -50,7 +47,7 @@ public class MainController {
         event.printInput();
 
         //Start GUI
-        //better with SwingUtilities.invokeLater(), because it will not block threads
+        //might be better with SwingUtilities.invokeLater(), because it will not block threads
         new SpinfoodFrame();
     }
 

@@ -4,6 +4,7 @@ import controller.Reader;
 import model.Group;
 import model.Pair;
 import model.Participant;
+import model.SpinfoodEvent;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -62,9 +63,10 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         comboBoxLang.addActionListener(e -> updateLanguage());
 
         readCSVButton.addActionListener(e -> {
-            List<Participant> participants = Reader.getParticipants();
-            if (participants != null) {
-                displayParticipants(participants);
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+            event.participants = Reader.getParticipants();
+            if (event.participants != null) {
+                displayParticipants();
 
                 printToConsole(resourceBundle.getString("infoConsoleFileRead"));
 
@@ -76,6 +78,8 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         // Initialize the UI with the default language texts
         updateLanguage();
 
+        // Initial display of participants
+        displayParticipants();
 
         // Set JFrame properties
         setTitle(resourceBundle.getString("title"));
@@ -120,10 +124,11 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         }
     }
 
-    private void displayParticipants(List<Participant> participants) {
+    private void displayParticipants() {
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
         if (participantListModel.isEmpty()) {
             // Add all participant-Strings to the list model
-            for (Participant participant : participants) {
+            for (Participant participant : event.participants) {
                 participantListModel.addElement(getShortRepresentation(participant));
             }
         }
