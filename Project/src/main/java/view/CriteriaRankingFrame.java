@@ -1,6 +1,6 @@
 package view;
 
-import controller.PairController;
+import controller.PairListBuilder;
 import model.Criterion;
 import model.PairList;
 
@@ -8,7 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
@@ -60,7 +59,7 @@ public class CriteriaRankingFrame extends JFrame {
                 System.out.println(resourceBundle.getString(s.getToken()));
             }
             dispose();
-            PairList pairList = PairController.getPairList(data1);
+            PairList pairList = PairListBuilder.getPairList(data1);
             callback.displayPairs(pairList.getPairList());
             callback.printToConsole(resourceBundle.getString("createdPairsWithAlgorithm"));
 
