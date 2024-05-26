@@ -10,7 +10,6 @@ import java.util.List;
  */
 public class GroupListBuilder {
 
-    private List<Pair> toBeUsed;  // pairs from pair list that haven't been put into other lists.
     private List<List<Pair>> pairLists;
     private List<Pair> pairSuccessors;
 
@@ -18,9 +17,10 @@ public class GroupListBuilder {
      * Uses Chris' algorithm for building groups from the pairList in the SpinfoodEvent singleton.
      * The resulting group list can be found in said singleton under the name groupList.
      */
-    public void buildGroupList() {
+    public void buildGroupList(List<Criterion> criteria) {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
-        toBeUsed = new ArrayList<>(event.getPairList());  // clone pairList
+        // pairs from pair list that haven't been put into other lists.
+        List<Pair> toBeUsed = new ArrayList<>(event.getPairList());  // clone pairList
         pairLists = new ArrayList<>();
         pairSuccessors = new ArrayList<>();
 
@@ -32,8 +32,8 @@ public class GroupListBuilder {
         // todo: maybe it's better to check this during the pair building algo
 
         // criteria 6 (strict food pref separation),8 (increase sex diversity),9 (reduce travel distance) via selected order:
+        executeOptionalCriteriaAlgosInCorrectOrder(criteria);
         criterion06StrictFoodSeparation();
-        // todo: 8 and 9
 
         // criterion 2: collect into groups of unique pairs (THIS HAS TO BE THE LAST CRITERION TO USE)
 
@@ -42,6 +42,30 @@ public class GroupListBuilder {
 
         // put successors from pairSuccessors into event.successors
         // todo: Absprache mit Parviz notwendig, um successors richtig zu speichern
+    }
+
+    /**
+     * Receives the criteria list with the 5 criteria sorted by the user. Executes algorithms corresponding to these
+     * criteria in the correct order.
+     * @param criteria list of 5 criteria (6-10)
+     */
+    private void executeOptionalCriteriaAlgosInCorrectOrder(List<Criterion> criteria) {
+        for (Criterion criterion : criteria) {
+            switch (criterion) {
+                case Criterion_06_Food_Preference -> criterion06StrictFoodSeparation();
+                case Criterion_08_Sex_Diversity -> criterion08SexDiversity();
+                case Criterion_09_Path_Length -> criterion09PathLength();
+                // 7 and 10 are irrelevant for the group algorithm
+            }
+        }
+    }
+
+    private void criterion09PathLength() {
+        // todo
+    }
+
+    private void criterion08SexDiversity() {
+        // todo
     }
 
     /**
@@ -360,7 +384,7 @@ public class GroupListBuilder {
 
         // test of group list builder
         GroupListBuilder glb = new GroupListBuilder();
-        glb.buildGroupList();
+        glb.buildGroupList(criteria);
         System.out.println("Amount of created groups: " + event.getGroupList().size());
         System.out.println("Amount of successors: " + glb.pairSuccessors.size() * 2);
 
@@ -387,7 +411,7 @@ public class GroupListBuilder {
             System.out.println("nicht vorhanden");
         }
         else {
-            Cluster cluster = event.getGroupList().get(110).pair1.cluster;
+            Cluster cluster = event.getGroupList().get(0).pair1.cluster;
             List<Group> groups = cluster.getGroups();
             for (int i = 0; i < groups.size(); i++) {
                 System.out.println("Group" + (i+1) + ":");
