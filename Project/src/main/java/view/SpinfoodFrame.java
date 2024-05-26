@@ -1,6 +1,7 @@
 package view;
 
 import controller.Reader;
+import controller.Saver;
 import model.Group;
 import model.Pair;
 import model.Participant;
@@ -81,6 +82,11 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             } else {
                 printToConsole(resourceBundle.getString("errorFileRead"));
             }
+        });
+
+        outputCSVButton.addActionListener(e -> {
+            Saver.save();
+            printToConsole("Saved.");
         });
 
         // Initialize the UI with the default language texts

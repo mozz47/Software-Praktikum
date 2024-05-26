@@ -23,6 +23,10 @@ public class Group {
         this.pairWithKitchen = pairWithKitchen;
     }
 
+    public static void resetIdCounter() {
+        idCounter = 0;
+    }
+
     /**
      * Returns the main food preference of a group according to criteria 6.1.
      * @return FoodPreference

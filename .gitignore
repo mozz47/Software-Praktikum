@@ -1,4 +1,5 @@
 # global .gitignore (there is a project-specific one in the project folder)
+Output/
 # java
 *.class
 *.jar

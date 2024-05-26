@@ -13,6 +13,11 @@ public class GroupListBuilder {
     private List<List<Pair>> pairLists;
     private List<Pair> pairSuccessors;
 
+    public GroupListBuilder() {
+        // reset group ids to 0
+        Group.resetIdCounter();
+    }
+
     /**
      * Uses Chris' algorithm for building groups from the pairList in the SpinfoodEvent singleton.
      * The resulting group list can be found in said singleton under the name groupList.

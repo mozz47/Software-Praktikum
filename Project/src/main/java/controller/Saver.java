@@ -46,7 +46,7 @@ public class Saver {
 
     private static void writeGroupListToCSV(List<Group>  groups, String fileName) {
         try {
-            FileWriter fw = new FileWriter(fileName);
+            FileWriter fw = new FileWriter("Output/" + fileName);
             StringBuilder sb = new StringBuilder();
             for (Group group : groups) {
                 sb.append(pairToString(group.pair1));
