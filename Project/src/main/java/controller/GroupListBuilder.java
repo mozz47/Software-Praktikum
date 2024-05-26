@@ -25,24 +25,124 @@ public class GroupListBuilder {
         pairSuccessors = new ArrayList<>();
 
         // criterion 1: food preference (max 1 meaty in mixed group)
-        boolean goodSplit = separateMeatiesAndRest();
-        if (!goodSplit) {
-            System.out.println("Keine brauchbare Aufteilung in Schritt 1");
-            return;
-        }
+        //pairLists = separateMeatiesAndRest(toBeUsed);
+        pairLists.add(toBeUsed);  // remove this line if applying criteria01
 
         // criterion 4: max 3 pairs per kitchen
-        // todo: maybe it's better to do check this during the pair building algo
+        // todo: maybe it's better to check this during the pair building algo
 
         // criteria 6 (strict food pref separation),8 (increase sex diversity),9 (reduce travel distance) via selected order:
-        // todo
+        criterion06StrictFoodSeparation();
+        // todo: 8 and 9
 
-        // criterion 2: collect into groups of unique pairs
+        // criterion 2: collect into groups of unique pairs (THIS HAS TO BE THE LAST CRITERION TO USE)
+
         splitIntoGroupsOf9Pairs();
         collectIntoGroups();
 
         // put successors from pairSuccessors into event.successors
         // todo: Absprache mit Parviz notwendig, um successors richtig zu speichern
+    }
+
+    /**
+     * Applies strictFoodSeparation() on every list in pairList and upgrades to new pairList.
+     */
+    private void criterion06StrictFoodSeparation() {
+        List<List<Pair>> newPairLists = new ArrayList<>();
+        for (List<Pair> list : pairLists) {
+            newPairLists.addAll(strictFoodSeparation(list));
+        }
+        pairLists = newPairLists;
+    }
+
+    /**
+     * Preferably, pairs and groups with identical food preferences should be formed.
+     * If this is not possible, the preferences should at least be as similar as possible.
+     * The preference deviation within the pairs and groups should thus be kept to a minimum.
+     * The group of 'Egalis' is particularly helpful here.
+     * They can be used as fillers and should preferably be paired with a 'Fleischi' when forming pairs.
+     * When forming groups, Egali pairs should preferably be combined with Fleischi pairs.
+     * Otherwise, there will be an increased number of withdrawals
+     * shortly after the announcement of the pairs and groups.
+     *
+     * @return pairList (not automatically set to enable use in other methods)
+     */
+    private List<List<Pair>> strictFoodSeparation(List<Pair> toBeSeparated) {
+        List<Pair> egalis = new ArrayList<>();
+        List<Pair> meaties = new ArrayList<>();
+        List<Pair> vegans = new ArrayList<>();
+        List<Pair> veggies = new ArrayList<>();
+
+        for (Pair p : toBeSeparated) {
+            switch (p.getMainFoodPreference()) {
+                case NONE:
+                    egalis.add(p);
+                case MEAT:
+                    meaties.add(p);
+                case VEGAN:
+                    vegans.add(p);
+                case VEGGIE:
+                    veggies.add(p);
+            }
+        }
+
+        // FILL VEGANS-GROUP up to 9
+
+        int veganCnt = vegans.size();
+        int veggieCnt = veggies.size();
+        int egalisCnt = egalis.size();
+
+        // alternative: veggies.size() % 9 != 0
+        if (veganCnt < 9) {
+            // fill vegan group with veggies
+            if (veganCnt + veggieCnt >= 9) {
+                int neededVeggies = 9 - veganCnt;
+                for (int i = 0; i < neededVeggies; i++) {
+                    Pair veggie = veggies.remove(0); // Remove the veggie from veggies list
+                    vegans.add(veggie); // Add the veggie to vegans list
+                }
+            }
+            else if (veganCnt + veggieCnt + egalisCnt >= 9) {
+                // Add all veggies first
+                vegans.addAll(veggies);
+                veggies.clear();
+
+                // Calculate remaining needed egalis
+                int neededEgalis = 9 - vegans.size();
+                for (int i = 0; i < neededEgalis; i++) {
+                    Pair egal = egalis.remove(0); // Remove the egalis from egalis list
+                    vegans.add(egal); // Add the egalis to vegans list
+                }
+            }
+            // if both aren't enough, we just leave the vegans alone in the list.
+        }
+
+        // FILL VEGGIE-GROUP up to 9
+
+        // Recalculate veggie count
+        veggieCnt = veggies.size();
+
+        // Fill veggies to 9 if possible
+        if (veggieCnt < 9) {
+            if (veggieCnt + egalisCnt >= 9) {
+                int neededEgalis = 9 - veggieCnt;
+                for (int i = 0; i < neededEgalis; i++) {
+                    Pair egali = egalis.remove(0); // Remove the egalis from egalis list
+                    veggies.add(egali); // Add the egalis to veggies list
+                }
+            }
+        }
+
+        // Add remaining egalis to meaties
+        meaties.addAll(egalis);
+        egalis.clear();
+
+        List<List<Pair>> out = new ArrayList<>();
+        out.add(vegans);
+        out.add(veggies);
+        out.add(meaties);
+
+        return out;
     }
 
     /**
@@ -169,13 +269,12 @@ public class GroupListBuilder {
      *
      * @return false only if there was no easy match for a 9+ pair group list.
      */
-    private boolean separateMeatiesAndRest() {
+    private List<List<Pair>> separateMeatiesAndRest(List<Pair> toBeSeparated) {
         List<Pair> meaties = new ArrayList<>();
         List<Pair> rest = new ArrayList<>();
         int meatyCount = 0;
         int restCount = 0;
-        boolean out = true;
-        for (Pair p : toBeUsed) {
+        for (Pair p : toBeSeparated) {
             if (p.getMainFoodPreference() == FoodPreference.MEAT
                     || p.getMainFoodPreference() == FoodPreference.NONE) {
                 meatyCount++;
@@ -188,17 +287,16 @@ public class GroupListBuilder {
             if (meatyCount > 1) {
                 // we could throw meaties into successors to still make it work here
                 // but for now we just abort
-                out = false;
+                throw new IllegalArgumentException("Algorithm aborted, less than 9 meaties and rest.");
             }
             else {
-                rest = new ArrayList<>(toBeUsed);  // clone list
-                toBeUsed = new ArrayList<>();  // empty
+                rest = new ArrayList<>(toBeSeparated);  // clone list
             }
         }
         else if (meatyCount < 9) {
             // throw all meaties into successors (we could keep one pair here)
             // but for now we discard all meaties
-            for (Pair p : toBeUsed) {
+            for (Pair p : toBeSeparated) {
                 if (p.getMainFoodPreference() == FoodPreference.MEAT
                         || p.getMainFoodPreference() == FoodPreference.NONE) {
                     pairSuccessors.add(p);
@@ -211,7 +309,7 @@ public class GroupListBuilder {
         else if (restCount < 9) {
             // throw all veggies and vegans into successors
             // it is a bit complicated to keep them in this case
-            for (Pair p : toBeUsed) {
+            for (Pair p : toBeSeparated) {
                 if (p.getMainFoodPreference() != FoodPreference.MEAT
                         || p.getMainFoodPreference() == FoodPreference.NONE) {
                     pairSuccessors.add(p);
@@ -225,7 +323,7 @@ public class GroupListBuilder {
             // here we have more than 9 of each group, so we split them
             // for each meaty that is over 9*n we could include him into a rest group
             // but for now we split them totally
-            for (Pair p : toBeUsed) {
+            for (Pair p : toBeSeparated) {
                 if (p.getMainFoodPreference() == FoodPreference.MEAT
                         || p.getMainFoodPreference() == FoodPreference.NONE) {
                     meaties.add(p);
@@ -234,8 +332,13 @@ public class GroupListBuilder {
                 }
             }
         }
-        pairLists.add(meaties);
-        pairLists.add(rest);
+        List<List<Pair>> out = new ArrayList<>();
+        if (!meaties.isEmpty()) {
+            out.add(meaties);
+        }
+        if (!rest.isEmpty()) {
+            out.add(rest);
+        }
         return out;
     }
 
@@ -284,7 +387,7 @@ public class GroupListBuilder {
             System.out.println("nicht vorhanden");
         }
         else {
-            Cluster cluster = event.getGroupList().get(90).pair1.cluster;
+            Cluster cluster = event.getGroupList().get(110).pair1.cluster;
             List<Group> groups = cluster.getGroups();
             for (int i = 0; i < groups.size(); i++) {
                 System.out.println("Group" + (i+1) + ":");
