@@ -52,4 +52,10 @@ public class Group {
         // if the group has no food preference, it should be meat
         return out == FoodPreference.NONE ? FoodPreference.MEAT : out;
     }
+
+    public String shortString() {
+        return "[" + pair1.shortString()
+                + pair2.shortString()
+                + pair3.shortString() + "]";
+    }
 }

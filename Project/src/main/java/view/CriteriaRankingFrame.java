@@ -1,8 +1,11 @@
 package view;
 
+import controller.GroupListBuilder;
 import controller.PairListBuilder;
 import model.Criterion;
 import model.PairList;
+import model.Participant;
+import model.SpinfoodEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +18,6 @@ import java.util.ResourceBundle;
  * and dropped by the user to sort them by importance or preference before starting the automatic assignment algorithm.
  */
 public class CriteriaRankingFrame extends JFrame {
-    private final PairDisplayCallback callback;
 
     /**
      * Constructor for the CriteriaRankingFrame. Creates a list of the 5 criteria and displays them in a JList.
@@ -23,18 +25,16 @@ public class CriteriaRankingFrame extends JFrame {
      * @param resourceBundle
      */
     public CriteriaRankingFrame(ResourceBundle resourceBundle, PairDisplayCallback callback) {
-        this.callback = callback;
-        // temporary placeholder data
-        List<Criterion> data1 = new ArrayList<>();
-        data1.add(Criterion.Criterion_06_Food_Preference);
-        data1.add(Criterion.Criterion_07_Age_Difference);
-        data1.add(Criterion.Criterion_08_Sex_Diversity);
-        data1.add(Criterion.Criterion_09_Path_Length);
-        data1.add(Criterion.Criterion_10_Group_Amount);
+        List<Criterion> criteria = new ArrayList<>();
+        criteria.add(Criterion.Criterion_06_Food_Preference);
+        criteria.add(Criterion.Criterion_07_Age_Difference);
+        criteria.add(Criterion.Criterion_08_Sex_Diversity);
+        criteria.add(Criterion.Criterion_09_Path_Length);
+        criteria.add(Criterion.Criterion_10_Group_Amount);
 
         // Create list models and populate them
         DefaultListModel<Criterion> lm1 = new DefaultListModel<>();
-        for (Criterion item : data1) {
+        for (Criterion item : criteria) {
             lm1.addElement(item);
         }
 
@@ -46,7 +46,7 @@ public class CriteriaRankingFrame extends JFrame {
         list1.setDropMode(DropMode.INSERT);
 
         // Set the TransferHandler for both lists
-        list1.setTransferHandler(new ListTransferHandler<>(list1, data1));
+        list1.setTransferHandler(new ListTransferHandler<>(list1, criteria));
 
         // Create scroll panes for the JLists
         JScrollPane scrollPane1 = new JScrollPane(list1);
@@ -54,18 +54,24 @@ public class CriteriaRankingFrame extends JFrame {
         // Create OK Button
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
-            System.out.println("Ranked criteria:");
-            for (Criterion s : data1) {
-                System.out.println(resourceBundle.getString(s.getToken()));
-            }
             dispose();
-            PairList pairList = PairListBuilder.getPairList(data1);
-            callback.displayPairs(pairList.getPairList());
+
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+
+            // start pair building algorithm
+            PairList pairList = PairListBuilder.getPairList(criteria);
+            event.updatePairList(pairList.getPairList());
+            event.updateSuccessors(pairList.getSuccessorList());
             callback.printToConsole(resourceBundle.getString("createdPairsWithAlgorithm"));
 
-            //starting of algorithm for groups
-            //GroupController.getAllGroups(data1);
-            //todo
+            // start group building algorithm
+            GroupListBuilder glb = new GroupListBuilder();
+            glb.buildGroupList(criteria);
+            callback.printToConsole(resourceBundle.getString("createdGroupsWithAlgorithm"));
+            callback.displayGroups(event.getGroupList());
+
+            // displaying results
+            callback.displayPairs(event.getPairList());
 
         });
         JPanel buttonPanel = new JPanel(new BorderLayout());

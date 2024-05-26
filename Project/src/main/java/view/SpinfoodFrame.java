@@ -31,9 +31,11 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private JScrollPane pairsPane;
     private JList<String> pairJList;
     private JList<String> participantJList;
-    private JList<Group> groupJList;
-    private DefaultListModel<String> participantListModel;
-    private DefaultListModel<String> pairListModel;
+    private JList<String> groupJList;
+    private JLabel selectLanguageLabel;
+    private final DefaultListModel<String> participantListModel;
+    private final DefaultListModel<String> pairListModel;
+    private final DefaultListModel<String> groupListModel;
 
 
     public SpinfoodFrame() {
@@ -53,6 +55,12 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         // Initialize pair list and set model
         pairJList.setModel(pairListModel);
         pairsPane.setViewportView(pairJList);
+
+        // Initialize group list model
+        groupListModel = new DefaultListModel<>();
+        // Initializ group list and set model
+        groupJList.setModel(groupListModel);
+        groupPane.setViewportView(groupJList);
 
 
         // Add languages to comboBoxLang for language selection
@@ -91,7 +99,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         printToConsole(resourceBundle.getString("infoConsoleStartUp"));
 
         // Add Action Listener for the autoAssignButton, use Algorithm
-        autoAssignButton.addActionListener(e -> SwingUtilities.invokeLater(() -> new CriteriaRankingFrame(resourceBundle, SpinfoodFrame.this)));
+        autoAssignButton.addActionListener(e -> new CriteriaRankingFrame(resourceBundle, SpinfoodFrame.this));
 
         // Add Action Listener for the outputCSVButton, choose DIR to save CSV
         outputCSVButton.addActionListener(e -> {
@@ -120,6 +128,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             readCSVButton.setText(resourceBundle.getString("readCSVButton"));
             outputCSVButton.setText(resourceBundle.getString("outputCSVButton"));
             consoleLabel.setText(resourceBundle.getString("console"));
+            selectLanguageLabel.setText(resourceBundle.getString("selectLanguageLabel"));
             setTitle(resourceBundle.getString("title"));
         }
     }
@@ -140,6 +149,13 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         // Add all pair-Strings to the list model
         for (Pair pair : pairs) {
             pairListModel.addElement(pair.shortString());
+        }
+    }
+
+    public void displayGroups(List<Group> groups) {
+        groupListModel.clear();
+        for (Group group : groups) {
+            groupListModel.addElement(group.shortString());
         }
     }
 
