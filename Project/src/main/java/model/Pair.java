@@ -177,13 +177,21 @@ public class Pair {
      */
     @Override
     public String toString() {
-        return "Pair{" + "participant1=" + participant1 + ", participant2=" + participant2 + ", registeredAsPair=" + registeredAsPair + '}';
+        String participantWithKitchen = p2sKitchenIsUsed ? participant2.name : participant1.name;
+        return "Pair id: " + id + "\n" +
+                "Participant 1: " + participant1.name + "\n" +
+                "Participant 2: " + participant2.name + "\n" +
+                "Path Length: " + String.format("%.2f", (getPathLength() * 111)) + "km\n" +
+                "Kitchen used: Kitchen of " + participantWithKitchen + ":\n" + getKitchen() + "\n" +
+                "Age difference: " + getAgeDifference() + "\n" +
+                "Different gender: " + (participant1.sex != participant2.sex) + "\n" +
+                "Food Preference: " + getMainFoodPreference() + "\n";
     }
 
     /**
      * Returns a short String representation of the pair.
      */
     public String shortString() {
-        return "(" + participant1.name + ", " + participant2.name + ")";
+        return participant1.name + ", " + participant2.name;
     }
 }

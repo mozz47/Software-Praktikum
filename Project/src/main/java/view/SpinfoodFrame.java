@@ -8,6 +8,8 @@ import model.Participant;
 import model.SpinfoodEvent;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import java.util.*;
@@ -19,6 +21,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     static {
         LANGUAGE_LOCALE_MAP.put("English", Locale.ENGLISH);
         LANGUAGE_LOCALE_MAP.put("German", Locale.GERMAN);
+        /*
         LANGUAGE_LOCALE_MAP.put("Vietnamese", new Locale.Builder().setLanguage("vi").build());
         LANGUAGE_LOCALE_MAP.put("French", Locale.FRENCH);
         LANGUAGE_LOCALE_MAP.put("Spanish", new Locale.Builder().setLanguage("es").build());
@@ -29,35 +32,44 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         LANGUAGE_LOCALE_MAP.put("Czech", new Locale.Builder().setLanguage("cs").build());
         LANGUAGE_LOCALE_MAP.put("Hungarian", new Locale.Builder().setLanguage("hu").build());
         LANGUAGE_LOCALE_MAP.put("Italian", Locale.ITALIAN);
+         */
     }
 
     private static final int MAX_CONSOLE_LINES = 8;
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.GERMAN);
     private final DefaultListModel<String> successorListModel;
     private JLabel participantsLabel;
+    private JLabel pairLabel;
+    private JLabel groupLabel;
+    private JLabel successorLabel;
+    private JLabel consoleLabel;
+    private JLabel selectLanguageLabel;
+    private JLabel participantInfoLabel;
+    private JLabel pairInfoLabel;
+    private JLabel groupInfoLabel;
+    private JLabel successorInfoLabel;
+    private JPanel mainPanel;
+    private JScrollPane participantsPane;
+    private JScrollPane pairsPane;
+    private JScrollPane groupPane;
+    private JScrollPane successorPane;
     private JButton autoAssignButton;
     private JButton readCSVButton;
     private JButton outputCSVButton;
-    private JTextPane consolePane;
-    private JLabel consoleLabel;
-    private JLabel groupLabel;
-    private JComboBox<String> comboBoxLang;
-    private JLabel pairLabel;
-    private JPanel mainPanel;
-    private JScrollPane groupPane;
-    private JScrollPane participantsPane;
-    private JScrollPane pairsPane;
-    private JList<String> pairJList;
-    private JList<String> participantJList;
-    private JList<String> groupJList;
-    private JLabel selectLanguageLabel;
-    private JLabel successorLabel;
-    private JScrollPane successorPane;
-    private JList<String> successorsJList;
     private JButton loadPreviousButton;
+    private JTextPane consolePane;
+    private JTextPane participantTextPane;
+    private JTextPane pairTextPane;
+    private JTextPane groupTextPane;
+    private JTextPane successorTextPane;
+    private JList<String> participantJList;
+    private JList<String> pairJList;
+    private JList<String> groupJList;
+    private JList<String> successorsJList;
     private final DefaultListModel<String> participantListModel;
     private final DefaultListModel<String> pairListModel;
     private final DefaultListModel<String> groupListModel;
+    private JComboBox<String> comboBoxLang;
 
 
     public SpinfoodFrame() {
@@ -80,7 +92,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
 
         // Initialize group list model
         groupListModel = new DefaultListModel<>();
-        // Initializ group list and set model
+        // Initialize group list and set model
         groupJList.setModel(groupListModel);
         groupPane.setViewportView(groupJList);
 
@@ -125,6 +137,46 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             printToConsole(resourceBundle.getString("restoredConsoleText"));
         });
 
+        participantJList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                SpinfoodEvent event = SpinfoodEvent.getInstance();
+                int selectedIndex = participantJList.getSelectedIndex();
+                if (selectedIndex != -1) {
+                    participantTextPane.setText(event.participants.get(selectedIndex).toString());
+                }
+            }
+        });
+
+        pairJList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                SpinfoodEvent event = SpinfoodEvent.getInstance();
+                int selectedIndex = pairJList.getSelectedIndex();
+                if (selectedIndex != -1) {
+                    pairTextPane.setText(event.getPairList().get(selectedIndex).toString());
+                }
+            }
+        });
+
+        groupJList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                SpinfoodEvent event = SpinfoodEvent.getInstance();
+                int selectedIndex = groupJList.getSelectedIndex();
+                if (selectedIndex != -1) {
+                    groupTextPane.setText(event.getGroupList().get(selectedIndex).toString());
+                }
+            }
+        });
+
+        successorsJList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                SpinfoodEvent event = SpinfoodEvent.getInstance();
+                int selectedIndex = successorsJList.getSelectedIndex();
+                if (selectedIndex != -1) {
+                    successorTextPane.setText(event.getSuccessors().get(selectedIndex).toString());
+                }
+            }
+        });
+
         // Initialize the UI with the default language texts
         updateLanguage();
 
@@ -133,7 +185,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
 
         // Set JFrame properties
         setTitle(resourceBundle.getString("title"));
-        setSize(800, 600);
+        setSize(1200, 800);
         setLocationRelativeTo(null);
         setVisible(true);
 
@@ -174,7 +226,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         if (participantListModel.isEmpty()) {
             // Add all participant-Strings to the list model
             for (Participant participant : event.participants) {
-                participantListModel.addElement(getShortRepresentation(participant));
+                participantListModel.addElement(participant.getShortRepresentation());
             }
         }
     }
@@ -200,34 +252,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     public void displaySuccessors(List<Participant> successors) {
         successorListModel.clear();
         for (Participant successor : successors) {
-            successorListModel.addElement(successor.toString());
-        }
-    }
-
-    //TODO move to Participant.java
-    private String getShortRepresentation(Participant participant) {
-        if (participant.partner == null) {
-            return participant.name + "(" +
-                    "foodPreference=" + participant.foodPreference +
-                    ", age=" + participant.age +
-                    ", sex=" + participant.sex +
-                    ", hasKitchen=" + participant.hasKitchen +
-                    ", mightHaveKitchen=" + participant.mightHaveKitchen +
-                    ", kitchen=" + participant.kitchen +
-                    ", partner=null" +
-                    ", story=" + participant.story +
-                    ')';
-        } else {
-            return participant.name + "(" +
-                    "foodPreference=" + participant.foodPreference +
-                    ", age=" + participant.age +
-                    ", sex=" + participant.sex +
-                    ", hasKitchen=" + participant.hasKitchen +
-                    ", mightHaveKitchen=" + participant.mightHaveKitchen +
-                    ", kitchen=" + participant.kitchen +
-                    ", partner=" + participant.name + //or else stackoverflow-error because of recursive call to each other
-                    ", story=" + participant.story +
-                    ')';
+            successorListModel.addElement(successor.name);
         }
     }
 

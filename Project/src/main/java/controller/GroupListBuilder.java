@@ -258,15 +258,15 @@ public class GroupListBuilder {
         Pair I = list.get(8);
 
         // apply pattern
-        Group A1 = new Group(A, B, C, A);
-        Group A2 = new Group(D, E, F, F);
-        Group A3 = new Group(G, H, I, H);
-        Group B1 = new Group(A, D, G, D);
-        Group B2 = new Group(B, E, H, B);
-        Group B3 = new Group(C, F, I, I);
-        Group C1 = new Group(A, E, I, E);
-        Group C2 = new Group(D, H, C, C);
-        Group C3 = new Group(B, F, G, G);
+        Group A1 = new Group(A, B, C, A, Meal.STARTER);
+        Group A2 = new Group(D, E, F, F, Meal.STARTER);
+        Group A3 = new Group(G, H, I, H, Meal.STARTER);
+        Group B1 = new Group(A, D, G, D, Meal.MAIN_COURSE);
+        Group B2 = new Group(B, E, H, B, Meal.MAIN_COURSE);
+        Group B3 = new Group(C, F, I, I, Meal.MAIN_COURSE);
+        Group C1 = new Group(A, E, I, E, Meal.DESSERT);
+        Group C2 = new Group(D, H, C, C, Meal.DESSERT);
+        Group C3 = new Group(B, F, G, G, Meal.DESSERT);
 
         // add clusters
         A.cluster = new Cluster(A1, B1, C1);
