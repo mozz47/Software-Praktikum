@@ -55,6 +55,7 @@ public class GroupListBuilder {
     /**
      * Receives the criteria list with the 5 criteria sorted by the user. Executes algorithms corresponding to these
      * criteria in the correct order.
+     *
      * @param criteria list of 5 criteria (6-10)
      */
     private void executeOptionalCriteriaAlgosInCorrectOrder(List<Criterion> criteria) {
@@ -133,8 +134,7 @@ public class GroupListBuilder {
                     Pair veggie = veggies.remove(0); // Remove the veggie from veggies list
                     vegans.add(veggie); // Add the veggie to vegans list
                 }
-            }
-            else if (veganCnt + veggieCnt + egalisCnt >= 9) {
+            } else if (veganCnt + veggieCnt + egalisCnt >= 9) {
                 // Add all veggies first
                 vegans.addAll(veggies);
                 veggies.clear();
@@ -204,9 +204,9 @@ public class GroupListBuilder {
      * Say list three times quickly in a row. ;)
      *
      * @param list the list to split
-     * @param n length of the output lists
+     * @param n    length of the output lists
+     * @param <T>  generic type of list
      * @return list of lists of length n
-     * @param <T> generic type of list
      */
     private static <T> List<List<T>> splitList(List<T> list, int n) {
         List<List<T>> result = new ArrayList<>();
@@ -261,7 +261,7 @@ public class GroupListBuilder {
         Group A1 = new Group(A, B, C, A);
         Group A2 = new Group(D, E, F, F);
         Group A3 = new Group(G, H, I, H);
-        Group B1 = new Group(A ,D, G, D);
+        Group B1 = new Group(A, D, G, D);
         Group B2 = new Group(B, E, H, B);
         Group B3 = new Group(C, F, I, I);
         Group C1 = new Group(A, E, I, E);
@@ -310,8 +310,7 @@ public class GroupListBuilder {
             if (p.getMainFoodPreference() == FoodPreference.MEAT
                     || p.getMainFoodPreference() == FoodPreference.NONE) {
                 meatyCount++;
-            }
-            else {
+            } else {
                 restCount++;
             }
         }
@@ -320,38 +319,32 @@ public class GroupListBuilder {
                 // we could throw meaties into successors to still make it work here
                 // but for now we just abort
                 throw new IllegalArgumentException("Algorithm aborted, less than 9 meaties and rest.");
-            }
-            else {
+            } else {
                 rest = new ArrayList<>(toBeSeparated);  // clone list
             }
-        }
-        else if (meatyCount < 9) {
+        } else if (meatyCount < 9) {
             // throw all meaties into successors (we could keep one pair here)
             // but for now we discard all meaties
             for (Pair p : toBeSeparated) {
                 if (p.getMainFoodPreference() == FoodPreference.MEAT
                         || p.getMainFoodPreference() == FoodPreference.NONE) {
                     pairSuccessors.add(p);
-                }
-                else {
+                } else {
                     rest.add(p);
                 }
             }
-        }
-        else if (restCount < 9) {
+        } else if (restCount < 9) {
             // throw all veggies and vegans into successors
             // it is a bit complicated to keep them in this case
             for (Pair p : toBeSeparated) {
                 if (p.getMainFoodPreference() != FoodPreference.MEAT
                         || p.getMainFoodPreference() == FoodPreference.NONE) {
                     pairSuccessors.add(p);
-                }
-                else {
+                } else {
                     meaties.add(p);
                 }
             }
-        }
-        else {
+        } else {
             // here we have more than 9 of each group, so we split them
             // for each meaty that is over 9*n we could include him into a rest group
             // but for now we split them totally
@@ -399,8 +392,7 @@ public class GroupListBuilder {
         System.out.println("Example group:");
         if (event.getGroupList().isEmpty()) {
             System.out.println("nicht vorhanden");
-        }
-        else {
+        } else {
             Group group = event.getGroupList().get(0);
             System.out.println("Pair1:");
             System.out.println(group.pair1.participant1);
@@ -417,12 +409,11 @@ public class GroupListBuilder {
         System.out.println("Example cluster:");
         if (event.getGroupList().isEmpty()) {
             System.out.println("nicht vorhanden");
-        }
-        else {
+        } else {
             Cluster cluster = event.getGroupList().get(0).pair1.cluster;
             List<Group> groups = cluster.getGroups();
             for (int i = 0; i < groups.size(); i++) {
-                System.out.println("Group" + (i+1) + ":");
+                System.out.println("Group" + (i + 1) + ":");
                 Group group = groups.get(i);
                 System.out.println("Pair1:");
                 System.out.println(group.pair1.participant1);

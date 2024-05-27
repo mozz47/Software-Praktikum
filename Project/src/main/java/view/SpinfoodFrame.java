@@ -10,11 +10,27 @@ import model.SpinfoodEvent;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
+    private static final Map<String, Locale> LANGUAGE_LOCALE_MAP = new HashMap<>();
+
+    static {
+        LANGUAGE_LOCALE_MAP.put("English", Locale.ENGLISH);
+        LANGUAGE_LOCALE_MAP.put("German", Locale.GERMAN);
+        LANGUAGE_LOCALE_MAP.put("Vietnamese", new Locale.Builder().setLanguage("vi").build());
+        LANGUAGE_LOCALE_MAP.put("French", Locale.FRENCH);
+        LANGUAGE_LOCALE_MAP.put("Spanish", new Locale.Builder().setLanguage("es").build());
+        LANGUAGE_LOCALE_MAP.put("Danish", new Locale.Builder().setLanguage("da").build());
+        LANGUAGE_LOCALE_MAP.put("Polish", new Locale.Builder().setLanguage("pl").build());
+        LANGUAGE_LOCALE_MAP.put("Mandarin", new Locale.Builder().setLanguage("zh").setRegion("CN").build());
+        LANGUAGE_LOCALE_MAP.put("Japanese", Locale.JAPAN);
+        LANGUAGE_LOCALE_MAP.put("Czech", new Locale.Builder().setLanguage("cs").build());
+        LANGUAGE_LOCALE_MAP.put("Hungarian", new Locale.Builder().setLanguage("hu").build());
+        LANGUAGE_LOCALE_MAP.put("Italian", Locale.ITALIAN);
+    }
+
     private static final int MAX_CONSOLE_LINES = 8;
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.GERMAN);
     private final DefaultListModel<String> successorListModel;
@@ -74,8 +90,9 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         successorPane.setViewportView(successorsJList);
 
         // Add languages to comboBoxLang for language selection
-        comboBoxLang.addItem("Deutsch");
-        comboBoxLang.addItem("English");
+        for (String language : LANGUAGE_LOCALE_MAP.keySet()) {
+            comboBoxLang.addItem(language);
+        }
 
         // Add an action listener to the comboBoxLang to change the language
         comboBoxLang.addActionListener(e -> updateLanguage());
@@ -135,17 +152,9 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private void updateLanguage() {
         String selectedLanguage = (String) comboBoxLang.getSelectedItem();
         if (selectedLanguage != null) {
-            switch (selectedLanguage) {
-                case "English":
-                    Locale.setDefault(Locale.ENGLISH);
-                    break;
-                case "Deutsch":
-                    Locale.setDefault(Locale.GERMAN);
-                    break;
-            }
-            resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.getDefault());
+            Locale.setDefault(LANGUAGE_LOCALE_MAP.get(selectedLanguage));
 
-            // Now update texts with correct language
+            resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.getDefault());
             participantsLabel.setText(resourceBundle.getString("participants"));
             pairLabel.setText(resourceBundle.getString("pairs"));
             groupLabel.setText(resourceBundle.getString("groups"));

@@ -44,7 +44,7 @@ public class Saver {
         writeGroupListToCSV(meatGroups, "meat.csv");
     }
 
-    private static void writeGroupListToCSV(List<Group>  groups, String fileName) {
+    private static void writeGroupListToCSV(List<Group> groups, String fileName) {
         try {
             FileWriter fw = new FileWriter("Output/" + fileName);
             StringBuilder sb = new StringBuilder();

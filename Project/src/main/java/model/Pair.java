@@ -109,11 +109,68 @@ public class Pair {
 
     /**
      * Returns the Kitchen that is used in the pair.
+     *
      * @return Kitchen
      */
     public Kitchen getKitchen() {
         return p2sKitchenIsUsed ? participant2.kitchen : participant1.kitchen;
     }
+
+
+    /**
+     * Calculates the Euclidean distance from kitchen 1 to kitchen 2 to kitchen 3 to party location.
+     *
+     * @return double sum of Euclidean distance
+     */
+    public double getPathLength() {
+        Pair pairWithKitchen1 = cluster.groupA.pairWithKitchen;
+        Coordinate c1 = new Coordinate(pairWithKitchen1.getKitchen().longitude, pairWithKitchen1.getKitchen().latitude);
+        Pair pairWithKitchen2 = cluster.groupB.pairWithKitchen;
+        Coordinate c2 = new Coordinate(pairWithKitchen2.getKitchen().longitude, pairWithKitchen2.getKitchen().latitude);
+        Pair pairWithKitchen3 = cluster.groupC.pairWithKitchen;
+        Coordinate c3 = new Coordinate(pairWithKitchen3.getKitchen().longitude, pairWithKitchen3.getKitchen().latitude);
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
+        Location partyLocation = event.partyLocation;
+        Coordinate c4 = new Coordinate(partyLocation.longitude, partyLocation.latitude);
+
+        return c1.distanceTo(c2) + c2.distanceTo(c3) + c3.distanceTo(c4) + c4.distanceTo(c1);
+    }
+
+    /**
+     * Returns the distance between this pair and the given pair.
+     *
+     * @param pair other pair
+     * @return double Euclidean distance
+     */
+    public double getDistanceToPair(Pair pair) {
+        Coordinate c1 = new Coordinate(this.getKitchen().longitude, this.getKitchen().latitude);
+        Coordinate c2 = new Coordinate(pair.getKitchen().longitude, pair.getKitchen().latitude);
+        return c1.distanceTo(c2);
+    }
+
+    /**
+     * Private class to calculate the distance between two coordinates.
+     */
+    private static class Coordinate {
+        double longitude;
+        double latitude;
+
+        Coordinate(double longitude, double latitude) {
+            this.longitude = longitude;
+            this.latitude = latitude;
+        }
+
+        /**
+         * Calculates the distance between two coordinates.
+         *
+         * @param other coordinate
+         * @return double Euclidean distance
+         */
+        double distanceTo(Coordinate other) {
+            return Math.sqrt(Math.pow(this.longitude - other.longitude, 2) + Math.pow(this.latitude - other.latitude, 2));
+        }
+    }
+
 
     /**
      * Returns human-readable string version of the pair.
