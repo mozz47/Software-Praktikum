@@ -76,32 +76,65 @@ public class Participant {
     @Override
     public String toString() {
         if (partner == null) {
-            return "Participant{" +
-                    "id=" + id +
-                    ", name='" + name + '\'' +
-                    ", foodPreference=" + foodPreference +
-                    ", age=" + age +
-                    ", sex=" + sex +
-                    ", hasKitchen=" + hasKitchen +
-                    ", mightHaveKitchen=" + mightHaveKitchen +
-                    ", kitchen=" + kitchen +
-                    ", partner=null" +
-                    ", story=" + story +
-                    '}';
+            return "Name: '" + name + "'\n" +
+                    "Food Preference: " + foodPreference + "\n" +
+                    "Age: " + age + "\n" +
+                    "Sex: " + sex + "\n" +
+                    getHasKitchenString() +
+                    "Partner: -\n" +
+                    "Story: " + story + "\n";
         } else {
-            return "Participant{" +
-                    "id=" + id +
-                    ", name='" + name + '\'' +
-                    ", foodPreference=" + foodPreference +
-                    ", age=" + age +
-                    ", sex=" + sex +
-                    ", hasKitchen=" + hasKitchen +
-                    ", mightHaveKitchen=" + mightHaveKitchen +
-                    ", kitchen=" + kitchen +
-                    ", partner=" + partner.name + //or else stackoverflow-error because of recursive call to each other
-                    ", story=" + story +
-                    '}';
+            return "Name: '" + name + "'\n" +
+                    "Food Preference: " + foodPreference + "\n" +
+                    "Age: " + age + "\n" +
+                    "Sex: " + sex + "\n" +
+                    getHasKitchenString() +
+                    "Partner: " + partner.name + "\n" +
+                    "Story: " + story + "\n";
         }
+    }
+
+    private String getHasKitchenString() {
+        String kitchenString = "Kitchen:";
+        if (!hasKitchen && !mightHaveKitchen) {
+            kitchenString += " -\n";
+        }
+        else {
+            kitchenString += " " + kitchen + "\n";
+        }
+        String hasKitchenString = hasKitchen ? "Yes" : (mightHaveKitchen ? "Maybe" : "No");
+
+        return "Kitchen available: " + hasKitchenString + "\n" + kitchenString;
+    }
+
+    public String getShortRepresentation() {
+        return name;
+        /* old version
+        if (participant.partner == null) {
+            return participant.name + "(" +
+                    "foodPreference=" + participant.foodPreference +
+                    ", age=" + participant.age +
+                    ", sex=" + participant.sex +
+                    ", hasKitchen=" + participant.hasKitchen +
+                    ", mightHaveKitchen=" + participant.mightHaveKitchen +
+                    ", kitchen=" + participant.kitchen +
+                    ", partner=null" +
+                    ", story=" + participant.story +
+                    ')';
+        } else {
+            return participant.name + "(" +
+                    "foodPreference=" + participant.foodPreference +
+                    ", age=" + participant.age +
+                    ", sex=" + participant.sex +
+                    ", hasKitchen=" + participant.hasKitchen +
+                    ", mightHaveKitchen=" + participant.mightHaveKitchen +
+                    ", kitchen=" + participant.kitchen +
+                    ", partner=" + participant.name + //or else stackoverflow-error because of recursive call to each other
+                    ", story=" + participant.story +
+                    ')';
+        }
+
+         */
     }
 
 

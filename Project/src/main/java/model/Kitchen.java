@@ -25,11 +25,9 @@ public class Kitchen extends Location {
      */
     @Override
     public String toString() {
-        return "Kitchen{" +
-                "story=" + story +
-                ", longitude=" + longitude +
-                ", latitude=" + latitude +
-                '}';
+        return "Story " + story + ", " +
+                "Longitude " + String.format("%.2f", longitude) + ", " +
+                "Latitude " + String.format("%.2f", latitude);
     }
 
 }

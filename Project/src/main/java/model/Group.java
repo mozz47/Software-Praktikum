@@ -10,17 +10,19 @@ public class Group {
     public Pair pair2;
     public Pair pair3;
     public Pair pairWithKitchen;  // the pair with the kitchen where the group will be eating
+    public Meal mealType;  // the type of meal that the group will be eating
 
     /**
      * Simple constructor for Group.
      */
-    public Group(Pair pair1, Pair pair2, Pair pair3, Pair pairWithKitchen) {
+    public Group(Pair pair1, Pair pair2, Pair pair3, Pair pairWithKitchen, Meal mealType) {
         idCounter++;
         this.id = idCounter;
         this.pair1 = pair1;
         this.pair2 = pair2;
         this.pair3 = pair3;
         this.pairWithKitchen = pairWithKitchen;
+        this.mealType = mealType;
     }
 
     public static void resetIdCounter() {
@@ -58,9 +60,17 @@ public class Group {
         return out == FoodPreference.NONE ? FoodPreference.MEAT : out;
     }
 
+    @Override
+    public String toString() {
+        return "Type of Meal: " + mealType + "\n" +
+                "Pair 1: " + pair1.shortString() + "\n" +
+                "Pair 2: " + pair2.shortString() + "\n" +
+                "Pair 3: " + pair3.shortString() + "\n" +
+                "Pair with Kitchen: " + pairWithKitchen.shortString() + "\n" +
+                "Food Preference: " + getMainFoodPreference() + "\n";
+    }
+
     public String shortString() {
-        return "[" + pair1.shortString()
-                + pair2.shortString()
-                + pair3.shortString() + "]";
+        return "Group " + id;
     }
 }
