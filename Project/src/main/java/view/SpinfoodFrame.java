@@ -1,6 +1,7 @@
 package view;
 
 import controller.Reader;
+import controller.Saver;
 import model.Group;
 import model.Pair;
 import model.Participant;
@@ -16,6 +17,7 @@ import java.util.ResourceBundle;
 public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private static final int MAX_CONSOLE_LINES = 8;
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.GERMAN);
+    private final DefaultListModel<String> successorListModel;
     private JLabel participantsLabel;
     private JButton autoAssignButton;
     private JButton readCSVButton;
@@ -31,9 +33,15 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private JScrollPane pairsPane;
     private JList<String> pairJList;
     private JList<String> participantJList;
-    private JList<Group> groupJList;
-    private DefaultListModel<String> participantListModel;
-    private DefaultListModel<String> pairListModel;
+    private JList<String> groupJList;
+    private JLabel selectLanguageLabel;
+    private JLabel successorLabel;
+    private JScrollPane successorPane;
+    private JList<String> successorsJList;
+    private JButton loadPreviousButton;
+    private final DefaultListModel<String> participantListModel;
+    private final DefaultListModel<String> pairListModel;
+    private final DefaultListModel<String> groupListModel;
 
 
     public SpinfoodFrame() {
@@ -54,6 +62,16 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         pairJList.setModel(pairListModel);
         pairsPane.setViewportView(pairJList);
 
+        // Initialize group list model
+        groupListModel = new DefaultListModel<>();
+        // Initializ group list and set model
+        groupJList.setModel(groupListModel);
+        groupPane.setViewportView(groupJList);
+
+        // Initialize successors list model
+        successorListModel = new DefaultListModel<>();
+        successorsJList.setModel(successorListModel);
+        successorPane.setViewportView(successorsJList);
 
         // Add languages to comboBoxLang for language selection
         comboBoxLang.addItem("Deutsch");
@@ -75,6 +93,21 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             }
         });
 
+        outputCSVButton.addActionListener(e -> {
+            Saver.save();
+            printToConsole(resourceBundle.getString("savedConsoleText"));
+        });
+
+        loadPreviousButton.addActionListener(e -> {
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+            event.restoreOldEvent();
+            printToConsole(resourceBundle.getString("backedUpConsoleText"));
+            displayGroups(event.getGroupList());
+            displayPairs(event.getPairList());
+            displayParticipants();
+            printToConsole(resourceBundle.getString("restoredConsoleText"));
+        });
+
         // Initialize the UI with the default language texts
         updateLanguage();
 
@@ -91,7 +124,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         printToConsole(resourceBundle.getString("infoConsoleStartUp"));
 
         // Add Action Listener for the autoAssignButton, use Algorithm
-        autoAssignButton.addActionListener(e -> SwingUtilities.invokeLater(() -> new CriteriaRankingFrame(resourceBundle, SpinfoodFrame.this)));
+        autoAssignButton.addActionListener(e -> new CriteriaRankingFrame(resourceBundle, SpinfoodFrame.this));
 
         // Add Action Listener for the outputCSVButton, choose DIR to save CSV
         outputCSVButton.addActionListener(e -> {
@@ -120,6 +153,9 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             readCSVButton.setText(resourceBundle.getString("readCSVButton"));
             outputCSVButton.setText(resourceBundle.getString("outputCSVButton"));
             consoleLabel.setText(resourceBundle.getString("console"));
+            selectLanguageLabel.setText(resourceBundle.getString("selectLanguageLabel"));
+            successorLabel.setText(resourceBundle.getString("successorLabel"));
+            loadPreviousButton.setText(resourceBundle.getString("loadPreviousButton"));
             setTitle(resourceBundle.getString("title"));
         }
     }
@@ -140,6 +176,22 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         // Add all pair-Strings to the list model
         for (Pair pair : pairs) {
             pairListModel.addElement(pair.shortString());
+        }
+    }
+
+    @Override
+    public void displayGroups(List<Group> groups) {
+        groupListModel.clear();
+        for (Group group : groups) {
+            groupListModel.addElement(group.shortString());
+        }
+    }
+
+    @Override
+    public void displaySuccessors(List<Participant> successors) {
+        successorListModel.clear();
+        for (Participant successor : successors) {
+            successorListModel.addElement(successor.toString());
         }
     }
 

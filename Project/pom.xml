@@ -38,7 +38,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>controller.MainController</mainClass>
+                            <mainClass>controller.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

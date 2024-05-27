@@ -3,13 +3,13 @@ package controller;
 import model.*;
 import view.SpinfoodFrame;
 
-public class MainController {
+public class Main {
 
     /**
      * MainController method for main execution order of the program.
      */
     public static void main(String[] args) {
-        initialize();
+        initializeWithoutFileChooser();
         run();
     }
 

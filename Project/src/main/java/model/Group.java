@@ -9,16 +9,22 @@ public class Group {
     public Pair pair1;
     public Pair pair2;
     public Pair pair3;
+    public Pair pairWithKitchen;  // the pair with the kitchen where the group will be eating
 
     /**
      * Simple constructor for Group.
      */
-    public Group(Pair pair1, Pair pair2, Pair pair3) {
+    public Group(Pair pair1, Pair pair2, Pair pair3, Pair pairWithKitchen) {
         idCounter++;
         this.id = idCounter;
         this.pair1 = pair1;
         this.pair2 = pair2;
         this.pair3 = pair3;
+        this.pairWithKitchen = pairWithKitchen;
+    }
+
+    public static void resetIdCounter() {
+        idCounter = 0;
     }
 
     /**
@@ -49,5 +55,11 @@ public class Group {
         }
         // if the group has no food preference, it should be meat
         return out == FoodPreference.NONE ? FoodPreference.MEAT : out;
+    }
+
+    public String shortString() {
+        return "[" + pair1.shortString()
+                + pair2.shortString()
+                + pair3.shortString() + "]";
     }
 }

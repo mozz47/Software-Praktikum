@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Class to handle Pairs
  */
-public class PairController {
+public class PairListBuilder {
 
     private static boolean[] used;
     private static List<Participant> successors;
@@ -132,7 +132,7 @@ public class PairController {
 
     public static void main(String[] args) {
         // Pairs für Teilnehmer, die sich alleine angemeldet haben
-        MainController.initializeWithoutFileChooser(); // load test event
+        Main.initializeWithoutFileChooser(); // load test event
 
         List<Criterion> criteria = new ArrayList<>();
         criteria.add(Criterion.Criterion_06_Food_Preference);
