@@ -27,9 +27,10 @@ public class Cluster {
 
     /**
      * Returns groups as list.
+     *
      * @return the list
      */
-    public List<Group > getGroups() {
+    public List<Group> getGroups() {
         List<Group> out = new ArrayList<>();
         out.add(groupA);
         out.add(groupB);

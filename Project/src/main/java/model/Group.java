@@ -29,6 +29,7 @@ public class Group {
 
     /**
      * Returns the main food preference of a group according to criteria 6.1.
+     *
      * @return FoodPreference
      */
     public FoodPreference getMainFoodPreference() {
