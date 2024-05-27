@@ -54,25 +54,7 @@ public class CriteriaRankingFrame extends JFrame {
         // Create OK Button
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
-            dispose();
-
-            SpinfoodEvent event = SpinfoodEvent.getInstance();
-
-            // start pair building algorithm
-            PairList pairList = PairListBuilder.getPairList(criteria);
-            event.updatePairList(pairList.getPairList());
-            event.updateSuccessors(pairList.getSuccessorList());
-            callback.printToConsole(resourceBundle.getString("createdPairsWithAlgorithm"));
-
-            // start group building algorithm
-            GroupListBuilder glb = new GroupListBuilder();
-            glb.buildGroupList(criteria);
-            callback.printToConsole(resourceBundle.getString("createdGroupsWithAlgorithm"));
-            callback.displayGroups(event.getGroupList());
-
-            // displaying results
-            callback.displayPairs(event.getPairList());
-
+            startAlgorithm(resourceBundle, callback, criteria);
         });
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.add(okButton, BorderLayout.CENTER);
@@ -98,6 +80,29 @@ public class CriteriaRankingFrame extends JFrame {
         setSize(500, 300);
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    private void startAlgorithm(ResourceBundle resourceBundle, PairDisplayCallback callback, List<Criterion> criteria) {
+        dispose();
+
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
+
+        // start pair building algorithm
+        PairList pairList = PairListBuilder.getPairList(criteria);
+        event.updatePairList(pairList.getPairList());
+        event.updateSuccessors(pairList.getSuccessorList());
+        callback.printToConsole(resourceBundle.getString("createdPairsWithAlgorithm"));
+
+        // start group building algorithm
+        GroupListBuilder glb = new GroupListBuilder();
+        glb.buildGroupList(criteria);
+        callback.printToConsole(resourceBundle.getString("createdGroupsWithAlgorithm"));
+        callback.displayGroups(event.getGroupList());
+
+        callback.displaySuccessors(event.getSuccessors());
+
+        // displaying results
+        callback.displayPairs(event.getPairList());
     }
 
     /**

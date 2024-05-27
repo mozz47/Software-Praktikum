@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private static final int MAX_CONSOLE_LINES = 8;
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.GERMAN);
+    private final DefaultListModel<String> successorListModel;
     private JLabel participantsLabel;
     private JButton autoAssignButton;
     private JButton readCSVButton;
@@ -34,6 +35,9 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private JList<String> participantJList;
     private JList<String> groupJList;
     private JLabel selectLanguageLabel;
+    private JLabel successorLabel;
+    private JScrollPane successorPane;
+    private JList<String> successorsJList;
     private final DefaultListModel<String> participantListModel;
     private final DefaultListModel<String> pairListModel;
     private final DefaultListModel<String> groupListModel;
@@ -63,6 +67,10 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         groupJList.setModel(groupListModel);
         groupPane.setViewportView(groupJList);
 
+        // Initialize successors list model
+        successorListModel = new DefaultListModel<>();
+        successorsJList.setModel(successorListModel);
+        successorPane.setViewportView(successorsJList);
 
         // Add languages to comboBoxLang for language selection
         comboBoxLang.addItem("Deutsch");
@@ -135,6 +143,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             outputCSVButton.setText(resourceBundle.getString("outputCSVButton"));
             consoleLabel.setText(resourceBundle.getString("console"));
             selectLanguageLabel.setText(resourceBundle.getString("selectLanguageLabel"));
+            successorLabel.setText(resourceBundle.getString("successorLabel"));
             setTitle(resourceBundle.getString("title"));
         }
     }
@@ -158,10 +167,19 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         }
     }
 
+    @Override
     public void displayGroups(List<Group> groups) {
         groupListModel.clear();
         for (Group group : groups) {
             groupListModel.addElement(group.shortString());
+        }
+    }
+
+    @Override
+    public void displaySuccessors(List<Participant> successors) {
+        successorListModel.clear();
+        for (Participant successor : successors) {
+            successorListModel.addElement(successor.toString());
         }
     }
 

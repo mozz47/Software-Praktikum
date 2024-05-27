@@ -46,7 +46,10 @@ public class GroupListBuilder {
         collectIntoGroups();
 
         // put successors from pairSuccessors into event.successors
-        // todo: Absprache mit Parviz notwendig, um successors richtig zu speichern
+        for (Pair successor : pairSuccessors) {
+            event.getSuccessors().add(successor.participant1);
+            event.getSuccessors().add(successor.participant2);
+        }
     }
 
     /**
