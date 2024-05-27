@@ -120,7 +120,7 @@ public class Pair {
     /**
      * Calculates the Euclidean distance from kitchen 1 to kitchen 2 to kitchen 3 to party location.
      *
-     * @return double Euclidean distance
+     * @return double sum of Euclidean distance
      */
     public double getPathLength() {
         Pair pairWithKitchen1 = cluster.groupA.pairWithKitchen;
@@ -134,6 +134,18 @@ public class Pair {
         Coordinate c4 = new Coordinate(partyLocation.longitude, partyLocation.latitude);
 
         return c1.distanceTo(c2) + c2.distanceTo(c3) + c3.distanceTo(c4) + c4.distanceTo(c1);
+    }
+
+    /**
+     * Returns the distance between this pair and the given pair.
+     *
+     * @param pair other pair
+     * @return double Euclidean distance
+     */
+    public double getDistanceToPair(Pair pair) {
+        Coordinate c1 = new Coordinate(this.getKitchen().longitude, this.getKitchen().latitude);
+        Coordinate c2 = new Coordinate(pair.getKitchen().longitude, pair.getKitchen().latitude);
+        return c1.distanceTo(c2);
     }
 
     /**
