@@ -38,6 +38,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private JLabel successorLabel;
     private JScrollPane successorPane;
     private JList<String> successorsJList;
+    private JButton loadPreviousButton;
     private final DefaultListModel<String> participantListModel;
     private final DefaultListModel<String> pairListModel;
     private final DefaultListModel<String> groupListModel;
@@ -94,7 +95,17 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
 
         outputCSVButton.addActionListener(e -> {
             Saver.save();
-            printToConsole("Saved.");
+            printToConsole(resourceBundle.getString("savedConsoleText"));
+        });
+
+        loadPreviousButton.addActionListener(e -> {
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+            event.restoreOldEvent();
+            printToConsole(resourceBundle.getString("backedUpConsoleText"));
+            displayGroups(event.getGroupList());
+            displayPairs(event.getPairList());
+            displayParticipants();
+            printToConsole(resourceBundle.getString("restoredConsoleText"));
         });
 
         // Initialize the UI with the default language texts
@@ -144,6 +155,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             consoleLabel.setText(resourceBundle.getString("console"));
             selectLanguageLabel.setText(resourceBundle.getString("selectLanguageLabel"));
             successorLabel.setText(resourceBundle.getString("successorLabel"));
+            loadPreviousButton.setText(resourceBundle.getString("loadPreviousButton"));
             setTitle(resourceBundle.getString("title"));
         }
     }
