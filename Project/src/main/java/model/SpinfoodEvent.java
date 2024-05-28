@@ -142,6 +142,28 @@ public class SpinfoodEvent {
     /**
      * prints human-readable version of the participant and party location data
      */
+
+    public String getParticipantKeyFigures() {
+        return "Amount: " + participants.size();
+    }
+
+    public String getPairKeyFigures() {
+        return "Amount: " + pairList.size() + "\n" +
+                "Gender Diversity: " + PairList.calculateGenderRatio(pairList) + "\n" +
+                "Average Age Difference: " + PairList.calculateAverageAgeDifference(pairList) + "\n" +
+                "Preference Deviation: " + PairList.calculateFoodPreferenceDifference(pairList);
+    }
+
+    public String getGroupKeyFigures() {
+        return "Amount: " + groupList.size() + "\n" +
+                "Gender Diversity: " + GroupList.calculateGenderRatio(groupList) + "\n" +
+                "Average Age Difference: " + GroupList.calculateAverageAgeDifference(groupList) + "\n";
+    }
+
+    public String getSuccessorsKeyFigures() {
+        return "Amount: " + successors.size();
+    }
+
     public void printInput() {
         System.out.println("Teilnehmer:");
         for (Participant p : participants) {
