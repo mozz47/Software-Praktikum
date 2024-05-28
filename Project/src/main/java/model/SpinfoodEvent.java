@@ -149,15 +149,16 @@ public class SpinfoodEvent {
 
     public String getPairKeyFigures() {
         return "Amount: " + pairList.size() + "\n" +
-                "Gender Diversity: " + PairList.calculateGenderRatio(pairList) + "\n" +
-                "Average Age Difference: " + PairList.calculateAverageAgeDifference(pairList) + "\n" +
+                "Gender Diversity: " + String.format("%.2f", PairList.calculateGenderRatio(pairList)) + "\n" +
+                "Average Age Difference: " + String.format("%.2f", PairList.calculateAverageAgeDifference(pairList)) + "\n" +
                 "Preference Deviation: " + PairList.calculateFoodPreferenceDifference(pairList);
     }
 
     public String getGroupKeyFigures() {
         return "Amount: " + groupList.size() + "\n" +
-                "Gender Diversity: " + GroupList.calculateGenderRatio(groupList) + "\n" +
-                "Average Age Difference: " + GroupList.calculateAverageAgeDifference(groupList) + "\n";
+                "Gender Diversity: " + String.format("%.2f", GroupList.calculateGenderRatio(groupList)) + "\n" +
+                "Average Age Difference: " + String.format("%.2f", GroupList.calculateAverageAgeDifference(groupList)) + "\n" +
+                "Preference Deviation: " + GroupList.calculateFoodPreferenceDeviation(groupList);
     }
 
     public String getSuccessorsKeyFigures() {
