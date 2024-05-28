@@ -8,8 +8,6 @@ import model.Participant;
 import model.SpinfoodEvent;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import java.util.*;
@@ -49,6 +47,10 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private JLabel groupInfoLabel;
     private JLabel successorInfoLabel;
     private JPanel mainPanel;
+    private JLabel participantKeyFiguresLabel;
+    private JLabel pairKeyFiguresLabel;
+    private JLabel groupKeyFiguresLabel;
+    private JLabel successorsKeyFiguresLabel;
     private JScrollPane participantsPane;
     private JScrollPane pairsPane;
     private JScrollPane groupPane;
@@ -62,6 +64,10 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private JTextPane pairTextPane;
     private JTextPane groupTextPane;
     private JTextPane successorTextPane;
+    private JTextPane pairKeyFiguresTextPane;
+    private JTextPane groupKeyFiguresTextPane;
+    private JTextPane successorsKeyFiguresTextPane;
+    private JTextPane participantKeyFiguresTextPane;
     private JList<String> participantJList;
     private JList<String> pairJList;
     private JList<String> groupJList;
@@ -217,6 +223,10 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             selectLanguageLabel.setText(resourceBundle.getString("selectLanguageLabel"));
             successorLabel.setText(resourceBundle.getString("successorLabel"));
             loadPreviousButton.setText(resourceBundle.getString("loadPreviousButton"));
+            participantInfoLabel.setText(resourceBundle.getString("participantInfoLabel"));
+            pairInfoLabel.setText(resourceBundle.getString("pairInfoLabel"));
+            groupInfoLabel.setText(resourceBundle.getString("groupInfoLabel"));
+            successorInfoLabel.setText(resourceBundle.getString("successorInfoLabel"));
             setTitle(resourceBundle.getString("title"));
         }
     }
@@ -227,32 +237,39 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             // Add all participant-Strings to the list model
             for (Participant participant : event.participants) {
                 participantListModel.addElement(participant.getShortRepresentation());
+                participantKeyFiguresTextPane.setText(event.getParticipantKeyFigures());
             }
         }
     }
 
     @Override
     public void displayPairs(List<Pair> pairs) {
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
         pairListModel.clear();
         // Add all pair-Strings to the list model
         for (Pair pair : pairs) {
             pairListModel.addElement(pair.shortString());
+            pairKeyFiguresTextPane.setText(event.getPairKeyFigures());
         }
     }
 
     @Override
     public void displayGroups(List<Group> groups) {
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
         groupListModel.clear();
         for (Group group : groups) {
             groupListModel.addElement(group.shortString());
+            groupKeyFiguresTextPane.setText(event.getGroupKeyFigures());
         }
     }
 
     @Override
     public void displaySuccessors(List<Participant> successors) {
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
         successorListModel.clear();
         for (Participant successor : successors) {
             successorListModel.addElement(successor.name);
+            successorsKeyFiguresTextPane.setText(event.getSuccessorsKeyFigures());
         }
     }
 

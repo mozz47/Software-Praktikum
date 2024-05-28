@@ -16,12 +16,12 @@ public class PairList {
         this.successorList = successorList;
         this.pairCount = pairList.size();
         this.successorCount = successorList.size();
-        this.averageAgeDifference = calculateAverageAgeDifference();
-        this.genderRatio = calculateGenderRatio();
-        this.averageFoodpreferenceDifference = calculateFoodPreferenceDifference();
+        this.averageAgeDifference = calculateAverageAgeDifference(pairList);
+        this.genderRatio = calculateGenderRatio(pairList);
+        this.averageFoodpreferenceDifference = calculateFoodPreferenceDifference(pairList);
     }
 
-    private double calculateAverageAgeDifference() {
+    public static double calculateAverageAgeDifference(List<Pair> pairList) {
         if (pairList.isEmpty()) return 0.0;
         int totalAgeDifference = 0;
         for (Pair pair : pairList) {
@@ -30,7 +30,7 @@ public class PairList {
         return (double) totalAgeDifference / pairList.size();
     }
 
-    private double calculateGenderRatio() {
+    public static double calculateGenderRatio(List<Pair> pairList) {
         if (pairList.isEmpty()) return 0.0;
         int maleCount = 0;
         int femaleCount = 0;
@@ -43,7 +43,7 @@ public class PairList {
         return femaleCount == 0 ? maleCount : (double) maleCount / femaleCount;
     }
 
-    private int calculateFoodPreferenceDifference() {
+    public static int calculateFoodPreferenceDifference(List<Pair> pairList) {
         if (pairList.isEmpty()) return 0;
         int totalFoodPreferenceDifference = 0;
         for (Pair pair : pairList) {
