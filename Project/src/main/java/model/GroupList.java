@@ -71,4 +71,15 @@ public class GroupList {
         return (double) totalDifference / (n * (n - 1));
     }
 
+    public static int calculateFoodPreferenceDeviation(List<Group> groupList) {
+        if (groupList.isEmpty()) return 0;
+        int totalFoodPreferenceDifference = 0;
+        for (Group group : groupList) {
+            totalFoodPreferenceDifference += PairPairingConstraints.getAbsoluteFoodDistance(group.pair1.participant1, group.pair1.participant2);
+            totalFoodPreferenceDifference += PairPairingConstraints.getAbsoluteFoodDistance(group.pair2.participant1, group.pair2.participant2);
+            totalFoodPreferenceDifference += PairPairingConstraints.getAbsoluteFoodDistance(group.pair3.participant1, group.pair3.participant2);
+        }
+        return totalFoodPreferenceDifference;
+    }
+
 }
