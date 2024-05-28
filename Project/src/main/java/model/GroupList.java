@@ -29,7 +29,8 @@ public class GroupList {
     }
 
     /**
-     * Calculates the average age difference of the group list. (These are O(n²) operations.)
+     * Calculates the average age difference of the group list. (The original algorithm had O(n²) operations,
+     * using dynamic programming, we have O(n) operations now)
      *
      * @param groupList group list
      * @return the average age difference
@@ -53,20 +54,21 @@ public class GroupList {
             return 0;
         }
 
-        double totalDifference = 0;
-        int count = 0;
+        long sumAges = 0;
+        long sumSquaredAges = 0;
 
-        // Calculate the total age difference between all pairs of participants
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                int ageDifference = Math.abs(participantList.get(i).age - participantList.get(j).age);
-                totalDifference += ageDifference;
-                count++;
-            }
+        // Calculate the sum of ages and the sum of squared ages
+        for (Participant p : participantList) {
+            sumAges += p.age;
+            sumSquaredAges += (long) p.age * p.age;
         }
 
-        // Calculate the average age difference
-        return totalDifference / count;
+        // Calculate the total age difference using the derived formula
+        long totalDifference = (n * sumSquaredAges - sumAges * sumAges);
+
+        // Since the totalDifference accounts for each pair twice (once as (i, j) and once as (j, i)),
+        // we need to divide it by the number of pairs to get the average difference.
+        return (double) totalDifference / (n * (n - 1));
     }
 
 }
