@@ -12,22 +12,32 @@ public class PairPairingConstraints {
         ageGap = 0;
         relaxedFoodPreferences = false;
         relaxedGenderDiversity = false;
-        relaxedMinimizeSuccessors = false;
         relaxedKitchenAmountOne = false; // extra constraint, always try to fulfill, should be relaxed last
         currentCriterionIndex = 0;
+        relaxedMinimizeSuccessors = false;
         this.criterions = new ArrayList<>(criterions);
         Collections.reverse(this.criterions);
-        //We have to reverse the list because the least important criterion stands on the bottom so we change it first.
+        //We have to reverse the list because the least important criterion stands initially on the end, we want to change it first,so we have to reverse the list because
+        //first change is on criterions[0] (relax least important feature first)
+        successorsAllowedRate = getAllowedSuccessorRate();
+    }
+
+    private float getAllowedSuccessorRate() {
+        // Get the index of Criterion_10_Group_Amount in the reversed list
+        //if GroupAmount is top priority, only allow 5% succ. rate, for each next position add 5 %
+        return 0.05f * (criterions.size() - criterions.indexOf(Criterion.Criterion_10_Group_Amount));
     }
 
     private List<Criterion> criterions; // <>
     private int currentCriterionIndex;
     private static final int MAXAGEGAP = 9;
     private int ageGap;
+    private boolean relaxedMinimizeSuccessors;
     private boolean relaxedFoodPreferences;
     private boolean relaxedGenderDiversity;
-    private boolean relaxedMinimizeSuccessors;
     private boolean relaxedKitchenAmountOne; //extra constraint, always try to find pairs so that they have max 1 kitchen
+    private float successorsAllowedRate;
+    
 
     public void relaxConstraints() {
         if (currentCriterionIndex == criterions.size()) {
@@ -53,9 +63,8 @@ public class PairPairingConstraints {
                 case Criterion_09_Path_Length: //not used with Pairs
                     break;
                 case Criterion_10_Group_Amount:
+                    successorsAllowedRate += 0.15f; // we try again with 10% more allowed successors than before
                     relaxedMinimizeSuccessors = true;
-                    //TODO set everything relaxed because we try to find pairs no matter what or
-                    //TODO maybe ? set for example 10% 15% 20% succsessor rate until exit loop
                     break;
             }
             if (!(criterion == Criterion.Criterion_07_Age_Difference)) { //because we increase ageGap several times
@@ -79,7 +88,7 @@ public class PairPairingConstraints {
             }
         }
 
-        if (!relaxedGenderDiversity && p1.sex != p2.sex) { // relaxedGenderDiversity true -> dont check sex because irrelevant
+        if (!relaxedGenderDiversity && p1.sex == p2.sex) { // relaxedGenderDiversity true -> dont check sex because irrelevant
             return false;
         }
 
@@ -91,7 +100,7 @@ public class PairPairingConstraints {
             return false;
         }
 
-        return true; //all soft constraints are fulfilled
+        return true; //all soft constraints are fulfilled for Pair building
     }
 
     public static int getAbsoluteFoodDistance(Participant p1, Participant p2) {
@@ -112,15 +121,19 @@ public class PairPairingConstraints {
     public static void main(String[] args) {
         PairPairingConstraints softConstraints = new PairPairingConstraints(List.of(
                 Criterion.Criterion_06_Food_Preference,
+                Criterion.Criterion_10_Group_Amount,
                 Criterion.Criterion_08_Sex_Diversity,
                 Criterion.Criterion_09_Path_Length,
-                Criterion.Criterion_10_Group_Amount,
                 Criterion.Criterion_07_Age_Difference));
         System.out.println(softConstraints.criterions);
         for (int i = 0; i < 15; i++) {
             softConstraints.relaxConstraints();
+            System.out.println(softConstraints.successorsAllowedRate);
         }
-        System.out.println(softConstraints.areConstraintsFullyRelaxed());
+        System.out.println(softConstraints.areConstraintsFullyRelaxed() + ": are fully relaxed");
     }
 
+    public float getSuccessorAllowedRate() {
+        return successorsAllowedRate;
+    }
 }

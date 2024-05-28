@@ -53,11 +53,9 @@ public class PairListBuilder {
         List<Pair> joinedPairs = new ArrayList<>();
         used = new boolean[participants.size()];
         successors = new ArrayList<>();
-        int[] successorsAmount = new int[15];
         PairPairingConstraints softConstraints = new PairPairingConstraints(criterions);
         int i;
         int j;
-        int indexSuccessorsAmount = 0;
         while (!softConstraints.areConstraintsFullyRelaxed()) {
             for (i = 0; i < participants.size(); i++) {
                 if (used[i]) {
@@ -86,12 +84,14 @@ public class PairListBuilder {
                     successors.add(participants.get(z));
                 }
             }
-            successorsAmount[indexSuccessorsAmount++] = successors.size();
-            if (!successors.isEmpty() && successors.size() > 1) { //maybe more than 1 left over -> relax constraints and try again
-                softConstraints.relaxConstraints();
-                //TODO if succsesors are same time 2 times in a row -> break or Look at position minimizeSuccessors
-                // for example if minimizeSuccessors at 1, then only 5% succsessor rate will be allowed
-                // if at 1
+            if (!successors.isEmpty() && successors.size() > 1) { //maybe more than 1 left over -> check successorsRate and if bigger than allowed, relax constraints
+                // Check successorRate - if acceptable rate, end, else try again with more relaxing constraints
+                float successorsRate = (float) successors.size() / participants.size();
+                if (successorsRate <= softConstraints.getSuccessorAllowedRate()) {
+                    break; //acceptable rate, so we break here, if not acceptable: relax constraints and we try again to find pairs with acceptable rate
+                } else {
+                    softConstraints.relaxConstraints();
+                }
                 successors.clear();
             }
         }
@@ -135,11 +135,13 @@ public class PairListBuilder {
         Main.initializeWithoutFileChooser(); // load test event
 
         List<Criterion> criteria = new ArrayList<>();
+
+        criteria.add(Criterion.Criterion_10_Group_Amount);
+        criteria.add(Criterion.Criterion_08_Sex_Diversity);
         criteria.add(Criterion.Criterion_06_Food_Preference);
         criteria.add(Criterion.Criterion_07_Age_Difference);
-        criteria.add(Criterion.Criterion_08_Sex_Diversity);
-        criteria.add(Criterion.Criterion_10_Group_Amount);
         criteria.add(Criterion.Criterion_09_Path_Length);
+
 
         List<Pair> allPairs = getGeneratedPairs(criteria);
 
@@ -151,6 +153,7 @@ public class PairListBuilder {
         for (Participant successor : successors) {
             System.out.println(successor.name);
         }
+        System.out.println(successors.size() + " successors size");
 
     }
 
