@@ -19,7 +19,6 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     static {
         LANGUAGE_LOCALE_MAP.put("English", Locale.ENGLISH);
         LANGUAGE_LOCALE_MAP.put("German", Locale.GERMAN);
-        /*
         LANGUAGE_LOCALE_MAP.put("Vietnamese", new Locale.Builder().setLanguage("vi").build());
         LANGUAGE_LOCALE_MAP.put("French", Locale.FRENCH);
         LANGUAGE_LOCALE_MAP.put("Spanish", new Locale.Builder().setLanguage("es").build());
@@ -30,7 +29,6 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         LANGUAGE_LOCALE_MAP.put("Czech", new Locale.Builder().setLanguage("cs").build());
         LANGUAGE_LOCALE_MAP.put("Hungarian", new Locale.Builder().setLanguage("hu").build());
         LANGUAGE_LOCALE_MAP.put("Italian", Locale.ITALIAN);
-         */
     }
 
     private static final int MAX_CONSOLE_LINES = 8;
@@ -227,6 +225,10 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             pairInfoLabel.setText(resourceBundle.getString("pairInfoLabel"));
             groupInfoLabel.setText(resourceBundle.getString("groupInfoLabel"));
             successorInfoLabel.setText(resourceBundle.getString("successorInfoLabel"));
+            participantKeyFiguresLabel.setText(resourceBundle.getString("participantKeyFiguresLabel"));
+            pairKeyFiguresLabel.setText(resourceBundle.getString("pairKeyFiguresLabel"));
+            groupKeyFiguresLabel.setText(resourceBundle.getString("groupKeyFiguresLabel"));
+            successorsKeyFiguresLabel.setText(resourceBundle.getString("successorsKeyFiguresLabel"));
             setTitle(resourceBundle.getString("title"));
         }
     }
