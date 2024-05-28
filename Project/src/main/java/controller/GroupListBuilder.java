@@ -33,17 +33,15 @@ public class GroupListBuilder {
         //pairLists = separateMeatiesAndRest(toBeUsed);
         pairLists.add(toBeUsed);  // remove this line if applying criteria01
 
-        // criterion 4: max 3 pairs per kitchen
-        // todo: maybe it's better to check this during the pair building algo
-
         // criteria 6 (strict food pref separation),8 (increase sex diversity),9 (reduce travel distance) via selected order:
         executeOptionalCriteriaAlgosInCorrectOrder(criteria);
         criterion06StrictFoodSeparation();
 
         // criterion 2: collect into groups of unique pairs (THIS HAS TO BE THE LAST CRITERION TO USE)
-
         splitIntoGroupsOf9Pairs();
         collectIntoGroups();
+
+        // todo: try to make groups out of successors
 
         // put successors from pairSuccessors into event.successors
         for (Pair successor : pairSuccessors) {
