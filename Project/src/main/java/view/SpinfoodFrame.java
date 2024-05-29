@@ -10,6 +10,8 @@ import model.SpinfoodEvent;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
+import java.io.File;
+import java.net.URL;
 import java.util.*;
 import java.util.List;
 
@@ -77,6 +79,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private final DefaultListModel<String> pairListModel;
     private final DefaultListModel<String> groupListModel;
     private JComboBox<String> comboBoxLang;
+    private JLabel logoLabel;
 
 
     public SpinfoodFrame() {
@@ -85,6 +88,13 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
 
+        // Set Logo
+        URL logoURL = getClass().getResource("/images/logo.png");
+        if (logoURL != null) {
+            logoLabel.setIcon(new ImageIcon(logoURL));
+        } else {
+            System.err.println("errors");
+        }
         // Initialize participants list model
         participantListModel = new DefaultListModel<>();
         // Initialize participants list and set the model
