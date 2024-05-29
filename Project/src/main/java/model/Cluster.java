@@ -37,4 +37,11 @@ public class Cluster {
         out.add(groupC);
         return out;
     }
+
+    @Override
+    public String toString() {
+        return "Starter: Gruppe " + groupA.id + "\n" +
+                "Mean Course: Gruppe " + groupB.id + "\n" +
+                "Dessert: Gruppe " + groupC.id;
+    }
 }

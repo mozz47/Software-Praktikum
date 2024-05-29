@@ -191,7 +191,8 @@ public class Pair {
                 "Kitchen used: Kitchen of " + participantWithKitchen + ":\n" + getKitchen() + "\n" +
                 "Age difference: " + getAgeRangeDifference() + "\n" +
                 "Different gender: " + (participant1.sex != participant2.sex) + "\n" +
-                "Food Preference: " + getMainFoodPreference() + "\n";
+                "Food Preference: " + getMainFoodPreference() + "\n" +
+                "Cluster: " + cluster;
     }
 
     /**

@@ -35,7 +35,6 @@ public class GroupListBuilder {
 
         // criteria 6 (strict food pref separation),8 (increase sex diversity),9 (reduce travel distance) via selected order:
         executeOptionalCriteriaAlgosInCorrectOrder(criteria);
-        criterion06StrictFoodSeparation();
 
         // criterion 2: collect into groups of unique pairs (THIS HAS TO BE THE LAST CRITERION TO USE)
         splitIntoGroupsOf9Pairs();

@@ -3,13 +3,15 @@ package controller;
 import model.*;
 import view.SpinfoodFrame;
 
+import javax.swing.*;
+
 public class Main {
 
     /**
      * MainController method for main execution order of the program.
      */
     public static void main(String[] args) {
-        initializeWithoutFileChooser();
+        initialize();
         run();
     }
 
@@ -48,7 +50,7 @@ public class Main {
 
         //Start GUI
         //might be better with SwingUtilities.invokeLater(), because it will not block threads
-        new SpinfoodFrame();
+        SwingUtilities.invokeLater(SpinfoodFrame::new);
     }
 
 }
