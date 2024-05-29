@@ -37,7 +37,7 @@ public class PairPairingConstraints {
     private boolean relaxedGenderDiversity;
     private boolean relaxedKitchenAmountOne; //extra constraint, always try to find pairs so that they have max 1 kitchen
     private float successorsAllowedRate;
-    
+
 
     public void relaxConstraints() {
         if (currentCriterionIndex == criterions.size()) {
@@ -48,7 +48,6 @@ public class PairPairingConstraints {
             switch (criterion) {
                 case Criterion_06_Food_Preference:
                     relaxedFoodPreferences = true;
-                    System.out.println("relaxed Food Preference");
                     break;
                 case Criterion_07_Age_Difference:
                     if (ageGap == MAXAGEGAP) {
@@ -56,26 +55,21 @@ public class PairPairingConstraints {
                         return;
                     } else {
                         ageGap++;
-                        System.out.println("relaxed age Gap");
                     }
                     break;
                 case Criterion_08_Sex_Diversity:
                     relaxedGenderDiversity = true;
-                    System.out.println("relaxed Gender Diversity");
                     break;
                 case Criterion_09_Path_Length: //not used with Pairs
-                    System.out.println("relaxed Path Length");
                     break;
 
                 case Criterion_10_Group_Amount:
                     successorsAllowedRate += 0.15f; // we try again with 10% more allowed successors than before
                     relaxedMinimizeSuccessors = true;
-                    System.out.println("relaxed Minimize Successors");
                     break;
             }
             if (!(criterion == Criterion.Criterion_07_Age_Difference)) { //because we increase ageGap several times
                 currentCriterionIndex++;
-                System.out.println("age difference relaxed completely, try next constraint");
             }
         }
     }

@@ -35,10 +35,16 @@ public class Pair {
     /**
      * Returns age difference of the two participant in terms of age ranges.
      */
-    public int getAgeDifference() {
+    public int getAgeRangeDifference() {
         int ageRange1 = participant1.getAgeRange();
         int ageRange2 = participant2.getAgeRange();
         return Math.abs(ageRange1 - ageRange2);
+    }
+
+    public int getAbsoluteAgeDifference() {
+        int age1 = participant1.age;
+        int age2 = participant2.age;
+        return Math.abs(age1 - age2);
     }
 
     /**
@@ -183,7 +189,7 @@ public class Pair {
                 "Participant 2: " + participant2.name + "\n" +
                 "Path Length: " + String.format("%.2f", (getPathLength() * 111)) + "km\n" +
                 "Kitchen used: Kitchen of " + participantWithKitchen + ":\n" + getKitchen() + "\n" +
-                "Age difference: " + getAgeDifference() + "\n" +
+                "Age difference: " + getAgeRangeDifference() + "\n" +
                 "Different gender: " + (participant1.sex != participant2.sex) + "\n" +
                 "Food Preference: " + getMainFoodPreference() + "\n";
     }

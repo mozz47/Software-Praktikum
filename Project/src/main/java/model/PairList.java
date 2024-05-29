@@ -9,7 +9,7 @@ public class PairList {
     private double genderRatio;
     private int pairCount;
     private int successorCount;
-    private int averageFoodpreferenceDifference;
+    private double averageFoodpreferenceDifference;
 
     public PairList(List<Pair> pairList, List<Participant> successorList) {
         this.pairList = pairList;
@@ -25,7 +25,7 @@ public class PairList {
         if (pairList.isEmpty()) return 0.0;
         int totalAgeDifference = 0;
         for (Pair pair : pairList) {
-            totalAgeDifference += pair.getAgeDifference();
+            totalAgeDifference += pair.getAbsoluteAgeDifference();
         }
         return (double) totalAgeDifference / pairList.size();
     }
@@ -43,13 +43,13 @@ public class PairList {
         return femaleCount == 0 ? maleCount : (double) maleCount / femaleCount;
     }
 
-    public static int calculateFoodPreferenceDifference(List<Pair> pairList) {
+    public static double calculateFoodPreferenceDifference(List<Pair> pairList) {
         if (pairList.isEmpty()) return 0;
-        int totalFoodPreferenceDifference = 0;
+        double totalFoodPreferenceDifference = 0;
         for (Pair pair : pairList) {
             totalFoodPreferenceDifference += PairPairingConstraints.getAbsoluteFoodDistance(pair.participant1, pair.participant2);
         }
-        return totalFoodPreferenceDifference;
+        return totalFoodPreferenceDifference / (double) pairList.size();
     }
 
 
@@ -77,7 +77,7 @@ public class PairList {
         return successorCount;
     }
 
-    public int getAverageFoodpreferenceDifference() {
+    public double getAverageFoodpreferenceDifference() {
         return averageFoodpreferenceDifference;
     }
 }
