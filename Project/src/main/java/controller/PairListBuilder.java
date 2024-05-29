@@ -84,6 +84,7 @@ public class PairListBuilder {
                     successors.add(participants.get(z));
                 }
             }
+
             if (!successors.isEmpty() && successors.size() > 1) { //maybe more than 1 left over -> check successorsRate and if bigger than allowed, relax constraints
                 // Check successorRate - if acceptable rate, end, else try again with more relaxing constraints
                 float successorsRate = (float) successors.size() / participants.size();

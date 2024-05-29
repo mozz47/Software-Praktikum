@@ -48,6 +48,7 @@ public class PairPairingConstraints {
             switch (criterion) {
                 case Criterion_06_Food_Preference:
                     relaxedFoodPreferences = true;
+                    System.out.println("relaxed Food Preference");
                     break;
                 case Criterion_07_Age_Difference:
                     if (ageGap == MAXAGEGAP) {
@@ -55,20 +56,26 @@ public class PairPairingConstraints {
                         return;
                     } else {
                         ageGap++;
+                        System.out.println("relaxed age Gap");
                     }
                     break;
                 case Criterion_08_Sex_Diversity:
                     relaxedGenderDiversity = true;
+                    System.out.println("relaxed Gender Diversity");
                     break;
                 case Criterion_09_Path_Length: //not used with Pairs
+                    System.out.println("relaxed Path Length");
                     break;
+
                 case Criterion_10_Group_Amount:
                     successorsAllowedRate += 0.15f; // we try again with 10% more allowed successors than before
                     relaxedMinimizeSuccessors = true;
+                    System.out.println("relaxed Minimize Successors");
                     break;
             }
             if (!(criterion == Criterion.Criterion_07_Age_Difference)) { //because we increase ageGap several times
                 currentCriterionIndex++;
+                System.out.println("age difference relaxed completely, try next constraint");
             }
         }
     }
@@ -78,7 +85,7 @@ public class PairPairingConstraints {
     }
 
     public boolean isValid(Participant p1, Participant p2) {
-        Pair testPair = new Pair(p1, p2, false);
+        Pair testPair = new Pair(p1, p2, false); //TODO
 
         if (!relaxedFoodPreferences) { //if relaxedFoodPreferences true -> dont check food preferences
             // isValid in PairController checks for hard constraints, so we only check for soft constraints
@@ -128,7 +135,8 @@ public class PairPairingConstraints {
         System.out.println(softConstraints.criterions);
         for (int i = 0; i < 15; i++) {
             softConstraints.relaxConstraints();
-            System.out.println(softConstraints.successorsAllowedRate);
+
+            //System.out.println(softConstraints.successorsAllowedRate);
         }
         System.out.println(softConstraints.areConstraintsFullyRelaxed() + ": are fully relaxed");
     }
