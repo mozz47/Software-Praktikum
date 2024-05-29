@@ -10,6 +10,7 @@ import model.SpinfoodEvent;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
@@ -91,7 +92,11 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         // Set Logo
         URL logoURL = getClass().getResource("/images/logo.png");
         if (logoURL != null) {
-            logoLabel.setIcon(new ImageIcon(logoURL));
+            ImageIcon originalIcon = new ImageIcon(logoURL);
+            Image originalImage = originalIcon.getImage();
+            Image resizedImage = originalImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            ImageIcon resizedIcon = new ImageIcon(resizedImage);
+            logoLabel.setIcon(resizedIcon);
         } else {
             System.err.println("errors");
         }
