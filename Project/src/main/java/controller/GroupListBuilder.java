@@ -107,12 +107,16 @@ public class GroupListBuilder {
             switch (p.getMainFoodPreference()) {
                 case NONE:
                     egalis.add(p);
+                    break;
                 case MEAT:
                     meaties.add(p);
+                    break;
                 case VEGAN:
                     vegans.add(p);
+                    break;
                 case VEGGIE:
                     veggies.add(p);
+                    break;
             }
         }
 
@@ -179,6 +183,7 @@ public class GroupListBuilder {
      */
     private void splitIntoGroupsOf9Pairs() {
         List<List<Pair>> newPairLists = new ArrayList<>();
+        List<Pair> newPairSuccessors = new ArrayList<>();
         for (List<Pair> list : pairLists) {
             // skip empty lists
             if (list.isEmpty()) {
@@ -188,11 +193,31 @@ public class GroupListBuilder {
             // we only want lists of 9 pairs, so if it's not, the rest are put into successors.
             if (list.size() % 9 != 0) {
                 List<Pair> overflow = splitList.remove(splitList.size() - 1);
-                pairSuccessors.addAll(overflow);
+                newPairSuccessors.addAll(overflow);
             }
             newPairLists.addAll(splitList);
         }
+        // check that number of pairs in pairLists is equal to number of pairs in newPairLists + newPairSuccessors
+        int pairsInNewPairLists = 0;
+        for (List<Pair> list : newPairLists) {
+            pairsInNewPairLists += list.size();
+        }
+        int pairsInPairLists = 0;
+        for (List<Pair> list : pairLists) {
+            pairsInPairLists += list.size();
+        }
+        int pairsInNewPairSuccessors = newPairSuccessors.size();
+
+        System.out.println("splitIntoGroupsOf9Pairs:");
+        System.out.println("pairsInNewPairLists: " + pairsInNewPairLists);
+        System.out.println("pairsInPairLists: " + pairsInPairLists);
+        System.out.println("pairsInNewPairSuccessors: " + pairsInNewPairSuccessors);
+        if (pairsInPairLists != pairsInNewPairLists + pairsInNewPairSuccessors) {
+            System.out.println("Something went horribly wrong.");
+        }
+
         pairLists = newPairLists;
+        pairSuccessors = newPairSuccessors;
     }
 
     /**
