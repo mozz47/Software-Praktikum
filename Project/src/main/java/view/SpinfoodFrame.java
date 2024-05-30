@@ -93,7 +93,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         if (logoURL != null) {
             ImageIcon originalIcon = new ImageIcon(logoURL);
             Image originalImage = originalIcon.getImage();
-            Image resizedImage = originalImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            Image resizedImage = originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
             ImageIcon resizedIcon = new ImageIcon(resizedImage);
             logoLabel.setIcon(resizedIcon);
         } else {

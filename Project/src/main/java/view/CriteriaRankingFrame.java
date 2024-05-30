@@ -77,7 +77,7 @@ public class CriteriaRankingFrame extends JFrame {
         // Set up frame properties
         setTitle(resourceBundle.getString("criteriaRankingFrame_title"));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(500, 300);
+        setSize(400, 220);
         setLocationRelativeTo(null);
         setVisible(true);
     }
