@@ -53,9 +53,13 @@ public class GroupListBuilder {
         }
     }
 
+    /**
+     * Tries to make groups out of successors.
+     *
+     * @return a list of groups
+     */
     private List<Group> tryToMakeGroupsOutOfSuccessors() {
-        // clone pairSuccessors
-        List<Pair> successorPairsToBeGrouped = new ArrayList<>(pairSuccessors);
+        List<Pair> successorPairsToBeGrouped = new ArrayList<>(pairSuccessors);  // clone pairSuccessors
         List<Pair> stillSuccessors = new ArrayList<>();
         List<List<Pair>> successorGroups = separateMeatiesAndRest(successorPairsToBeGrouped);
         splitIntoGroupsOf9Pairs(successorGroups, stillSuccessors);
