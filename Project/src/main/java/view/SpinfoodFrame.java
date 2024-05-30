@@ -196,7 +196,12 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         });
 
         outputCSVButton.addActionListener(e -> {
-            // todo groups check
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+            // group check
+            if (event.getGroupList() == null) {
+                printToConsole(resourceBundle.getString("noGroupsError"));
+                return;
+            }
 
             Saver.save();
             printToConsole(resourceBundle.getString("savedConsoleText"));
@@ -204,6 +209,13 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
 
         loadPreviousButton.addActionListener(e -> {
             SpinfoodEvent event = SpinfoodEvent.getInstance();
+
+            // old groups, pairs and successors check
+            if (!event.hasOldData()) {
+                printToConsole(resourceBundle.getString("noOldDataError"));
+                return;
+            }
+
             event.restoreOldEvent();
             printToConsole(resourceBundle.getString("backedUpConsoleText"));
             displayGroups(event.getGroupList());
@@ -271,24 +283,35 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             Locale.setDefault(LANGUAGE_LOCALE_MAP.get(selectedLanguage));
 
             resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.getDefault());
+
+            // labels
             participantsLabel.setText(resourceBundle.getString("participants"));
             pairLabel.setText(resourceBundle.getString("pairs"));
             groupLabel.setText(resourceBundle.getString("groups"));
-            pairBuildingButton.setText(resourceBundle.getString("pairBuildingButton"));
-            readCSVButton.setText(resourceBundle.getString("readCSVButton"));
-            outputCSVButton.setText(resourceBundle.getString("outputCSVButton"));
+            successorLabel.setText(resourceBundle.getString("successorLabel"));
+
             consoleLabel.setText(resourceBundle.getString("console"));
             selectLanguageLabel.setText(resourceBundle.getString("selectLanguageLabel"));
-            successorLabel.setText(resourceBundle.getString("successorLabel"));
-            loadPreviousButton.setText(resourceBundle.getString("loadPreviousButton"));
+
             participantInfoLabel.setText(resourceBundle.getString("participantInfoLabel"));
             pairInfoLabel.setText(resourceBundle.getString("pairInfoLabel"));
             groupInfoLabel.setText(resourceBundle.getString("groupInfoLabel"));
             successorInfoLabel.setText(resourceBundle.getString("successorInfoLabel"));
+
             participantKeyFiguresLabel.setText(resourceBundle.getString("participantKeyFiguresLabel"));
             pairKeyFiguresLabel.setText(resourceBundle.getString("pairKeyFiguresLabel"));
             groupKeyFiguresLabel.setText(resourceBundle.getString("groupKeyFiguresLabel"));
             successorsKeyFiguresLabel.setText(resourceBundle.getString("successorsKeyFiguresLabel"));
+
+            // buttons
+            readCSVButton.setText(resourceBundle.getString("readCSVButton"));
+            outputCSVButton.setText(resourceBundle.getString("outputCSVButton"));
+            changeCriteriaOrderButton.setText(resourceBundle.getString("changeCriteriaOrderButton"));
+            pairBuildingButton.setText(resourceBundle.getString("pairBuildingButton"));
+            groupBuildingButton.setText(resourceBundle.getString("groupBuildingButton"));
+            loadPreviousButton.setText(resourceBundle.getString("loadPreviousButton"));
+
+            // other
             setTitle(resourceBundle.getString("title"));
         }
     }

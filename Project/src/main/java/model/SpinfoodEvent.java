@@ -164,6 +164,16 @@ public class SpinfoodEvent {
                 "Number of unmatched Pairs (to Groups): " + unmatchedPairs();
     }
 
+    /**
+     * For integrity checks.
+     * Returns true if the old pair, group and successors lists are not null, so they can be restored.
+     *
+     * @return true if the old pair, group and successors lists are not null
+     */
+    public boolean hasOldData() {
+        return this.pairListOld != null && this.groupListOld != null && this.successorsOld != null;
+    }
+
     private int unmatchedParticipants() {
         return participants.size() - 2*pairList.size();
     }
