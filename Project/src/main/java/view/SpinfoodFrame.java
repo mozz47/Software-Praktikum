@@ -90,7 +90,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         pack();
 
         // Set Logo
-        URL logoURL = getClass().getResource("/images/logo.png");
+        URL logoURL = getClass().getResource("/images/logo_transparent.png");
         if (logoURL != null) {
             ImageIcon originalIcon = new ImageIcon(logoURL);
             Image originalImage = originalIcon.getImage();
