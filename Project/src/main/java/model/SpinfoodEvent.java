@@ -153,7 +153,8 @@ public class SpinfoodEvent {
                 "Gender Diversity: " + String.format("%.2f", PairList.calculateGenderRatio(pairList)) + "\n" +
                 "Average Age Difference: " + String.format("%.2f", PairList.calculateAverageAgeDifference(pairList)) + "\n" +
                 "Preference Deviation: " + PairList.calculateFoodPreferenceDifference(pairList) + "\n" +
-                "Number of unmatched Participants (to Pairs): " + unmatchedParticipants();
+                "Number of unmatched Participants (to Pairs): " + unmatchedParticipants() + "\n" +
+                "Average Path Length: " + String.format("%.2f", PairList.averagePathLength(pairList)) + "km\n";
     }
 
     public String getGroupKeyFigures() {

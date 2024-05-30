@@ -289,6 +289,12 @@ public class GroupListBuilder {
         }
         List<Group> groups = new ArrayList<>(9);
 
+        // sort pairs by distance to party location to get shorter path lengths
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
+        Location partyLocation = event.partyLocation;
+        final int accuracy = 1000;  // sort needs int, but we have double. So we multiply by a large number to be more accurate
+        list.sort((p1, p2) -> (int) ((-1) * accuracy * (p1.getDistanceToLocation(partyLocation) - p2.getDistanceToLocation(partyLocation))));
+
         // name pairs systematically
         Pair A = list.get(0);
         Pair B = list.get(1);

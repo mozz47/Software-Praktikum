@@ -155,6 +155,18 @@ public class Pair {
     }
 
     /**
+     * Calculates the distance between this pair and the given location.
+     *
+     * @param location the location
+     * @return double Euclidean distance
+     */
+    public double getDistanceToLocation(Location location) {
+        Coordinate c1 = new Coordinate(this.getKitchen().longitude, this.getKitchen().latitude);
+        Coordinate c2 = new Coordinate(location.longitude, location.latitude);
+        return c1.distanceTo(c2);
+    }
+
+    /**
      * Private class to calculate the distance between two coordinates.
      */
     private static class Coordinate {
@@ -185,14 +197,16 @@ public class Pair {
     public String toString() {
         String participantWithKitchen = p2sKitchenIsUsed ? participant2.name : participant1.name;
         String clusterString = cluster == null ? "None" : cluster.toString();
+        String pathLengthString = cluster == null ? "No path set" : String.format("%.2f", (getPathLength() * 111)) + "km";
         return "Pair id: " + id + "\n" +
                 "Participant 1: " + participant1.name + "\n" +
                 "Participant 2: " + participant2.name + "\n" +
-                "Path Length: " + String.format("%.2f", (getPathLength() * 111)) + "km\n" +
+                "Path Length: " + pathLengthString + "\n" +
                 "Kitchen used: Kitchen of " + participantWithKitchen + ":\n" + getKitchen() + "\n" +
                 "Age difference: " + getAgeRangeDifference() + "\n" +
                 "Different gender: " + (participant1.sex != participant2.sex) + "\n" +
                 "Food Preference: " + getMainFoodPreference() + "\n" +
+                "Distance to party: " + String.format("%.2f", (getDistanceToLocation(SpinfoodEvent.getInstance().partyLocation) * 111)) + "km\n" +
                 "Cluster: " + clusterString;
     }
 

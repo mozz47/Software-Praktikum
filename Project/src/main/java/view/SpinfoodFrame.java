@@ -333,8 +333,8 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         // Add all pair-Strings to the list model
         for (Pair pair : pairs) {
             pairListModel.addElement(pair.shortString());
-            pairKeyFiguresTextPane.setText(event.getPairKeyFigures());
         }
+        pairKeyFiguresTextPane.setText(event.getPairKeyFigures());
     }
 
     private void displayGroups(List<Group> groups) {
@@ -342,8 +342,9 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         groupListModel.clear();
         for (Group group : groups) {
             groupListModel.addElement(group.shortString());
-            groupKeyFiguresTextPane.setText(event.getGroupKeyFigures());
         }
+        pairKeyFiguresTextPane.setText(event.getPairKeyFigures());
+        groupKeyFiguresTextPane.setText(event.getGroupKeyFigures());
     }
 
     private void displaySuccessors(List<Participant> successors) {
@@ -351,8 +352,8 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         successorListModel.clear();
         for (Participant successor : successors) {
             successorListModel.addElement(successor.name);
-            successorsKeyFiguresTextPane.setText(event.getSuccessorsKeyFigures());
         }
+        successorsKeyFiguresTextPane.setText(event.getSuccessorsKeyFigures());
     }
 
     @Override

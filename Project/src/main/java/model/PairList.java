@@ -21,6 +21,20 @@ public class PairList {
         this.averageFoodpreferenceDifference = calculateFoodPreferenceDifference(pairList);
     }
 
+    public static double averagePathLength(List<Pair> pairList) {
+        if (pairList.isEmpty()) return -1.0;
+        double totalPathLength = 0;
+        int pairsUsedForCalculation = 0;
+        for (Pair pair : pairList) {
+            if (pair.cluster == null) {
+                continue;
+            }
+            totalPathLength += pair.getPathLength();
+            pairsUsedForCalculation++;
+        }
+        return totalPathLength / pairsUsedForCalculation;
+    }
+
     public static double calculateAverageAgeDifference(List<Pair> pairList) {
         if (pairList.isEmpty()) return 0.0;
         int totalAgeDifference = 0;
