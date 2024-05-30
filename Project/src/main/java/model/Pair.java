@@ -184,6 +184,7 @@ public class Pair {
     @Override
     public String toString() {
         String participantWithKitchen = p2sKitchenIsUsed ? participant2.name : participant1.name;
+        String clusterString = cluster == null ? "None" : cluster.toString();
         return "Pair id: " + id + "\n" +
                 "Participant 1: " + participant1.name + "\n" +
                 "Participant 2: " + participant2.name + "\n" +
@@ -192,7 +193,7 @@ public class Pair {
                 "Age difference: " + getAgeRangeDifference() + "\n" +
                 "Different gender: " + (participant1.sex != participant2.sex) + "\n" +
                 "Food Preference: " + getMainFoodPreference() + "\n" +
-                "Cluster: " + cluster;
+                "Cluster: " + clusterString;
     }
 
     /**

@@ -5,6 +5,7 @@ import model.Group;
 import model.Pair;
 import model.SpinfoodEvent;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class Saver {
 
     private static void writeGroupListToCSV(List<Group> groups, String fileName) {
         try {
+            new File("Output/").mkdirs();
             FileWriter fw = new FileWriter("Output/" + fileName);
             StringBuilder sb = new StringBuilder();
             for (Group group : groups) {

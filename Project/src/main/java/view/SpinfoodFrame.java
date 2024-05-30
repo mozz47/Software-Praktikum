@@ -31,7 +31,6 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         LANGUAGE_LOCALE_MAP.put("Czech", new Locale.Builder().setLanguage("cs").build());
         LANGUAGE_LOCALE_MAP.put("Hungarian", new Locale.Builder().setLanguage("hu").build());
         LANGUAGE_LOCALE_MAP.put("Italian", Locale.ITALIAN);
-        
          */
     }
 
@@ -140,6 +139,18 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         pairBuildingButton.addActionListener(e -> {
             SpinfoodEvent event = SpinfoodEvent.getInstance();
 
+            // participant check
+            if (event.participants == null) {
+                printToConsole(resourceBundle.getString("noParticipantsError"));
+                return;
+            }
+
+            // criteria check
+            if (event.criteria == null) {
+                printToConsole(resourceBundle.getString("noCriteriaError"));
+                return;
+            }
+
             // start pair building algorithm
             PairList pairList = PairListBuilder.getPairList(event.criteria);
             event.updatePairList(pairList.getPairList());
@@ -152,6 +163,12 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
 
         groupBuildingButton.addActionListener(e -> {
             SpinfoodEvent event = SpinfoodEvent.getInstance();
+
+            // pair check
+            if (SpinfoodEvent.getInstance().getPairList() == null) {
+                printToConsole(resourceBundle.getString("noPairsError"));
+                return;
+            }
 
             // start group building algorithm
             GroupListBuilder glb = new GroupListBuilder();
@@ -179,6 +196,8 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         });
 
         outputCSVButton.addActionListener(e -> {
+            // todo groups check
+
             Saver.save();
             printToConsole(resourceBundle.getString("savedConsoleText"));
         });
@@ -330,7 +349,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             consolePane.setCaretPosition(doc.getLength());
 
         } catch (BadLocationException e) {
-            e.printStackTrace();
+            // Ignore
         }
     }
 
