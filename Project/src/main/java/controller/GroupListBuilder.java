@@ -30,23 +30,37 @@ public class GroupListBuilder {
         pairSuccessors = new ArrayList<>();
 
         // criterion 1: food preference (max 1 meaty in mixed group)
-        //pairLists = separateMeatiesAndRest(toBeUsed);
+        //pairLists = separateMeatiesAndRest(toBeUsed);  // currently not used because splitIntoGroupsOf9Pairs() already guarantees this criterion
         pairLists.add(toBeUsed);  // remove this line if applying criteria01
 
         // criteria 6 (strict food pref separation),8 (increase sex diversity),9 (reduce travel distance) via selected order:
         executeOptionalCriteriaAlgosInCorrectOrder(criteria);
 
         // criterion 2: collect into groups of unique pairs (THIS HAS TO BE THE LAST CRITERION TO USE)
-        splitIntoGroupsOf9Pairs();
-        collectIntoGroups();
+        splitIntoGroupsOf9Pairs(pairLists, pairSuccessors);
+        List<Group> groupList = collectIntoGroups(pairLists);
 
-        // todo: try to make groups out of successors
+        // try to make groups out of successors and add to groupList
+        groupList.addAll(tryToMakeGroupsOutOfSuccessors());
+
+        // write groupList to singleton
+        event.updateGroupList(groupList);
 
         // put successors from pairSuccessors into event.successors
         for (Pair successor : pairSuccessors) {
             event.getSuccessors().add(successor.participant1);
             event.getSuccessors().add(successor.participant2);
         }
+    }
+
+    private List<Group> tryToMakeGroupsOutOfSuccessors() {
+        // clone pairSuccessors
+        List<Pair> successorPairsToBeGrouped = new ArrayList<>(pairSuccessors);
+        List<Pair> stillSuccessors = new ArrayList<>();
+        List<List<Pair>> successorGroups = separateMeatiesAndRest(successorPairsToBeGrouped);
+        splitIntoGroupsOf9Pairs(successorGroups, stillSuccessors);
+        pairSuccessors = stillSuccessors;
+        return collectIntoGroups(successorGroups);
     }
 
     /**
@@ -181,7 +195,7 @@ public class GroupListBuilder {
     /**
      * Splitting into pair lists of 9 pairs each (exactly) and discarding the rest to successors.
      */
-    private void splitIntoGroupsOf9Pairs() {
+    private void splitIntoGroupsOf9Pairs(List<List<Pair>> pairLists, List<Pair> pairSuccessors) {
         List<List<Pair>> newPairLists = new ArrayList<>();
         List<Pair> newPairSuccessors = new ArrayList<>();
         for (List<Pair> list : pairLists) {
@@ -216,8 +230,12 @@ public class GroupListBuilder {
             System.out.println("Something went horribly wrong.");
         }
 
-        pairLists = newPairLists;
-        pairSuccessors = newPairSuccessors;
+        // replace pairLists with newPairLists
+        pairLists.clear();
+        pairLists.addAll(newPairLists);
+        // replace pairSuccessors with newPairSuccessors
+        pairSuccessors.clear();
+        pairSuccessors.addAll(newPairSuccessors);
     }
 
     /**
@@ -247,13 +265,12 @@ public class GroupListBuilder {
      * The kitchen of the pairs denoted with '*' are used for the meal.
      * This ensures that every pair uses its kitchen exactly once.
      */
-    private void collectIntoGroups() {
-        SpinfoodEvent event = SpinfoodEvent.getInstance();
+    private List<Group> collectIntoGroups(List<List<Pair>> pairLists) {
         List<Group> groupList = new ArrayList<>();
         for (List<Pair> list : pairLists) {
             groupList.addAll(listOf9PairsToGroup(list));
         }
-        event.updateGroupList(groupList);  // sets group list and backs up potential old group list
+        return groupList;
     }
 
     /**
