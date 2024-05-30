@@ -98,7 +98,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             ImageIcon resizedIcon = new ImageIcon(resizedImage);
             logoLabel.setIcon(resizedIcon);
         } else {
-            System.err.println("errors, cannot find photo, please check it again.");
+            System.err.println("errors, cannot find photo, please check it again");
         }
         // Initialize participants list model
         participantListModel = new DefaultListModel<>();
