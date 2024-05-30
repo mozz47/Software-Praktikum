@@ -1,17 +1,15 @@
 package view;
 
+import controller.GroupListBuilder;
+import controller.PairListBuilder;
 import controller.Reader;
 import controller.Saver;
-import model.Group;
-import model.Pair;
-import model.Participant;
-import model.SpinfoodEvent;
+import model.*;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.io.File;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -59,7 +57,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private JScrollPane pairsPane;
     private JScrollPane groupPane;
     private JScrollPane successorPane;
-    private JButton autoAssignButton;
+    private JButton pairBuildingButton;
     private JButton readCSVButton;
     private JButton outputCSVButton;
     private JButton loadPreviousButton;
@@ -81,6 +79,8 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private final DefaultListModel<String> groupListModel;
     private JComboBox<String> comboBoxLang;
     private JLabel logoLabel;
+    private JButton groupBuildingButton;
+    private JButton changeCriteriaOrderButton;
 
 
     public SpinfoodFrame() {
@@ -127,6 +127,40 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         for (String language : LANGUAGE_LOCALE_MAP.keySet()) {
             comboBoxLang.addItem(language);
         }
+
+        // Initial console message
+        printToConsole(resourceBundle.getString("infoConsoleStartUp"));
+
+        // Add Action Listener for the autoAssignButton, use Algorithm
+        changeCriteriaOrderButton.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> new CriteriaRankingFrame(resourceBundle, this));
+            printToConsole(resourceBundle.getString("criteriaRankingFrameOrder"));
+        });
+
+        pairBuildingButton.addActionListener(e -> {
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+
+            // start pair building algorithm
+            PairList pairList = PairListBuilder.getPairList(event.criteria);
+            event.updatePairList(pairList.getPairList());
+            event.updateSuccessors(pairList.getSuccessorList());
+            printToConsole(resourceBundle.getString("createdPairsWithAlgorithm"));
+
+            displayPairs(event.getPairList());
+            displaySuccessors(event.getSuccessors());
+        });
+
+        groupBuildingButton.addActionListener(e -> {
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+
+            // start group building algorithm
+            GroupListBuilder glb = new GroupListBuilder();
+            glb.buildGroupList(event.criteria);
+            printToConsole(resourceBundle.getString("createdGroupsWithAlgorithm"));
+
+            displayGroups(event.getGroupList());
+            displaySuccessors(event.getSuccessors());
+        });
 
         // Add an action listener to the comboBoxLang to change the language
         comboBoxLang.addActionListener(e -> updateLanguage());
@@ -210,17 +244,6 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         setSize(1200, 800);
         setLocationRelativeTo(null);
         setVisible(true);
-
-        // Initial console message
-        printToConsole(resourceBundle.getString("infoConsoleStartUp"));
-
-        // Add Action Listener for the autoAssignButton, use Algorithm
-        autoAssignButton.addActionListener(e -> new CriteriaRankingFrame(resourceBundle, SpinfoodFrame.this));
-
-        // Add Action Listener for the outputCSVButton, choose DIR to save CSV
-        outputCSVButton.addActionListener(e -> {
-            //TODO
-        });
     }
 
     private void updateLanguage() {
@@ -232,7 +255,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             participantsLabel.setText(resourceBundle.getString("participants"));
             pairLabel.setText(resourceBundle.getString("pairs"));
             groupLabel.setText(resourceBundle.getString("groups"));
-            autoAssignButton.setText(resourceBundle.getString("autoAssignButton"));
+            pairBuildingButton.setText(resourceBundle.getString("pairBuildingButton"));
             readCSVButton.setText(resourceBundle.getString("readCSVButton"));
             outputCSVButton.setText(resourceBundle.getString("outputCSVButton"));
             consoleLabel.setText(resourceBundle.getString("console"));
@@ -262,8 +285,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         }
     }
 
-    @Override
-    public void displayPairs(List<Pair> pairs) {
+    private void displayPairs(List<Pair> pairs) {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         pairListModel.clear();
         // Add all pair-Strings to the list model
@@ -273,8 +295,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         }
     }
 
-    @Override
-    public void displayGroups(List<Group> groups) {
+    private void displayGroups(List<Group> groups) {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         groupListModel.clear();
         for (Group group : groups) {
@@ -283,8 +304,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         }
     }
 
-    @Override
-    public void displaySuccessors(List<Participant> successors) {
+    private void displaySuccessors(List<Participant> successors) {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         successorListModel.clear();
         for (Participant successor : successors) {

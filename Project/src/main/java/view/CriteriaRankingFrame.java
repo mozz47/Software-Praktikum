@@ -54,7 +54,7 @@ public class CriteriaRankingFrame extends JFrame {
         // Create OK Button
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
-            startAlgorithm(resourceBundle, callback, criteria);
+            startAlgorithm(criteria, callback);
         });
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.add(okButton, BorderLayout.CENTER);
@@ -82,27 +82,15 @@ public class CriteriaRankingFrame extends JFrame {
         setVisible(true);
     }
 
-    private void startAlgorithm(ResourceBundle resourceBundle, PairDisplayCallback callback, List<Criterion> criteria) {
+    private void startAlgorithm(List<Criterion> criteria, PairDisplayCallback callback) {
         dispose();
 
         SpinfoodEvent event = SpinfoodEvent.getInstance();
+        event.criteria = criteria;
 
-        // start pair building algorithm
-        PairList pairList = PairListBuilder.getPairList(criteria);
-        event.updatePairList(pairList.getPairList());
-        event.updateSuccessors(pairList.getSuccessorList());
-        callback.printToConsole(resourceBundle.getString("createdPairsWithAlgorithm"));
-
-        // start group building algorithm
-        GroupListBuilder glb = new GroupListBuilder();
-        glb.buildGroupList(criteria);
-        callback.printToConsole(resourceBundle.getString("createdGroupsWithAlgorithm"));
-        callback.displayGroups(event.getGroupList());
-
-        callback.displaySuccessors(event.getSuccessors());
-
-        // displaying results
-        callback.displayPairs(event.getPairList());
+        for (Criterion criterion : event.criteria) {
+            callback.printToConsole(criterion.toString());
+        }
     }
 
     /**

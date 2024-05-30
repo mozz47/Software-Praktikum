@@ -10,6 +10,7 @@ public class SpinfoodEvent {
 
     public List<Participant> participants;
     public Location partyLocation;
+    public List<Criterion> criteria;
 
     private List<Pair> pairList;  // private to manage the old pair list
     private List<Pair> pairListOld;
