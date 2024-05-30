@@ -154,6 +154,10 @@ public class Pair {
         return c1.distanceTo(c2);
     }
 
+    public Coordinate getCoordinates() {
+        return new Coordinate(this.getKitchen().longitude, this.getKitchen().latitude);
+    }
+
     /**
      * Calculates the distance between this pair and the given location.
      *
@@ -165,30 +169,6 @@ public class Pair {
         Coordinate c2 = new Coordinate(location.longitude, location.latitude);
         return c1.distanceTo(c2);
     }
-
-    /**
-     * Private class to calculate the distance between two coordinates.
-     */
-    private static class Coordinate {
-        double longitude;
-        double latitude;
-
-        Coordinate(double longitude, double latitude) {
-            this.longitude = longitude;
-            this.latitude = latitude;
-        }
-
-        /**
-         * Calculates the distance between two coordinates.
-         *
-         * @param other coordinate
-         * @return double Euclidean distance
-         */
-        double distanceTo(Coordinate other) {
-            return Math.sqrt(Math.pow(this.longitude - other.longitude, 2) + Math.pow(this.latitude - other.latitude, 2));
-        }
-    }
-
 
     /**
      * Returns human-readable string version of the pair.

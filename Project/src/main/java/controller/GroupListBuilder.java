@@ -42,6 +42,8 @@ public class GroupListBuilder {
 
         // try to make groups out of successors and add to groupList
         groupList.addAll(tryToMakeGroupsOutOfSuccessors());
+        groupList.addAll(tryToMakeGroupsOutOfSuccessors());
+        //groupList.addAll(tryToMakeGroupsOutOfSuccessors());
 
         // write groupList to singleton
         event.updateGroupList(groupList);
@@ -61,7 +63,7 @@ public class GroupListBuilder {
     private List<Group> tryToMakeGroupsOutOfSuccessors() {
         List<Pair> successorPairsToBeGrouped = new ArrayList<>(pairSuccessors);  // clone pairSuccessors
         List<Pair> stillSuccessors = new ArrayList<>();
-        List<List<Pair>> successorGroups = separateMeatiesAndRest(successorPairsToBeGrouped);
+        List<List<Pair>> successorGroups = separateMeatiesAndRest(successorPairsToBeGrouped, stillSuccessors);
         splitIntoGroupsOf9Pairs(successorGroups, stillSuccessors);
         pairSuccessors = stillSuccessors;
         return collectIntoGroups(successorGroups);
@@ -84,8 +86,19 @@ public class GroupListBuilder {
         }
     }
 
+    /**
+     * Uses the KMeans algorithm to cluster the pairs in pairList by Coordinates.
+     */
     private void criterion09PathLength() {
-        // todo
+        final int k = 2;  // to be adjusted
+        List<List<Pair>> newPairLists = new ArrayList<>();
+        for (List<Pair> list : pairLists) {
+            KMeans kMeans = new KMeans(k, list);
+            kMeans.init();
+            kMeans.cluster();
+            newPairLists.addAll(kMeans.getClusters());
+        }
+        pairLists = newPairLists;
     }
 
     private void criterion08SexDiversity() {
@@ -348,26 +361,37 @@ public class GroupListBuilder {
      * Also, it is not a problem to have a single meaty in a rest-group.
      * For now, we handle egalies like meaties
      *
-     * @return false only if there was no easy match for a 9+ pair group list.
+     * @return list of pair lists
      */
-    private List<List<Pair>> separateMeatiesAndRest(List<Pair> toBeSeparated) {
+    private List<List<Pair>> separateMeatiesAndRest(List<Pair> toBeSeparated, List<Pair> pairSuccessors) {
         List<Pair> meaties = new ArrayList<>();
         List<Pair> rest = new ArrayList<>();
+        List<List<Pair>> out = new ArrayList<>();
+        int pureMeatyCount = 0;
         int meatyCount = 0;
         int restCount = 0;
         for (Pair p : toBeSeparated) {
             if (p.getMainFoodPreference() == FoodPreference.MEAT
                     || p.getMainFoodPreference() == FoodPreference.NONE) {
+                if (p.getMainFoodPreference() == FoodPreference.MEAT) {
+                    pureMeatyCount++;
+                }
                 meatyCount++;
             } else {
                 restCount++;
             }
         }
+        if (pureMeatyCount == 0 || restCount == 0) {
+            // no need to split if one is empty
+            out.add(toBeSeparated);
+            return out;
+        }
         if (meatyCount < 9 && restCount < 9) {
             if (meatyCount > 1) {
                 // we could throw meaties into successors to still make it work here
-                // but for now we just abort
-                throw new IllegalArgumentException("Algorithm aborted, less than 9 meaties and rest.");
+                // but for now we discard everyone.
+                pairSuccessors.addAll(toBeSeparated);
+                return new ArrayList<>();
             } else {
                 rest = new ArrayList<>(toBeSeparated);  // clone list
             }
@@ -406,7 +430,6 @@ public class GroupListBuilder {
                 }
             }
         }
-        List<List<Pair>> out = new ArrayList<>();
         if (!meaties.isEmpty()) {
             out.add(meaties);
         }
