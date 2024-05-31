@@ -12,7 +12,7 @@ public class PairListBuilder {
     private static boolean[] used;
     private static List<Participant> successors;
 
-    public static List<Pair> getRegisteredTogetherPairs() {
+    static List<Pair> getRegisteredTogetherPairs() {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         List<Pair> pairList = new ArrayList<>();
         HashSet<String> processedParticipantsIds = new HashSet<>();
@@ -35,7 +35,7 @@ public class PairListBuilder {
         return pairList;
     }
 
-    public static List<Participant> getRegisteredAloneParticipants() {
+    static List<Participant> getRegisteredAloneParticipants() {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         List<Participant> pairList = new ArrayList<>();
 
@@ -48,7 +48,7 @@ public class PairListBuilder {
         return pairList;
     }
 
-    private static List<Pair> getGeneratedPairs(List<Criterion> criterions) {
+    static List<Pair> getGeneratedPairs(List<Criterion> criterions) {
         List<Participant> participants = getRegisteredAloneParticipants();
         List<Pair> joinedPairs = new ArrayList<>();
         used = new boolean[participants.size()];
@@ -114,20 +114,8 @@ public class PairListBuilder {
         return new PairList(registeredTogetherPairs, successors);
     }
 
-    /**
-     * Collects the successors from the given list of participants and saves them to a CSV file.
-     *
-     * @param participants the list of participants to collect successors from
-     * @return true if there are successors in the list, false otherwise
-     */
-    private static boolean collectSuccessors(List<Participant> participants) {
-        //TODO Save to CSV
-        for (int i = 0; i < participants.size(); i++) {
-            if (!used[i]) {
-                successors.add(participants.get(i));
-            }
-        }
-        return !successors.isEmpty();
+    static List<Participant> getSuccessors() {
+        return successors;
     }
 
     public static void main(String[] args) {

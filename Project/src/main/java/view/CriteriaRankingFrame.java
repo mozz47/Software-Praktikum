@@ -1,10 +1,6 @@
 package view;
 
-import controller.GroupListBuilder;
-import controller.PairListBuilder;
 import model.Criterion;
-import model.PairList;
-import model.Participant;
 import model.SpinfoodEvent;
 
 import javax.swing.*;
@@ -24,7 +20,7 @@ public class CriteriaRankingFrame extends JFrame {
      *
      * @param resourceBundle
      */
-    public CriteriaRankingFrame(ResourceBundle resourceBundle, PairDisplayCallback callback) {
+    public CriteriaRankingFrame(ResourceBundle resourceBundle, DisplayCallback callback) {
         List<Criterion> criteria = new ArrayList<>();
         criteria.add(Criterion.Criterion_06_Food_Preference);
         criteria.add(Criterion.Criterion_07_Age_Difference);
@@ -55,6 +51,8 @@ public class CriteriaRankingFrame extends JFrame {
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
             startAlgorithm(criteria, callback);
+            callback.enableBuildPairsButton();
+
         });
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.add(okButton, BorderLayout.CENTER);
@@ -82,7 +80,7 @@ public class CriteriaRankingFrame extends JFrame {
         setVisible(true);
     }
 
-    private void startAlgorithm(List<Criterion> criteria, PairDisplayCallback callback) {
+    private void startAlgorithm(List<Criterion> criteria, DisplayCallback callback) {
         dispose();
 
         SpinfoodEvent event = SpinfoodEvent.getInstance();

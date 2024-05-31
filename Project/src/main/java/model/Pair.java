@@ -32,8 +32,17 @@ public class Pair {
         this.registeredAsPair = registeredAsPair;
         if (registeredAsPair) {
             p2sKitchenIsUsed = false;
-        } else {
-            p2sKitchenIsUsed = participant2.hasKitchen || participant2.mightHaveKitchen; //Todo: if both have kitchen, whos kitchen do we use??
+        } else if (getKitchenAmount() == 2) {
+            Coordinate p1Kitchen = new Coordinate(participant1.kitchen.longitude, participant1.kitchen.latitude);
+            Coordinate p2Kitchen = new Coordinate(participant2.kitchen.longitude, participant2.kitchen.latitude);
+            Coordinate partylocation = new Coordinate(SpinfoodEvent.getInstance().partyLocation.longitude, SpinfoodEvent.getInstance().partyLocation.latitude);
+            if (p1Kitchen.distanceTo(partylocation) > p2Kitchen.distanceTo(partylocation)) {
+                p2sKitchenIsUsed = true;
+            } else {
+                p2sKitchenIsUsed = false;
+            }
+        } else { //kitchenamount == 1
+            p2sKitchenIsUsed = participant2.hasKitchen || participant2.mightHaveKitchen;
         }
 
     }
@@ -183,7 +192,7 @@ public class Pair {
     public String toString() {
         String participantWithKitchen = p2sKitchenIsUsed ? participant2.name : participant1.name;
         String clusterString = cluster == null ? "None" : cluster.toString();
-        String pathLengthString = cluster == null ? "No path set" : String.format("%.2f", (getPathLength() * 111)) + "km";
+        String pathLengthString = cluster == null ? "No path set" : String.format("%.2f", (getPathLength())) + "km";
         return "Pair id: " + id + "\n" +
                 "Participant 1: " + participant1.name + "\n" +
                 "Participant 2: " + participant2.name + "\n" +

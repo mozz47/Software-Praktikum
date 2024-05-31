@@ -5,16 +5,21 @@ import controller.PairListBuilder;
 import controller.Reader;
 import controller.Saver;
 import model.*;
+import model.Pair;
+import model.SpinfoodEvent;
+
 
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.net.URL;
-import java.util.*;
 import java.util.List;
 
-public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
+
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
+import java.net.URL;
+import java.util.*;
+
+public class SpinfoodFrame extends JFrame implements DisplayCallback {
     private static final Map<String, Locale> LANGUAGE_LOCALE_MAP = new HashMap<>();
 
     static {
@@ -36,6 +41,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
 
     private static final int MAX_CONSOLE_LINES = 8;
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.GERMAN);
+
     private final DefaultListModel<String> successorListModel;
     private JLabel participantsLabel;
     private JLabel pairLabel;
@@ -80,6 +86,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
     private JLabel logoLabel;
     private JButton groupBuildingButton;
     private JButton changeCriteriaOrderButton;
+    private JButton showPairMapButton;
 
 
     public SpinfoodFrame() {
@@ -127,6 +134,13 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             comboBoxLang.addItem(language);
         }
 
+        //set enabled of buttons initially off
+        pairBuildingButton.setEnabled(false);
+        groupBuildingButton.setEnabled(false);
+        outputCSVButton.setEnabled(false);
+        loadPreviousButton.setEnabled(false);
+        showPairMapButton.setEnabled(false);
+
         // Initial console message
         printToConsole(resourceBundle.getString("infoConsoleStartUp"));
 
@@ -134,6 +148,22 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         changeCriteriaOrderButton.addActionListener(e -> {
             SwingUtilities.invokeLater(() -> new CriteriaRankingFrame(resourceBundle, this));
             printToConsole(resourceBundle.getString("criteriaRankingFrameOrder"));
+            groupBuildingButton.setEnabled(false);
+            outputCSVButton.setEnabled(false);
+             showPairMapButton.setEnabled(false);
+        });
+
+        showPairMapButton.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> { //TODO: maybe remove because was not specified in Project specs?
+                SpinfoodEvent event = SpinfoodEvent.getInstance();
+                List<Pair> pairs = event.getPairList();
+                PairMap pairMap = new PairMap("Pair Map", pairs);
+
+                pairMap.pack();
+                pairMap.setLocationRelativeTo(null);
+                pairMap.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                pairMap.setVisible(true);
+            });
         });
 
         pairBuildingButton.addActionListener(e -> {
@@ -159,6 +189,10 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
 
             displayPairs(event.getPairList());
             displaySuccessors(event.getSuccessors());
+
+            groupBuildingButton.setEnabled(true);
+            pairBuildingButton.setEnabled(false);
+            showPairMapButton.setEnabled(true);
         });
 
         groupBuildingButton.addActionListener(e -> {
@@ -177,18 +211,27 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
 
             displayGroups(event.getGroupList());
             displaySuccessors(event.getSuccessors());
+
+            outputCSVButton.setEnabled(true);
+            groupBuildingButton.setEnabled(false);
+            pairBuildingButton.setEnabled(false);
+
+            if (event.hasOldData()) {
+                loadPreviousButton.setEnabled(true);
+            }
         });
 
         // Add an action listener to the comboBoxLang to change the language
         comboBoxLang.addActionListener(e -> updateLanguage());
 
-        readCSVButton.addActionListener(e -> {
+        readCSVButton.addActionListener(e -> { //TODO maybe set other buttons enabled/disabled if new csv was read
             SpinfoodEvent event = SpinfoodEvent.getInstance();
             event.participants = Reader.getParticipants();
             if (event.participants != null) {
                 displayParticipants();
 
                 printToConsole(resourceBundle.getString("infoConsoleFileRead"));
+                //TODO set change criteria button enabled false (if changed main to initialize())
 
             } else {
                 printToConsole(resourceBundle.getString("errorFileRead"));
@@ -310,6 +353,7 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
             pairBuildingButton.setText(resourceBundle.getString("pairBuildingButton"));
             groupBuildingButton.setText(resourceBundle.getString("groupBuildingButton"));
             loadPreviousButton.setText(resourceBundle.getString("loadPreviousButton"));
+            showPairMapButton.setText(resourceBundle.getString("showMapButton"));
 
             // other
             setTitle(resourceBundle.getString("title"));
@@ -377,4 +421,8 @@ public class SpinfoodFrame extends JFrame implements PairDisplayCallback {
         }
     }
 
+    @Override
+    public void enableBuildPairsButton() {
+        pairBuildingButton.setEnabled(true);
+    }
 }

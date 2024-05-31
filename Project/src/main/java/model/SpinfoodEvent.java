@@ -44,6 +44,11 @@ public class SpinfoodEvent {
         return event;
     }
 
+    //For test purposes
+    public static void setInstance(SpinfoodEvent event) {
+        SpinfoodEvent.event = event;
+    }
+
     /**
      * Updates the pair list, saving the current one in pairListOld.
      *
@@ -152,7 +157,7 @@ public class SpinfoodEvent {
         return "Amount: " + pairList.size() + "\n" +
                 "Gender Diversity: " + String.format("%.2f", PairList.calculateGenderRatio(pairList)) + "\n" +
                 "Average Age Difference: " + String.format("%.2f", PairList.calculateAverageAgeDifference(pairList)) + "\n" +
-                "Preference Deviation: " + PairList.calculateFoodPreferenceDifference(pairList) + "\n" +
+                "Preference Deviation: " + String.format("%.2f", PairList.calculateFoodPreferenceDifference(pairList)) + "\n" +
                 "Number of unmatched Participants (to Pairs): " + unmatchedParticipants() + "\n" +
                 "Average Path Length: " + String.format("%.2f", PairList.averagePathLength(pairList)) + "km\n";
     }
@@ -161,7 +166,7 @@ public class SpinfoodEvent {
         return "Amount: " + groupList.size() + "\n" +
                 "Gender Diversity: " + String.format("%.2f", GroupList.calculateGenderRatio(groupList)) + "\n" +
                 "Average Age Difference: " + String.format("%.2f", GroupList.calculateAverageAgeDifference(groupList)) + "\n" +
-                "Preference Deviation: " + GroupList.calculateFoodPreferenceDeviation(groupList) + "\n" +
+                "Preference Deviation: " + String.format("%.3f", GroupList.calculateFoodPreferenceDeviation(groupList)) + "\n" +
                 "Number of unmatched Pairs (to Groups): " + unmatchedPairs();
     }
 
@@ -185,6 +190,14 @@ public class SpinfoodEvent {
 
     public String getSuccessorsKeyFigures() {
         return "Amount: " + successors.size();
+    }
+
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public List<Criterion> getCriteria() {
+        return criteria;
     }
 
     public void printInput() {
