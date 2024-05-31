@@ -97,7 +97,6 @@ public class PairListBuilder {
             }
         }
 
-        boolean successorsLeftOver = collectSuccessors(participants);
         //System.out.println((successorsLeftOver ? "successors left over" : "no successors left over") + ", are constraints fully relaxed: " + softConstraints.areConstraintsFullyRelaxed());
         return joinedPairs;
     }
