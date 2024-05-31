@@ -195,7 +195,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             showPairMapButton.setEnabled(true);
         });
 
-        groupBuildingButton.addActionListener(e -> {
+        groupBuildingButton.addActionListener(e -> { //TODO set max amount of Groups as required in Crit. 8.1.3
             SpinfoodEvent event = SpinfoodEvent.getInstance();
 
             // pair check
