@@ -13,7 +13,7 @@ public class Pair {
     public Participant participant1;
     public Participant participant2;
     public final boolean registeredAsPair;
-    public boolean p2sKitchenIsUsed; //todo: initialize in constructor/Reader
+    public boolean p2sKitchenIsUsed;
 
     public Cluster cluster;
 
@@ -30,6 +30,12 @@ public class Pair {
         this.participant1 = participant1;
         this.participant2 = participant2;
         this.registeredAsPair = registeredAsPair;
+        if (registeredAsPair) {
+            p2sKitchenIsUsed = false;
+        } else {
+            p2sKitchenIsUsed = participant2.hasKitchen || participant2.mightHaveKitchen; //Todo: if both have kitchen, whos kitchen do we use??
+        }
+
     }
 
     /**
@@ -186,7 +192,7 @@ public class Pair {
                 "Age difference: " + getAgeRangeDifference() + "\n" +
                 "Different gender: " + (participant1.sex != participant2.sex) + "\n" +
                 "Food Preference: " + getMainFoodPreference() + "\n" +
-                "Distance to party: " + String.format("%.2f", (getDistanceToLocation(SpinfoodEvent.getInstance().partyLocation) * 111)) + "km\n" +
+                "Distance to party: " + String.format("%.2f", (getDistanceToLocation(SpinfoodEvent.getInstance().partyLocation))) + "km\n" +
                 "Cluster: " + clusterString;
     }
 
