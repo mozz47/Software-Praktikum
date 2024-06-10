@@ -82,7 +82,7 @@ public class PairPairingConstraints {
 
         if (!relaxedFoodPreferences) {
             int absoluteFoodDistance = getAbsoluteFoodDistance(p1, p2);
-            if (absoluteFoodDistance >= 2) {
+            if (absoluteFoodDistance >= 1) {
                 System.out.println("Invalid Pair due to Food Preferences: " + p1.name + ", " + p2.name);
                 return false;
             }

@@ -74,15 +74,24 @@ public class Pair {
             return fp1;
         }
         if ((fp1 == FoodPreference.MEAT && fp2 == FoodPreference.NONE) || (fp2 == FoodPreference.MEAT && fp1 == FoodPreference.NONE)) {
-            return FoodPreference.MEAT;
+            return FoodPreference.MEAT; //Fleischi und Egali ergibt Fleischi
         }
-        if (fp1 == FoodPreference.VEGAN || fp2 == FoodPreference.VEGAN) {
-            return FoodPreference.VEGAN;
+        if (fp1 == FoodPreference.VEGAN  && fp2 == FoodPreference.VEGGIE || fp2 == FoodPreference.VEGAN  && fp1 == FoodPreference.VEGGIE) {
+            return FoodPreference.VEGAN;  //Vegan und Veggie ergibt VEGAN
         }
-        if (fp1 == FoodPreference.VEGGIE || fp2 == FoodPreference.VEGGIE) {
-            return FoodPreference.VEGGIE;
+        if (fp1 == FoodPreference.MEAT  && fp2 == FoodPreference.VEGGIE || fp2 == FoodPreference.MEAT  && fp1 == FoodPreference.VEGGIE) {
+            return FoodPreference.VEGGIE; //Fleischi UND Veggie ergibt Veggie
         }
-        return FoodPreference.NONE;
+        if (fp1 == FoodPreference.MEAT  && fp2 == FoodPreference.VEGAN || fp2 == FoodPreference.MEAT  && fp1 == FoodPreference.VEGAN) {
+            return FoodPreference.VEGAN; //Fleischi und Vegan ergibt Vegan
+        }
+        if (fp1 == FoodPreference.NONE  && fp2 == FoodPreference.VEGGIE || fp2 == FoodPreference.NONE  && fp1 == FoodPreference.VEGGIE) {
+            return FoodPreference.VEGGIE; //Egali und Veggie ergibt Veggie
+        }
+        if (fp1 == FoodPreference.NONE  && fp2 == FoodPreference.VEGAN || fp2 == FoodPreference.NONE  && fp1 == FoodPreference.VEGAN) {
+            return FoodPreference.VEGGIE; //Egali und Vegan ergibt Vegan
+        }
+        return FoodPreference.VEGAN;
     }
 
     /**
@@ -91,19 +100,7 @@ public class Pair {
     public boolean isValid() {
         boolean haveAKitchen = getKitchenAmount() >= 1;
 
-        return registeredAsPair || (haveAKitchen && !sameHouse() && isValidFoodPreference());
-    }
-
-    private boolean isValidFoodPreference() {
-        FoodPreference fp1 = participant1.foodPreference;
-        FoodPreference fp2 = participant2.foodPreference;
-        // Fleischliebhaber darf nicht mit Veganer oder Vegetarier gepaart werden
-        if (fp1 == FoodPreference.MEAT && (fp2 == FoodPreference.VEGAN || fp2 == FoodPreference.VEGGIE)) {
-            return false;
-        } else if (fp2 == FoodPreference.MEAT && (fp1 == FoodPreference.VEGAN || fp1 == FoodPreference.VEGGIE)) {
-            return false;
-        }
-        return true;
+        return registeredAsPair || (haveAKitchen && !sameHouse()); //removed isValidFoodPreference because specification changed!!!
     }
 
     /**

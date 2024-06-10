@@ -55,6 +55,9 @@ public class GroupListBuilder {
                 event.getSuccessors().add(successor.participant2);
             }
         }
+
+        //TODO add switch of kitchen in pairs if 2 kitchens are available in order to fulfill criteria 6.3 after finished Group-Algo
+        //TODO check crit. 6.4 where kitchen is used 4 times, which is not allowed because for one meal will be used twice!
     }
 
     /**

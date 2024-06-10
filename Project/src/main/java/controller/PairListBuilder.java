@@ -135,8 +135,6 @@ public class PairListBuilder {
             }
         }
 
-
-
         System.out.println((successors.isEmpty() ? "No successors left over" : "Some successors left over") + ", are constraints fully relaxed: " + constraints.areConstraintsFullyRelaxed());
         return joinedPairs;
     }
