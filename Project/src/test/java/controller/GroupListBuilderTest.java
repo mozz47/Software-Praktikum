@@ -11,12 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GroupListBuilderTest {
 
-    private List<Participant> participants;
     private List<Criterion> criteria;
 
     @BeforeEach
     public void setUp() {
-        participants = loadTestParticipants();
+        List<Participant> participants = loadTestParticipants();
         criteria = new ArrayList<>();
 
         criteria.add(Criterion.Criterion_06_Food_Preference);
@@ -29,6 +28,7 @@ public class GroupListBuilderTest {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         event.partyLocation = new Location(8.674617, 50.590932);
         event.participants = participants;
+        System.out.println(participants);
     }
 
     @Test
@@ -37,13 +37,18 @@ public class GroupListBuilderTest {
 
         PairPairingConstraints constraints = new PairPairingConstraints(criteria);
 
-        // Relax constraints a few times initially for testing
-        for (int i = 0; i < 5; i++) {
+
+        // Relax constraints a few times initially for testing --DONT DO, breaks algorithm
+        /*
+        for (int i = 0; i < 20; i++) {
             constraints.relaxConstraints();
         }
+         */
 
-        List<Pair> pairs = PairListBuilder.getGeneratedPairs(constraints);
+
+        List<Pair> pairs = PairListBuilder.getPairList(criteria).getPairList();
         event.updatePairList(pairs);
+        System.out.println(pairs.size());
 
         assertFalse(pairs.isEmpty(), "Pairs should not be empty");
 
@@ -73,6 +78,7 @@ public class GroupListBuilderTest {
         participants.add(new Participant("01be5c1f-4aa1-458d-a530-b1c109ffbb55", "Person3", FoodPreference.VEGAN, 22, Sex.MALE, true, false, new Kitchen(0, 8.681372, 50.582079), 0, null));
         participants.add(new Participant("01c1372d-d120-4459-9b65-39d56d1ad430", "Person4", FoodPreference.VEGGIE, 23, Sex.MALE, true, false, new Kitchen(1, 8.683279, 50.581563), 1, null));
         participants.add(new Participant("033d5f60-5853-4931-8b38-1d3da9910e6d", "Person5", FoodPreference.MEAT, 28, Sex.MALE, true, false, new Kitchen(2, 8.681891, 50.576791), 2, null));
+        participants.add(new Participant("07b7446a-9d8b-478b-b3e9-e95b992fcf50", "Person13", FoodPreference.NONE, 27, Sex.MALE, true, false, new Kitchen(2, 8.674109, 50.5764905482704), 2, null));
 
         // Additional paired participants
         Participant partner1 = new Participant("117ee996-14d3-44e8-8bcb-eb2d29fddda5", "Personx1", FoodPreference.VEGAN, 25, Sex.MALE, false, false, new Kitchen(0, 8.681372, 50.582079), 0, null);

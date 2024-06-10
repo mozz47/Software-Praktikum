@@ -67,7 +67,9 @@ public class PairListBuilder {
                     }
                     System.out.println("Trying to pair: " + participants.get(i).name + " and " + participants.get(j).name);
                     Pair pair = new Pair(participants.get(i), participants.get(j), false);
-                    if (pair.isValid() && constraints.isValid(participants.get(i), participants.get(j))) { // soft and hard Constraints fulfilled?
+                    boolean pairValidHardConstraints = pair.isValid();
+                    boolean pairValidSoftConstraints = constraints.isValid(participants.get(i), participants.get(j));
+                    if (pairValidHardConstraints && pairValidSoftConstraints) { // soft and hard Constraints fulfilled?
                         joinedPairs.add(pair);
                         used[i] = true;
                         used[j] = true;
@@ -96,6 +98,44 @@ public class PairListBuilder {
                 successors.clear();
             }
         }
+
+        //Now all Constraints are fully relaxed, try last time to match pairs with hard-constraints only but only if joinedPairs completely empty
+        //because normally we dont want to match only by hard-constraints but if not found any pairs, try as last chance
+        if (joinedPairs.isEmpty()) {
+            for (i = 0; i < participants.size(); i++) {
+                if (used[i]) {
+                    continue;
+                }
+                for (j = 0; j < participants.size(); j++) {  // Start from 0 to check all combinations
+                    if (used[j]) {
+                        continue;
+                    }
+                    if (i == j) {
+                        continue;
+                    }
+                    System.out.println("Trying to pair: " + participants.get(i).name + " and " + participants.get(j).name);
+                    Pair pair = new Pair(participants.get(i), participants.get(j), false);
+                    boolean pairValidHardConstraints = pair.isValid();
+                    if (pairValidHardConstraints) { //only hard constraints
+                        joinedPairs.add(pair);
+                        used[i] = true;
+                        used[j] = true;
+                        break;
+                    } else {
+                        System.out.println("Pair invalid: " + participants.get(i).name + ", " + participants.get(j).name);
+                    }
+                }
+            }
+            //collect succ.
+            for (int z = 0; z < participants.size(); z++) {
+                // To check if all participants have been used
+                if (!used[z]) {
+                    successors.add(participants.get(z));
+                }
+            }
+        }
+
+
 
         System.out.println((successors.isEmpty() ? "No successors left over" : "Some successors left over") + ", are constraints fully relaxed: " + constraints.areConstraintsFullyRelaxed());
         return joinedPairs;

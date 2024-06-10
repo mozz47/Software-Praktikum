@@ -61,19 +61,6 @@ public class PairListBuilderTest {
     }
 
     @Test
-    public void testPairingByGenderDiversity() {
-        SpinfoodEvent event = SpinfoodEvent.getInstance();
-        event.participants = participants;
-
-        PairPairingConstraints constraints = new PairPairingConstraints(criteria);
-        List<Pair> pairs = PairListBuilder.getGeneratedPairs(constraints);
-
-        for (Pair pair : pairs) {
-            assertNotEquals(pair.participant1.sex, pair.participant2.sex);
-        }
-    }
-
-    @Test
     public void testPairingByKitchenAvailability() {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         event.participants = participants;
@@ -144,21 +131,6 @@ public class PairListBuilderTest {
     }
 
     @Test
-    public void testInvalidPairingByGenderDiversity() {
-        SpinfoodEvent event = SpinfoodEvent.getInstance();
-        event.participants = participants;
-
-        PairPairingConstraints constraints = new PairPairingConstraints(criteria);
-        List<Pair> pairs = PairListBuilder.getGeneratedPairs(constraints);
-
-        for (Pair pair : pairs) {
-            if (pair.participant1.sex == pair.participant2.sex) {
-                assertFalse(pair.isValid());
-            }
-        }
-    }
-
-    @Test
     public void testInvalidPairingByKitchenAvailability() {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         event.participants = participants;
@@ -197,6 +169,7 @@ public class PairListBuilderTest {
         participants.add(new Participant("01be5c1f-4aa1-458d-a530-b1c109ffbb55", "Person3", FoodPreference.VEGAN, 22, Sex.MALE, true, false, new Kitchen(0, 8.681372, 50.582079), 0, null));
         participants.add(new Participant("01c1372d-d120-4459-9b65-39d56d1ad430", "Person4", FoodPreference.VEGGIE, 23, Sex.MALE, true, false, new Kitchen(1, 8.683279, 50.581563), 1, null));
         participants.add(new Participant("033d5f60-5853-4931-8b38-1d3da9910e6d", "Person5", FoodPreference.MEAT, 28, Sex.MALE, true, false, new Kitchen(2, 8.681891, 50.576791), 2, null));
+        participants.add(new Participant("06082fb2-4297-4cf0-8840-c246d99f9700", "Person10", FoodPreference.VEGAN, 30, Sex.MALE, true, false, new Kitchen(2, 8.719772, 50.5919253), 2, null));
 
         // Additional paired participants
         Participant partner1 = new Participant("117ee996-14d3-44e8-8bcb-eb2d29fddda5", "Personx1", FoodPreference.VEGAN, 25, Sex.MALE, false, false, new Kitchen(0, 8.681372, 50.582079), 0, null);

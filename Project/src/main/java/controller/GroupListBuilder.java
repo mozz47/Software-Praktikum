@@ -49,9 +49,11 @@ public class GroupListBuilder {
         event.updateGroupList(groupList);
 
         // put successors from pairSuccessors into event.successors
-        for (Pair successor : pairSuccessors) {
-            event.getSuccessors().add(successor.participant1);
-            event.getSuccessors().add(successor.participant2);
+        if(pairSuccessors.size() > 1) {
+            for (Pair successor : pairSuccessors) {
+                event.getSuccessors().add(successor.participant1);
+                event.getSuccessors().add(successor.participant2);
+            }
         }
     }
 
