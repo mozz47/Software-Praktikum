@@ -1,53 +1,50 @@
 package model;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class PairPairingConstraints {
 
-    public PairPairingConstraints(List<Criterion> criterions) {
-
-        ageGap = 0;
-        relaxedFoodPreferences = false;
-        relaxedGenderDiversity = false;
-        relaxedKitchenAmountOne = false; // extra constraint, always try to fulfill, should be relaxed last
-        currentCriterionIndex = 0;
-        relaxedMinimizeSuccessors = false;
-        this.criterions = new ArrayList<>(criterions);
-        Collections.reverse(this.criterions);
-        //We have to reverse the list because the least important criterion stands initially on the end, we want to change it first,so we have to reverse the list because
-        //first change is on criterions[0] (relax least important feature first)
-        successorsAllowedRate = getAllowedSuccessorRate();
-    }
-
-    private float getAllowedSuccessorRate() {
-        // Get the index of Criterion_10_Group_Amount in the reversed list
-        //if GroupAmount is top priority, only allow 5% succ. rate, for each next position add 5 %
-        return 0.05f * (criterions.size() - criterions.indexOf(Criterion.Criterion_10_Group_Amount));
-    }
-
-    private List<Criterion> criterions; // <>
+    private List<Criterion> criterions;
     private int currentCriterionIndex;
     private static final int MAXAGEGAP = 9;
     private int ageGap;
     private boolean relaxedMinimizeSuccessors;
     private boolean relaxedFoodPreferences;
     private boolean relaxedGenderDiversity;
-    private boolean relaxedKitchenAmountOne; //extra constraint, always try to find pairs so that they have max 1 kitchen
+    private boolean relaxedKitchenAmountOne;
     private float successorsAllowedRate;
 
+    public PairPairingConstraints(List<Criterion> criterions) {
+        ageGap = 0;
+        relaxedFoodPreferences = false;
+        relaxedGenderDiversity = false;
+        relaxedKitchenAmountOne = false;
+        currentCriterionIndex = 0;
+        relaxedMinimizeSuccessors = false;
+        this.criterions = new ArrayList<>(criterions);
+        Collections.reverse(this.criterions);  // Reverse the list to prioritize relaxing the least important criterion first
+        successorsAllowedRate = getAllowedSuccessorRate();
+    }
+
+    private float getAllowedSuccessorRate() {
+        // If GroupAmount is top priority, only allow 5% succ. rate, for each next position add 5%
+        return 0.05f * (criterions.size() - criterions.indexOf(Criterion.Criterion_10_Group_Amount));
+    }
 
     public void relaxConstraints() {
+        System.out.println("Relaxing constraints at index: " + currentCriterionIndex);
         if (currentCriterionIndex == criterions.size()) {
-            relaxedKitchenAmountOne = true; //gets relaxed last in each case
+            relaxedKitchenAmountOne = true;
+            System.out.println("All constraints fully relaxed.");
         }
         if (currentCriterionIndex < criterions.size()) {
             Criterion criterion = criterions.get(currentCriterionIndex);
             switch (criterion) {
                 case Criterion_06_Food_Preference:
                     relaxedFoodPreferences = true;
+                    System.out.println("Relaxed Food Preferences.");
                     break;
                 case Criterion_07_Age_Difference:
                     if (ageGap == MAXAGEGAP) {
@@ -55,20 +52,22 @@ public class PairPairingConstraints {
                         return;
                     } else {
                         ageGap++;
+                        System.out.println("Relaxed Age Gap to: " + ageGap);
                     }
                     break;
                 case Criterion_08_Sex_Diversity:
                     relaxedGenderDiversity = true;
+                    System.out.println("Relaxed Gender Diversity.");
                     break;
-                case Criterion_09_Path_Length: //not used with Pairs
+                case Criterion_09_Path_Length:
                     break;
-
                 case Criterion_10_Group_Amount:
-                    successorsAllowedRate += 0.15f; // we try again with 10% more allowed successors than before
+                    successorsAllowedRate += 0.15f;
                     relaxedMinimizeSuccessors = true;
+                    System.out.println("Relaxed Group Amount.");
                     break;
             }
-            if (!(criterion == Criterion.Criterion_07_Age_Difference)) { //because we increase ageGap several times
+            if (!(criterion == Criterion.Criterion_07_Age_Difference)) {
                 currentCriterionIndex++;
             }
         }
@@ -79,29 +78,41 @@ public class PairPairingConstraints {
     }
 
     public boolean isValid(Participant p1, Participant p2) {
-        Pair testPair = new Pair(p1, p2, false); //TODO
+        Pair testPair = new Pair(p1, p2, false);
 
-        if (!relaxedFoodPreferences) { //if relaxedFoodPreferences true -> dont check food preferences
-            // isValid in PairController checks for hard constraints, so we only check for soft constraints
+        if (!relaxedFoodPreferences) {
             int absoluteFoodDistance = getAbsoluteFoodDistance(p1, p2);
-            if (absoluteFoodDistance >= 1) {
+            if (absoluteFoodDistance >= 2) {
+                System.out.println("Invalid Pair due to Food Preferences: " + p1.name + ", " + p2.name);
                 return false;
             }
         }
 
-        if (!relaxedGenderDiversity && p1.sex == p2.sex) { // relaxedGenderDiversity true -> dont check sex because irrelevant
+        if (!relaxedGenderDiversity && p1.sex == p2.sex) {
+            System.out.println("Invalid Pair due to Gender Diversity: " + p1.name + ", " + p2.name);
             return false;
         }
 
-        if (!relaxedKitchenAmountOne && testPair.getKitchenAmount() > 1) { // relaxedKitchenAmountOne true -> dont check kitchen amount because irrelevant
+        if (!relaxedKitchenAmountOne && testPair.getKitchenAmount() > 1) {
+            System.out.println("Invalid Pair due to Kitchen Amount: " + p1.name + ", " + p2.name);
             return false;
         }
 
         if ((p1.getAgeRange() - p2.getAgeRange()) > ageGap) {
+            System.out.println("Invalid Pair due to Age Gap: " + p1.name + ", " + p2.name);
             return false;
         }
 
-        return true; //all soft constraints are fulfilled for Pair building
+        if (!kitchenAvailable(p1, p2)) {
+            System.out.println("Invalid Pair due to No Available Kitchen: " + p1.name + ", " + p2.name);
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean kitchenAvailable(Participant p1, Participant p2) {
+        return p1.hasKitchen || p1.mightHaveKitchen || p2.hasKitchen || p2.mightHaveKitchen;
     }
 
     public static int getAbsoluteFoodDistance(Participant p1, Participant p2) {
@@ -118,7 +129,6 @@ public class PairPairingConstraints {
         return Math.abs(p1Distance - p2Distance);
     }
 
-
     public static void main(String[] args) {
         PairPairingConstraints softConstraints = new PairPairingConstraints(List.of(
                 Criterion.Criterion_06_Food_Preference,
@@ -129,8 +139,6 @@ public class PairPairingConstraints {
         System.out.println(softConstraints.criterions);
         for (int i = 0; i < 15; i++) {
             softConstraints.relaxConstraints();
-
-            //System.out.println(softConstraints.successorsAllowedRate);
         }
         System.out.println(softConstraints.areConstraintsFullyRelaxed() + ": are fully relaxed");
     }

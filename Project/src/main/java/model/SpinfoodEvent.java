@@ -181,7 +181,7 @@ public class SpinfoodEvent {
     }
 
     private int unmatchedParticipants() {
-        return participants.size() - 2*pairList.size();
+        return participants.size() - 2 * pairList.size();
     }
 
     private int unmatchedPairs() {

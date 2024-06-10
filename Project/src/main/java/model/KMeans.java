@@ -30,6 +30,16 @@ public class KMeans {
         }
     }
 
+    // public void init() {
+    //    Random random = new Random();
+    //    int pairsSize = pairs.size();
+    //    for (int i = 0; i < k && i < pairsSize; i++) {
+    //        Pair randomPair = pairs.get(random.nextInt(pairs.size()));
+    //        Cluster cluster = new Cluster(randomPair);
+    //        clusters.add(cluster);
+    //    }
+    //}
+
     public void cluster() {
         boolean centroidsChanged;
 

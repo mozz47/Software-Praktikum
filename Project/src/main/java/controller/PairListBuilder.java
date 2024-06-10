@@ -18,13 +18,12 @@ public class PairListBuilder {
         HashSet<String> processedParticipantsIds = new HashSet<>();
 
         for (Participant participant : Objects.requireNonNull(event.participants)) {
-
-            if (processedParticipantsIds.contains(participant.id)) { //already processed with previous Participant
+            if (processedParticipantsIds.contains(participant.id)) { // already processed with previous Participant
                 continue;
             }
 
-            //create Pair if registered together, skip if registered alone
-            if (participant.partner != null) { //has Partner
+            // create Pair if registered together, skip if registered alone
+            if (participant.partner != null) { // has Partner
                 Pair pair = new Pair(participant, participant.partner, true);
                 pairList.add(pair);
                 processedParticipantsIds.add(participant.id);
@@ -40,7 +39,6 @@ public class PairListBuilder {
         List<Participant> pairList = new ArrayList<>();
 
         for (Participant participant : Objects.requireNonNull(event.participants)) {
-
             if (participant.partner == null) {
                 pairList.add(participant);
             }
@@ -48,68 +46,70 @@ public class PairListBuilder {
         return pairList;
     }
 
-    static List<Pair> getGeneratedPairs(List<Criterion> criterions) {
+    static List<Pair> getGeneratedPairs(PairPairingConstraints constraints) {
         List<Participant> participants = getRegisteredAloneParticipants();
         List<Pair> joinedPairs = new ArrayList<>();
         used = new boolean[participants.size()];
         successors = new ArrayList<>();
-        PairPairingConstraints softConstraints = new PairPairingConstraints(criterions);
         int i;
         int j;
-        while (!softConstraints.areConstraintsFullyRelaxed()) {
+        while (!constraints.areConstraintsFullyRelaxed()) {
             for (i = 0; i < participants.size(); i++) {
                 if (used[i]) {
                     continue;
                 }
-                for (j = 1; j < participants.size(); j++) {
+                for (j = 0; j < participants.size(); j++) {  // Start from 0 to check all combinations
                     if (used[j]) {
                         continue;
                     }
                     if (i == j) {
                         continue;
                     }
+                    System.out.println("Trying to pair: " + participants.get(i).name + " and " + participants.get(j).name);
                     Pair pair = new Pair(participants.get(i), participants.get(j), false);
-                    if (pair.isValid() && softConstraints.isValid(participants.get(i), participants.get(j))) { //soft and hard Constraints fulfilled?
+                    if (pair.isValid() && constraints.isValid(participants.get(i), participants.get(j))) { // soft and hard Constraints fulfilled?
                         joinedPairs.add(pair);
                         used[i] = true;
                         used[j] = true;
                         break;
+                    } else {
+                        System.out.println("Pair invalid: " + participants.get(i).name + ", " + participants.get(j).name);
                     }
                 }
             }
 
             for (int z = 0; z < participants.size(); z++) {
-                //To check if all participants have been used
+                // To check if all participants have been used
                 if (!used[z]) {
                     successors.add(participants.get(z));
                 }
             }
 
-            if (!successors.isEmpty() && successors.size() > 1) { //maybe more than 1 left over -> check successorsRate and if bigger than allowed, relax constraints
+            if (!successors.isEmpty() && successors.size() > 1) { // maybe more than 1 left over -> check successorsRate and if bigger than allowed, relax constraints
                 // Check successorRate - if acceptable rate, end, else try again with more relaxing constraints
                 float successorsRate = (float) successors.size() / participants.size();
-                if (successorsRate <= softConstraints.getSuccessorAllowedRate()) {
-                    break; //acceptable rate, so we break here, if not acceptable: relax constraints and we try again to find pairs with acceptable rate
+                if (successorsRate <= constraints.getSuccessorAllowedRate()) {
+                    break; // acceptable rate, so we break here, if not acceptable: relax constraints and we try again to find pairs with acceptable rate
                 } else {
-                    softConstraints.relaxConstraints();
+                    constraints.relaxConstraints();
                 }
                 successors.clear();
             }
         }
 
-        //System.out.println((successorsLeftOver ? "successors left over" : "no successors left over") + ", are constraints fully relaxed: " + softConstraints.areConstraintsFullyRelaxed());
+        System.out.println((successors.isEmpty() ? "No successors left over" : "Some successors left over") + ", are constraints fully relaxed: " + constraints.areConstraintsFullyRelaxed());
         return joinedPairs;
     }
 
     public static PairList getPairList(List<Criterion> criterion) {
         List<Pair> registeredTogetherPairs = getRegisteredTogetherPairs();
-        List<Pair> generatedPairs = getGeneratedPairs(criterion);
+        PairPairingConstraints constraints = new PairPairingConstraints(criterion);
+        List<Pair> generatedPairs = getGeneratedPairs(constraints);
         registeredTogetherPairs.addAll(generatedPairs);
         /*
         for (Pair pair : generatedPairs) {
             System.out.println(pair.shortString());
         }
-
          */
         return new PairList(registeredTogetherPairs, successors);
     }
@@ -130,8 +130,8 @@ public class PairListBuilder {
         criteria.add(Criterion.Criterion_07_Age_Difference);
         criteria.add(Criterion.Criterion_09_Path_Length);
 
-
-        List<Pair> allPairs = getGeneratedPairs(criteria);
+        PairPairingConstraints constraints = new PairPairingConstraints(criteria);
+        List<Pair> allPairs = getGeneratedPairs(constraints);
 
         System.out.println("Pairs: ");
         for (Pair pair : allPairs) {
@@ -142,7 +142,5 @@ public class PairListBuilder {
             System.out.println(successor.name);
         }
         System.out.println(successors.size() + " successors size");
-
     }
-
 }

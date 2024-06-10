@@ -112,7 +112,7 @@ public class Pair {
      * @return true if both participants have the same house
      */
     public boolean sameHouse() {
-        if ((this.participant1.hasKitchen || this.participant1.mightHaveKitchen) && !(this.participant2.hasKitchen || this.participant2.mightHaveKitchen)) { //if 1 has/maybe has kitchen and 2 not
+        if ((this.participant1.hasKitchen || this.participant1.mightHaveKitchen) && !(this.participant2.hasKitchen || this.participant2.mightHaveKitchen)) { //if 1 has/maybeHaveKitchen and 2 not
             return false;
         } else if (!(this.participant1.hasKitchen || this.participant1.mightHaveKitchen) && (this.participant2.hasKitchen || this.participant2.mightHaveKitchen)) { // if 1 has no kitchen and 2 has/maybe has
             return false;

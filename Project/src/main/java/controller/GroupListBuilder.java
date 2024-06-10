@@ -93,10 +93,14 @@ public class GroupListBuilder {
         final int k = 2;  // to be adjusted
         List<List<Pair>> newPairLists = new ArrayList<>();
         for (List<Pair> list : pairLists) {
-            KMeans kMeans = new KMeans(k, list);
-            kMeans.init();
-            kMeans.cluster();
-            newPairLists.addAll(kMeans.getClusters());
+            if (list.size() >= k) {  // Ensure the list has enough elements for clustering
+                KMeans kMeans = new KMeans(k, list);
+                kMeans.init();
+                kMeans.cluster();
+                newPairLists.addAll(kMeans.getClusters());
+            } else {
+                newPairLists.add(list);
+            }
         }
         pairLists = newPairLists;
     }
