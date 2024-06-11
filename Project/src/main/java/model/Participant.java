@@ -137,5 +137,7 @@ public class Participant {
          */
     }
 
-
+    public String getId() {
+        return this.id;
+    }
 }
