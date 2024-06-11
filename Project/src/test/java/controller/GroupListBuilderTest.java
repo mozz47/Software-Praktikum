@@ -35,8 +35,6 @@ public class GroupListBuilderTest {
     public void testGroupFormation() {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
 
-        PairPairingConstraints constraints = new PairPairingConstraints(criteria);
-
 
         // Relax constraints a few times initially for testing --DONT DO, breaks algorithm
         /*

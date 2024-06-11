@@ -44,11 +44,11 @@ public class Cluster {
      * @return the meal type that the pair has to cook, or -1 if the pair does not have to cook
      */
     public int getCookingMeal(Pair pair) {
-        if (groupA.pairWithKitchen == pair) {
+        if (groupA.pairWithKitchen.equals(pair)) {
             return 1; // Starter
-        } else if (groupB.pairWithKitchen == pair) {
+        } else if (groupB.pairWithKitchen.equals(pair)) {
             return 2; // Main Course
-        } else if (groupC.pairWithKitchen == pair) {
+        } else if (groupC.pairWithKitchen.equals(pair)) {
             return 3; // Dessert
         }
         return -1; // This pair does not have to cook !should never be the case!
