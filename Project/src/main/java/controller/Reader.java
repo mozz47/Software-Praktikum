@@ -48,64 +48,57 @@ public class Reader {
      */
     private static List<Participant> getParticipants(String TEILNEHMER_CSV) {
         List<Participant> participantList = new ArrayList<>();
-        try {
-            assert TEILNEHMER_CSV != null;
-            try (InputStream inputStream = new FileInputStream(TEILNEHMER_CSV)) {
-                try (Scanner scanner = new Scanner(inputStream)) {
+        try (InputStream inputStream = new FileInputStream(TEILNEHMER_CSV);
+             Scanner scanner = new Scanner(inputStream)) {
 
-                    // skip header line
-                    if (scanner.hasNextLine()) {
-                        scanner.nextLine();
-                    }
+            if (scanner.hasNextLine()) {
+                scanner.nextLine();  // skip header line
+            }
 
-                    while (scanner.hasNextLine()) {
-                        String line = scanner.nextLine();
-                        String[] parts = line.split(",", -1);  // negative limit to keep empty strings
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",", -1);  // negative limit to keep empty strings
 
-                        //READING OF DATA
-                        String id = parts[1];
-                        String name = parts[2];
-                        FoodPreference foodPreference = FoodPreference.valueOf(parts[3].toUpperCase());
-                        int age = (int) Double.parseDouble(parts[4]);
-                        Sex sex = Sex.valueOf(parts[5].toUpperCase());
-                        boolean hasKitchen = parts[6].equals("yes");
-                        boolean mightHaveKitchen = parts[6].equals("maybe");
-                        int kitchen_story = parts[7].isEmpty() ? 0 : (int) Double.parseDouble(parts[7]); //if empty, story = 0
-                        double kitchen_longitude = 0;
-                        double kitchen_latitude = 0;
-                        if (hasKitchen || mightHaveKitchen) {
-                            kitchen_longitude = Double.parseDouble(parts[8]);
-                            kitchen_latitude = Double.parseDouble(parts[9]);
-                        }
-                        Kitchen kitchen = new Kitchen(kitchen_story, kitchen_longitude, kitchen_latitude);
+                // Reading data
+                String id = parts[1];
+                String name = parts[2];
+                FoodPreference foodPreference = FoodPreference.valueOf(parts[3].toUpperCase());
+                int age = (int) Double.parseDouble(parts[4]);
+                Sex sex = Sex.valueOf(parts[5].toUpperCase());
+                boolean hasKitchen = parts[6].equalsIgnoreCase("yes");
+                boolean mightHaveKitchen = parts[6].equalsIgnoreCase("maybe");
+                int kitchenStory = parts[7].isEmpty() ? 0 : (int) Double.parseDouble(parts[7]);
+                double kitchenLongitude = 0;
+                double kitchenLatitude = 0;
 
-                        // create instance of 1st Participant
-                        Participant p1 = new Participant(id, name, foodPreference, age, sex, hasKitchen, mightHaveKitchen, kitchen, kitchen_story, null);
+                if (hasKitchen || mightHaveKitchen) {
+                    kitchenLongitude = Double.parseDouble(parts[8]);
+                    kitchenLatitude = Double.parseDouble(parts[9]);
+                }
 
-                        participantList.add(p1); // add him to list
+                Kitchen kitchen = new Kitchen(kitchenStory, kitchenLongitude, kitchenLatitude);
+                Participant p1 = new Participant(id, name, foodPreference, age, sex, hasKitchen, mightHaveKitchen, kitchen, kitchenStory, null);
+                participantList.add(p1);  // Add to list
 
-                        if (parts.length > 10 && !parts[10].isEmpty()) {
-                            // manage 2nd Participant
-                            String id_2 = parts[10];
-                            String name_2 = parts[11];
-                            int age_2 = (int) Double.parseDouble(parts[12]);
-                            Sex sex_2 = Sex.valueOf(parts[13].toUpperCase());
+                if (parts.length > 10 && !parts[10].isEmpty()) {
+                    // Manage 2nd Participant
+                    String id2 = parts[10];
+                    String name2 = parts[11];
+                    int age2 = (int) Double.parseDouble(parts[12]);
+                    Sex sex2 = Sex.valueOf(parts[13].toUpperCase());
 
-                            // create instance
-                            Participant p2 = new Participant(id_2, name_2, foodPreference, age_2, sex_2, false, false, kitchen, kitchen_story, p1);
-
-                            p1.partner = p2; // adding p2 as partner to p1
-
-                            participantList.add(p2); // add p2 to list
-                        }
-                    }
-                    return participantList;
+                    // Create instance
+                    Participant p2 = new Participant(id2, name2, foodPreference, age2, sex2, false, false, kitchen, kitchenStory, p1);
+                    p1.partner = p2;  // Add p2 as partner to p1
+                    participantList.add(p2);  // Add p2 to list
                 }
             }
+            return participantList;
+
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     /**

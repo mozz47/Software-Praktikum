@@ -364,6 +364,10 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
 
     private void displayParticipants() {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
+        if (event.participants == null) {
+
+            return;
+        }
         if (participantListModel.isEmpty()) {
             // Add all participant-Strings to the list model
             for (Participant participant : event.participants) {

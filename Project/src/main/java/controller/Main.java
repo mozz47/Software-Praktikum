@@ -11,12 +11,13 @@ public class Main {
      * MainController method for main execution order of the program.
      */
     public static void main(String[] args) {
-        initializeWithoutFileChooser();
+        initialize();
         run();
     }
 
     /**
      * Create Spinfood Event Singleton and initialize it with test data.
+     * DOES NOT SUPPORT JAR FILE
      */
     public static void initializeWithoutFileChooser() {
         // Create Spinfood Event
@@ -34,9 +35,9 @@ public class Main {
         // Create Spinfood Event
         SpinfoodEvent event = SpinfoodEvent.getInstance();
 
-        // Read Input
-        event.participants = Reader.getParticipants();
-        event.partyLocation = Reader.getPartyLocation();
+        // Read Input on start up
+        //event.participants = Reader.getParticipants();
+        //event.partyLocation = Reader.getPartyLocation();
     }
 
     /**
@@ -44,9 +45,11 @@ public class Main {
      */
     private static void run() {
         // print human-readable version of input
+        /*
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         System.out.println("Human-readable version of input data:");
         event.printInput();
+         */
 
         //Start GUI
         //might be better with SwingUtilities.invokeLater(), because it will not block threads
