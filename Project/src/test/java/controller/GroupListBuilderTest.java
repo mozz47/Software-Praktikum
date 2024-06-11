@@ -62,6 +62,26 @@ public class GroupListBuilderTest {
         }
     }
 
+    @Test
+    public void testListOf9PairsToGroup() {
+        List<Pair> pairs = loadTestPairs();
+        GroupListBuilder groupListBuilder = new GroupListBuilder();
+
+        List<Group> groups = groupListBuilder.listOf9PairsToGroup(pairs);
+
+        assertEquals(9, groups.size(), "There should be exactly 9 groups formed");
+
+        // Verify the structure of the groups
+        for (Group group : groups) {
+            assertNotNull(group, "Group should not be null");
+            assertNotNull(group.pair1, "Pair1 should not be null");
+            assertNotNull(group.pair2, "Pair2 should not be null");
+            assertNotNull(group.pair3, "Pair3 should not be null");
+            assertNotNull(group.pairWithKitchen, "PairWithKitchen should not be null");
+            assertNotNull(group.mealType, "MealType should not be null");
+        }
+    }
+
     private boolean isGroupValid(Group group) {
         return group.pair1.isValid() && group.pair2.isValid() && group.pair3.isValid() &&
                 !group.pair1.equals(group.pair2) && !group.pair1.equals(group.pair3) && !group.pair2.equals(group.pair3);
@@ -85,5 +105,18 @@ public class GroupListBuilderTest {
         participants.get(3).partner = partner2;
 
         return participants;
+    }
+
+    private List<Pair> loadTestPairs() {
+        List<Pair> pairs = new ArrayList<>();
+
+        // Create 9 pairs
+        for (int i = 1; i <= 9; i++) {
+            Participant p1 = new Participant("id" + i + "a", "Person" + i + "a", FoodPreference.NONE, 20 + i, Sex.MALE, true, false, new Kitchen(i, 8.68 + i, 50.58 + i), i, null);
+            Participant p2 = new Participant("id" + i + "b", "Person" + i + "b", FoodPreference.NONE, 21 + i, Sex.FEMALE, true, false, new Kitchen(i, 8.68 + i, 50.58 + i), i, null);
+            pairs.add(new Pair(p1, p2, false));  // Adjusted the third argument to be a boolean value
+        }
+
+        return pairs;
     }
 }

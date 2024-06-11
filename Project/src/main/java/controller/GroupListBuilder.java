@@ -305,7 +305,7 @@ public class GroupListBuilder {
      * @param list list of EXACTLY 9 pairs, otherwise this WILL NOT WORK.
      * @return 9 groups
      */
-    private List<Group> listOf9PairsToGroup(List<Pair> list) {
+    List<Group> listOf9PairsToGroup(List<Pair> list) {
         if (list.size() != 9) {
             throw new IllegalArgumentException("Input list must be of length 9, you fool!");
         }
