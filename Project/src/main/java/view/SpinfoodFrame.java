@@ -246,8 +246,10 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
                 return;
             }
 
-            Saver.save();
-            printToConsole(resourceBundle.getString("savedConsoleText"));
+            boolean success = Saver.save();
+            if(success) {
+                printToConsole(resourceBundle.getString("savedConsoleText"));
+            }
         });
 
         loadPreviousButton.addActionListener(e -> {

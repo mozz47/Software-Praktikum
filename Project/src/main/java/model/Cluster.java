@@ -38,6 +38,22 @@ public class Cluster {
         return out;
     }
 
+    /**
+     * Identifies the meal that the given pair has to cook in this cluster.
+     * @param pair the pair to check
+     * @return the meal type that the pair has to cook, or -1 if the pair does not have to cook
+     */
+    public int getCookingMeal(Pair pair) {
+        if (groupA.pairWithKitchen == pair) {
+            return 1; // Starter
+        } else if (groupB.pairWithKitchen == pair) {
+            return 2; // Main Course
+        } else if (groupC.pairWithKitchen == pair) {
+            return 3; // Dessert
+        }
+        return -1; // This pair does not have to cook !should never be the case!
+    }
+
     @Override
     public String toString() {
         return "Starter: Gruppe " + groupA.id + "\n" +
