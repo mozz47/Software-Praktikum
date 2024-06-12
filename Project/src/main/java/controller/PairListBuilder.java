@@ -172,29 +172,29 @@ public class PairListBuilder {
         return successors;
     }
 
-    public static void main(String[] args) {
+    // public static void main(String[] args) {
         // Pairs für Teilnehmer, die sich alleine angemeldet haben
-        Main.initializeWithoutFileChooser(); // load test event
+    // Main.initializeWithoutFileChooser(); // load test event
 
-        List<Criterion> criteria = new ArrayList<>();
+    // List<Criterion> criteria = new ArrayList<>();
 
-        criteria.add(Criterion.Criterion_10_Group_Amount);
-        criteria.add(Criterion.Criterion_08_Sex_Diversity);
-        criteria.add(Criterion.Criterion_06_Food_Preference);
-        criteria.add(Criterion.Criterion_07_Age_Difference);
-        criteria.add(Criterion.Criterion_09_Path_Length);
+    // criteria.add(Criterion.Criterion_10_Group_Amount);
+    // criteria.add(Criterion.Criterion_08_Sex_Diversity);
+    // criteria.add(Criterion.Criterion_06_Food_Preference);
+    // criteria.add(Criterion.Criterion_07_Age_Difference);
+    // criteria.add(Criterion.Criterion_09_Path_Length);
 
-        PairPairingConstraints constraints = new PairPairingConstraints(criteria);
-        List<Pair> allPairs = getGeneratedPairs(constraints);
+    // PairPairingConstraints constraints = new PairPairingConstraints(criteria);
+    // List<Pair> allPairs = getGeneratedPairs(constraints);
 
-        System.out.println("Pairs: ");
-        for (Pair pair : allPairs) {
-            System.out.println(pair.shortString());
-        }
-        System.out.println("Successors: ");
-        for (Participant successor : successors) {
-            System.out.println(successor.name);
-        }
-        System.out.println(successors.size() + " successors size");
-    }
+    // System.out.println("Pairs: ");
+    // for (Pair pair : allPairs) {
+    // System.out.println(pair.shortString());
+    // }
+    // System.out.println("Successors: ");
+    // for (Participant successor : successors) {
+    // System.out.println(successor.name);
+    // }
+    // System.out.println(successors.size() + " successors size");
+    // }
 }
