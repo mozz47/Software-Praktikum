@@ -19,6 +19,9 @@ import javax.swing.text.StyledDocument;
 import java.net.URL;
 import java.util.*;
 
+/**
+ * Represents the main GUI window of the Spinfood application.
+ */
 public class SpinfoodFrame extends JFrame implements DisplayCallback {
     private static final Map<String, Locale> LANGUAGE_LOCALE_MAP = new HashMap<>();
 
@@ -90,6 +93,16 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
     private JButton openNumberSpinnerButton;
 
 
+    /**
+     * Creates a SpinfoodFrame object, which represents the main GUI window of the Spinfood application.
+     * The constructor initializes all the necessary components of the GUI and sets their initial properties.
+     * It also sets up event listeners for user interactions with the GUI elements.
+     *
+     * This method does not return any value and has no input parameters.
+     *
+     * @see JFrame
+     * @see DisplayCallback
+     */
     public SpinfoodFrame() {
         // Initialize components from the .form file
         setContentPane(mainPanel);
@@ -334,6 +347,12 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         setVisible(true);
     }
 
+    /**
+     * Updates the language of the GUI components based on the selected language from the combo box.
+     * It retrieves the language locale based on the selected language and sets it as the default locale.
+     * Then it retrieves the resource bundle for the selected language and updates the text of all the relevant labels and buttons.
+     * This method does not return any value.
+     */
     private void updateLanguage() {
         String selectedLanguage = (String) comboBoxLang.getSelectedItem();
         if (selectedLanguage != null) {
@@ -374,6 +393,13 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         }
     }
 
+    /**
+     * Displays the participants in the Spinfood event.
+     *
+     * If the participants list is null or empty, no action is taken.
+     * Otherwise, each participant's short representation is added to the participantListModel
+     * and the participant key figures are set in the participantKeyFiguresTextPane.
+     */
     private void displayParticipants() {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         if (event.participants == null) {
@@ -389,6 +415,15 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         }
     }
 
+    /**
+     * Displays the given pairs in the GUI.
+     *
+     * This method takes a list of Pair objects as input and updates the user interface accordingly. If the list is null or empty, no action is taken. Otherwise, each pair's short
+     *  representation is added to the pairListModel, which is responsible for displaying the pairs in a graphical list. Additionally, the pair key figures are retrieved from the
+     * SpinfoodEvent instance and set as the text of the pairKeyFiguresTextPane.
+     *
+     * @param pairs the list of Pair objects to be displayed
+     */
     private void displayPairs(List<Pair> pairs) {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         pairListModel.clear();
@@ -399,6 +434,15 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         pairKeyFiguresTextPane.setText(event.getPairKeyFigures());
     }
 
+    /**
+     * Displays the given groups in the GUI.
+     *
+     * This method takes a list of Group objects as input and updates the user interface accordingly. If the list is null or empty, no action is taken. Otherwise,
+     * each group's short representation is added to the groupListModel, which is responsible for displaying the groups in a graphical list.
+     * Additionally, the pair key figures are retrieved from the SpinfoodEvent instance and set as the text of the pairKeyFiguresTextPane.
+     *
+     * @param groups the list of Group objects to be displayed
+     */
     private void displayGroups(List<Group> groups) {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         groupListModel.clear();
@@ -409,6 +453,15 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         groupKeyFiguresTextPane.setText(event.getGroupKeyFigures());
     }
 
+    /**
+     * Displays the given successors in the GUI.
+     *
+     * This method takes a list of Participant objects as input and updates the user interface accordingly. If the list is null or empty, no action is taken.
+     * Otherwise, each successor's name is added to the successorListModel, which is responsible for displaying the successors in a graphical list.
+     * Additionally, the successors key figures are retrieved from the SpinfoodEvent instance and set as the text of the successorsKeyFiguresTextPane.
+     *
+     * @param successors the list of Participant objects to be displayed as successors
+     */
     private void displaySuccessors(List<Participant> successors) {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         successorListModel.clear();
@@ -418,6 +471,11 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         successorsKeyFiguresTextPane.setText(event.getSuccessorsKeyFigures());
     }
 
+    /**
+     * Appends a message to the console pane in the GUI.
+     *
+     * @param message the message to be printed to the console pane
+     */
     @Override
     public void printToConsole(String message) {
         StyledDocument doc = consolePane.getStyledDocument();

@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * Represents different criteria that are used for the Algorithms.
+ */
 public enum Criterion {
 
     Criterion_06_Food_Preference("criterion_06"),
