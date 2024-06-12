@@ -368,6 +368,21 @@ public class GroupListBuilder {
         // increase counter
         createdPairsCounter += 9;
 
+        // add NinePairFormation to Singleton
+        NinePairFormation npf = new NinePairFormation(groups, list);
+        event.ninePairFormations.add(npf);
+
+        // add NinePairFormation to pairs
+        A.ninePairFormation = npf;
+        B.ninePairFormation = npf;
+        C.ninePairFormation = npf;
+        D.ninePairFormation = npf;
+        E.ninePairFormation = npf;
+        F.ninePairFormation = npf;
+        G.ninePairFormation = npf;
+        H.ninePairFormation = npf;
+        I.ninePairFormation = npf;
+
         return groups;
     }
 

@@ -166,7 +166,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         });
 
         showPairMapButton.addActionListener(e -> {
-            SwingUtilities.invokeLater(() -> { //TODO: maybe remove because was not specified in Project specs?
+            SwingUtilities.invokeLater(() -> {
                 SpinfoodEvent event = SpinfoodEvent.getInstance();
                 List<Pair> pairs = event.getPairList();
                 PairMap pairMap = new PairMap("Pair Map", pairs);
@@ -212,9 +212,10 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         });
 
         cancellationButton.addActionListener(e -> {
-
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
             CancellationHandler.handleAllCancellations();
-
+            displayGroups(event.getGroupList());
+            displaySuccessors(event.getSuccessors());
         });
 
         groupBuildingButton.addActionListener(e -> {

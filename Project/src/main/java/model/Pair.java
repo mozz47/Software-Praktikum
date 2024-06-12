@@ -16,6 +16,7 @@ public class Pair {
     public boolean p2sKitchenIsUsed;
 
     public Cluster cluster;
+    public NinePairFormation ninePairFormation;
 
     /**
      * Main constructor of Pair.

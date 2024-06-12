@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,8 @@ public class SpinfoodEvent {
     private List<Participant> successors;  // private to manage the old successors
     private List<Participant> successorsOld;
 
+    public List<NinePairFormation> ninePairFormations;
+
     /**
      * private constructor to prevent creating instances from outside the class
      */
@@ -32,6 +35,7 @@ public class SpinfoodEvent {
         this.groupList = null;
         this.pairListOld = null;
         this.groupListOld = null;
+        this.ninePairFormations = new ArrayList<>();
     }
 
     /**
