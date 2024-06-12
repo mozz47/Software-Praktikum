@@ -13,10 +13,10 @@ public class Coordinate {
     }
 
     /**
-     * Calculates the distance between two coordinates.
+     * Calculates the distance between this coordinate and another coordinate using the Haversine formula.
      *
-     * @param other coordinate
-     * @return double Euclidean distance
+     * @param other the other coordinate
+     * @return the distance in kilometers
      */
     double distanceTo(Coordinate other) {
         //Using Haversine Formula to calculate distance in kilometers with longitude and latitude

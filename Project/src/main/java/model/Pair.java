@@ -56,6 +56,11 @@ public class Pair {
         return Math.abs(ageRange1 - ageRange2);
     }
 
+    /**
+     * Calculates the absolute age difference between two participants in a pair.
+     *
+     * @return The absolute age difference between the two participants.
+     */
     public int getAbsoluteAgeDifference() {
         int age1 = participant1.age;
         int age2 = participant2.age;

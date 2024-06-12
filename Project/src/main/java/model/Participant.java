@@ -42,6 +42,22 @@ public class Participant {
         this.story = story;
     }
 
+    /**
+     * Returns the age range of a participant based on their age.
+     *
+     * The age range is determined as follows:
+     * - If the age is less than or equal to 17, the age range is 0.
+     * - If the age is less than or equal to 23, the age range is 1.
+     * - If the age is less than or equal to 27, the age range is 2.
+     * - If the age is less than or equal to 30, the age range is 3.
+     * - If the age is less than or equal to 35, the age range is 4.
+     * - If the age is less than or equal to 41, the age range is 5.
+     * - If the age is less than or equal to 46, the age range is 6.
+     * - If the age is less than or equal to 56, the age range is 7.
+     * - Otherwise, the age range is 8.
+     *
+     * @return The age range of the participant.
+     */
     public int getAgeRange() {
         if (age <= 17) {
             return 0;
@@ -107,6 +123,12 @@ public class Participant {
         return "Kitchen available: " + hasKitchenString + "\n" + kitchenString;
     }
 
+    /**
+     * Returns a short representation of the participant.
+     * The short representation includes only the participant's name.
+     *
+     * @return The short representation of the participant.
+     */
     public String getShortRepresentation() {
         return name;
         /* old version
@@ -137,6 +159,11 @@ public class Participant {
          */
     }
 
+    /**
+     * Returns the ID of the participant.
+     *
+     * @return The ID of the participant.
+     */
     public String getId() {
         return this.id;
     }
