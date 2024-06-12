@@ -451,62 +451,62 @@ public class GroupListBuilder {
     /**
      * Main method for testing the group list builder
      */
-    public static void main(String[] args) {
+    // public static void main(String[] args) {
         // setup
-        Main.initializeWithoutFileChooser(); // load test event
-        SpinfoodEvent event = SpinfoodEvent.getInstance();
-        List<Criterion> criteria = new ArrayList<>();
-        criteria.add(Criterion.Criterion_06_Food_Preference);
-        criteria.add(Criterion.Criterion_07_Age_Difference);
-        criteria.add(Criterion.Criterion_08_Sex_Diversity);
-        criteria.add(Criterion.Criterion_10_Group_Amount);
-        criteria.add(Criterion.Criterion_09_Path_Length);
-        PairList allPairs = PairListBuilder.getPairList(criteria);
-        event.updatePairList(allPairs.getPairList());
+        // Main.initializeWithoutFileChooser(); // load test event
+        // SpinfoodEvent event = SpinfoodEvent.getInstance();
+    // List<Criterion> criteria = new ArrayList<>();
+    // criteria.add(Criterion.Criterion_06_Food_Preference);
+    // criteria.add(Criterion.Criterion_07_Age_Difference);
+    // criteria.add(Criterion.Criterion_08_Sex_Diversity);
+    // criteria.add(Criterion.Criterion_10_Group_Amount);
+    // criteria.add(Criterion.Criterion_09_Path_Length);
+    // PairList allPairs = PairListBuilder.getPairList(criteria);
+    // event.updatePairList(allPairs.getPairList());
 
         // test of group list builder
-        GroupListBuilder glb = new GroupListBuilder();
-        glb.buildGroupList(criteria);
-        System.out.println("Amount of created groups: " + event.getGroupList().size());
-        System.out.println("Amount of successors: " + glb.pairSuccessors.size() * 2);
+    // GroupListBuilder glb = new GroupListBuilder();
+    // glb.buildGroupList(criteria);
+    // System.out.println("Amount of created groups: " + event.getGroupList().size());
+    // System.out.println("Amount of successors: " + glb.pairSuccessors.size() * 2);
 
-        System.out.println("Example group:");
-        if (event.getGroupList().isEmpty()) {
-            System.out.println("nicht vorhanden");
-        } else {
-            Group group = event.getGroupList().get(0);
-            System.out.println("Pair1:");
-            System.out.println(group.pair1.participant1);
-            System.out.println(group.pair1.participant2);
-            System.out.println("Pair2:");
-            System.out.println(group.pair2.participant1);
-            System.out.println(group.pair2.participant2);
-            System.out.println("Pair3:");
-            System.out.println(group.pair3.participant1);
-            System.out.println(group.pair3.participant2);
-            System.out.println();
-        }
+    // System.out.println("Example group:");
+    // if (event.getGroupList().isEmpty()) {
+    // System.out.println("nicht vorhanden");
+    // } else {
+    // Group group = event.getGroupList().get(0);
+    // System.out.println("Pair1:");
+    // System.out.println(group.pair1.participant1);
+    // System.out.println(group.pair1.participant2);
+    // System.out.println("Pair2:");
+    // System.out.println(group.pair2.participant1);
+    // System.out.println(group.pair2.participant2);
+    // System.out.println("Pair3:");
+    // System.out.println(group.pair3.participant1);
+    // System.out.println(group.pair3.participant2);
+    // System.out.println();
+    // }
 
-        System.out.println("Example cluster:");
-        if (event.getGroupList().isEmpty()) {
-            System.out.println("nicht vorhanden");
-        } else {
-            Cluster cluster = event.getGroupList().get(0).pair1.cluster;
-            List<Group> groups = cluster.getGroups();
-            for (int i = 0; i < groups.size(); i++) {
-                System.out.println("Group" + (i + 1) + ":");
-                Group group = groups.get(i);
-                System.out.println("Pair1:");
-                System.out.println(group.pair1.participant1);
-                System.out.println(group.pair1.participant2);
-                System.out.println("Pair2:");
-                System.out.println(group.pair2.participant1);
-                System.out.println(group.pair2.participant2);
-                System.out.println("Pair3:");
-                System.out.println(group.pair3.participant1);
-                System.out.println(group.pair3.participant2);
-                System.out.println();
-            }
-        }
-    }
+    // System.out.println("Example cluster:");
+    // if (event.getGroupList().isEmpty()) {
+    // System.out.println("nicht vorhanden");
+    // } else {
+    // Cluster cluster = event.getGroupList().get(0).pair1.cluster;
+    // List<Group> groups = cluster.getGroups();
+    // for (int i = 0; i < groups.size(); i++) {
+    // System.out.println("Group" + (i + 1) + ":");
+    // Group group = groups.get(i);
+    // System.out.println("Pair1:");
+    // System.out.println(group.pair1.participant1);
+    // System.out.println(group.pair1.participant2);
+    // System.out.println("Pair2:");
+    // System.out.println(group.pair2.participant1);
+    // System.out.println(group.pair2.participant2);
+    // System.out.println("Pair3:");
+    // System.out.println(group.pair3.participant1);
+    // System.out.println(group.pair3.participant2);
+    // System.out.println();
+    // }
+    // }
+    // }
 }
