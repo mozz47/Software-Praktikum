@@ -343,6 +343,7 @@ public class GroupListBuilder {
         Group C2 = new Group(D, H, C, C, Meal.DESSERT);
         Group C3 = new Group(B, F, G, G, Meal.DESSERT);
 
+
         // add clusters
         A.cluster = new Cluster(A1, B1, C1);
         B.cluster = new Cluster(A1, B2, C3);

@@ -181,6 +181,8 @@ public class PairListBuilder {
         return successors;
     }
 
+
+
     // public static void main(String[] args) {
         // Pairs für Teilnehmer, die sich alleine angemeldet haben
     // Main.initializeWithoutFileChooser(); // load test event
