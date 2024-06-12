@@ -167,4 +167,8 @@ public class Participant {
     public String getId() {
         return this.id;
     }
+
+    public boolean probablyEquals(Participant partner) {
+        return this.id.equals(partner.id);
+    }
 }

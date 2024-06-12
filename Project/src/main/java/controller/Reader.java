@@ -44,7 +44,7 @@ public class Reader {
      *
      * @return List of all Participants
      */
-    private static List<Participant> getParticipants(String TEILNEHMER_CSV) {
+    static List<Participant> getParticipants(String TEILNEHMER_CSV) {
         List<Participant> participantList = new ArrayList<>();
         try (InputStream inputStream = new FileInputStream(TEILNEHMER_CSV);
              Scanner scanner = new Scanner(inputStream)) {
@@ -154,7 +154,7 @@ public class Reader {
      * @param fileChooserTitle the title to be displayed in the file chooser dialog
      * @return the absolute path of the selected file, or null if the file selection was canceled
      */
-    private static String getFilePath(String fileChooserTitle) {
+    static String getFilePath(String fileChooserTitle) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle(fileChooserTitle);
         int result = fileChooser.showOpenDialog(null);

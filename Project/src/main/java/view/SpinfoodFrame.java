@@ -1,9 +1,6 @@
 package view;
 
-import controller.GroupListBuilder;
-import controller.PairListBuilder;
-import controller.Reader;
-import controller.Saver;
+import controller.*;
 import model.*;
 import model.Pair;
 import model.SpinfoodEvent;
@@ -11,6 +8,8 @@ import model.SpinfoodEvent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 
@@ -91,6 +90,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
     private JButton changeCriteriaOrderButton;
     private JButton showPairMapButton;
     private JButton openNumberSpinnerButton;
+    private JButton cancellationButton;
 
 
     /**
@@ -211,6 +211,12 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
 
         openNumberSpinnerButton.addActionListener(e -> {
             SwingUtilities.invokeLater(() -> new NumberSpinnerFrame(resourceBundle));
+        });
+
+        cancellationButton.addActionListener(e -> {
+
+            CancellationHandler.handleAllCancellations();
+
         });
 
         groupBuildingButton.addActionListener(e -> {
@@ -345,6 +351,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         setSize(1200, 800);
         setLocationRelativeTo(null);
         setVisible(true);
+
     }
 
     /**
