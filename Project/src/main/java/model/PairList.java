@@ -60,7 +60,7 @@ public class PairList {
         if (pairList.isEmpty()) return 0.0;
         int totalAgeDifference = 0;
         for (Pair pair : pairList) {
-            totalAgeDifference += pair.getAbsoluteAgeDifference();
+            totalAgeDifference += pair.getAgeRangeDifference(); //because was specified like this in Spez. 3
         }
         return (double) totalAgeDifference / pairList.size();
     }

@@ -79,7 +79,7 @@ public class GroupList {
             totalFoodPreferenceDifference += PairPairingConstraints.getAbsoluteFoodDistance(group.pair2.participant1, group.pair2.participant2);
             totalFoodPreferenceDifference += PairPairingConstraints.getAbsoluteFoodDistance(group.pair3.participant1, group.pair3.participant2);
         }
-        return totalFoodPreferenceDifference / (double) groupList.size();
+        return totalFoodPreferenceDifference / (double) (groupList.size()*3); // *3 because 3 pairs in each group
     }
 
 }

@@ -64,7 +64,7 @@ public class PairListTest {
 
     @Test
     public void testCalculateAverageAgeDifference() {
-        double expected = (pair1.getAbsoluteAgeDifference() + pair2.getAbsoluteAgeDifference()) / 2.0;
+        double expected = (pair1.getAgeRangeDifference() + pair2.getAgeRangeDifference()) / 2.0;
         assertEquals(expected, PairList.calculateAverageAgeDifference(Arrays.asList(pair1, pair2)));
     }
 
@@ -95,7 +95,7 @@ public class PairListTest {
         PairList pairList = new PairList(Arrays.asList(pair1, pair2), Arrays.asList(p1, p3));
         assertEquals(2, pairList.getPairCount());
         assertEquals(2, pairList.getSuccessorCount());
-        assertEquals((pair1.getAbsoluteAgeDifference() + pair2.getAbsoluteAgeDifference()) / 2.0, pairList.getAverageAgeDifference());
+        assertEquals((pair1.getAgeRangeDifference() + pair2.getAgeRangeDifference()) / 2.0, pairList.getAverageAgeDifference());
         assertEquals(1.0, pairList.getGenderRatio());
         assertEquals((PairPairingConstraints.getAbsoluteFoodDistance(p1, p2) +
                 PairPairingConstraints.getAbsoluteFoodDistance(p3, p4)) / 2.0, pairList.getAverageFoodpreferenceDifference());
