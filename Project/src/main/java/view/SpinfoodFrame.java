@@ -295,6 +295,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             displayGroups(event.getGroupList());
             displayPairs(event.getPairList());
             displayParticipants();
+            displaySuccessors(event.getSuccessors());
             printToConsole(resourceBundle.getString("restoredConsoleText"));
         });
 
