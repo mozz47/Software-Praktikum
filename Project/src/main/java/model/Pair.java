@@ -104,7 +104,8 @@ public class Pair {
     }
 
     /**
-     * !!!!ONLY USE IF AT LEAST ONE HAS KITCHEN!!!!
+     * Checks if both Participant of the Pair live in the same house. If only one of them has/maybeHas kitchen, they don't
+     * live in the same house. If both have/maybeHave kitchen, it is checked if they live in the same house (same Location of kitchen).
      *
      * @return true if both participants have the same house
      */
@@ -114,7 +115,8 @@ public class Pair {
         } else if (!(this.participant1.hasKitchen || this.participant1.mightHaveKitchen) && (this.participant2.hasKitchen || this.participant2.mightHaveKitchen)) { // if 1 has no kitchen and 2 has/maybe has
             return false;
         } else { // both have/maybe have kitchen
-            return participant1.kitchen.longitude == participant2.kitchen.longitude && participant1.kitchen.latitude == participant2.kitchen.latitude;
+            return (participant1.kitchen.longitude == participant2.kitchen.longitude)
+                    && (participant1.kitchen.latitude == participant2.kitchen.latitude);
         }
     }
 
