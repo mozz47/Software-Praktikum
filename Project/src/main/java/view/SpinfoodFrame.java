@@ -232,15 +232,22 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         readCSVButton.addActionListener(e -> {
             SpinfoodEvent event = SpinfoodEvent.getInstance();
             event.participants = Reader.getParticipants();
-            event.partyLocation = Reader.getPartyLocation();
-            if (event.participants != null) {
-                displayParticipants();
-
-                printToConsole(resourceBundle.getString("infoConsoleFileRead"));
-
-            } else {
+            if(event.participants == null) {
+                JOptionPane.showMessageDialog(null, resourceBundle.getString("errorFileRead"), resourceBundle.getString("cancellation"), JOptionPane.ERROR_MESSAGE);
                 printToConsole(resourceBundle.getString("errorFileRead"));
+                return;
+
             }
+            event.partyLocation = Reader.getPartyLocation();
+            if (event.partyLocation == null) {
+                JOptionPane.showMessageDialog(null, resourceBundle.getString("errorFileRead"), resourceBundle.getString("cancellation"), JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            displayParticipants();
+
+            printToConsole(resourceBundle.getString("infoConsoleFileRead"));
+
         });
 
         outputCSVButton.addActionListener(e -> {

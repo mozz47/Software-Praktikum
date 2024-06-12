@@ -9,9 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Utility class for reading data from CSV files.
@@ -96,7 +94,6 @@ public class Reader {
             return participantList;
 
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -113,9 +110,9 @@ public class Reader {
     }
 
     /**
-     * Reads all the Info of participants from a selected .csv file, creates participant and adds each one to list
+     * Reads party location from partylocation.csv
      *
-     * @return List of all Participants
+     * @return the party location as a Location object, or null if an error occurs
      */
     public static Location getPartyLocation() {
         return getPartyLocation(getFilePath("Select PartyLocation.csv"));
@@ -146,9 +143,8 @@ public class Reader {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
         }
-
         return null;
     }
 
