@@ -158,6 +158,15 @@ public class PairListBuilder {
         return joinedPairs;
     }
 
+    /**
+     * Retrieves a PairList that contains pairs of participants based on the given list of Criterion objects.
+     * The method first retrieves pairs of participants who have registered together and adds them to the list.
+     * Then, it generates additional pairs based on the given order of constraints and adds them to the list.
+     * The list is returned along with a list of successors who did not find a partner.
+     *
+     * @param criterion The list of Criterion objects that define the order of constraints.
+     * @return A PairList object containing pairs of participants and successors who did not find a partner.
+     */
     public static PairList getPairList(List<Criterion> criterion) {
         List<Pair> registeredTogetherPairs = getRegisteredTogetherPairs(); // get Pairs which registered together
         //create new Pairing constraints object, which handles relaxation of constraints in given order
