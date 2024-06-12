@@ -29,46 +29,26 @@ public class GroupList {
     }
 
     /**
-     * Calculates the average age difference of the group list. (The original algorithm had O(n²) operations,
-     * using dynamic programming, we have O(n) operations now)
+     * Calculates the average age difference among the participants in a group list.
      *
-     * @param groupList group list
+     * @param groupList the list of groups containing pairs
      * @return the average age difference
      */
     public static double calculateAverageAgeDifference(List<Group> groupList) {
         List<Participant> participantList = new ArrayList<>();
 
+        List<Pair> pairList = new ArrayList<>();
         // Extract all participants from the groups
         for (Group group : groupList) {
-            participantList.add(group.pair1.participant1);
-            participantList.add(group.pair1.participant2);
-            participantList.add(group.pair2.participant1);
-            participantList.add(group.pair2.participant2);
-            participantList.add(group.pair3.participant1);
-            participantList.add(group.pair3.participant2);
+            pairList.add(group.pair1);
+            pairList.add(group.pair2);
+            pairList.add(group.pair3);
         }
-
-        int n = participantList.size();
-        if (n < 2) {
-            // If there are fewer than 2 participants, the average age difference is not defined
-            return 0;
+        double sumOfAgeRanges = 0;
+        for (Pair pair : pairList) {
+            sumOfAgeRanges+= pair.getAgeRangeDifference();
         }
-
-        long sumAges = 0;
-        long sumSquaredAges = 0;
-
-        // Calculate the sum of ages and the sum of squared ages
-        for (Participant p : participantList) {
-            sumAges += p.age;
-            sumSquaredAges += (long) p.age * p.age;
-        }
-
-        // Calculate the total age difference using the derived formula
-        long totalDifference = (n * sumSquaredAges - sumAges * sumAges);
-
-        // Since the totalDifference accounts for each pair twice (once as (i, j) and once as (j, i)),
-        // we need to divide it by the number of pairs to get the average difference.
-        return (double) totalDifference / (n * (n - 1));
+        return sumOfAgeRanges / (double) groupList.size();
     }
 
     public static double calculateFoodPreferenceDeviation(List<Group> groupList) {

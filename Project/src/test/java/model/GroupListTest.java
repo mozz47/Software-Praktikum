@@ -70,7 +70,9 @@ public class GroupListTest {
 
     @Test
     public void testCalculateAverageAgeDifference() {
-        //TODO
+        List<Group> groupList = Arrays.asList(group1, group2);
+        double expectedAverageAgeDifference = 4.5; // calculated average age difference for the provided participants
+        assertEquals(expectedAverageAgeDifference, GroupList.calculateAverageAgeDifference(groupList));
     }
 
     @Test
