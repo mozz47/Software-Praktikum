@@ -1,7 +1,5 @@
 package controller;
 
-//TODO change according to: https://www.baeldung.com/java-mockito-singleton
-
 import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -159,6 +157,50 @@ public class PairListBuilderTest {
                 assertFalse(pair.isValid());
             }
         }
+    }
+
+    @Test
+    public void testGetRegisteredTogetherPairs() {
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
+        event.participants = participants;
+
+        List<Pair> pairs = PairListBuilder.getRegisteredTogetherPairs();
+
+        assertEquals(2, pairs.size()); // Assuming there are 2 pairs registered together in the test data
+
+        for (Pair pair : pairs) {
+            assertNotNull(pair.participant1.partner);
+        }
+    }
+
+    @Test
+    public void testGetPairList() {
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
+        event.participants = participants;
+
+        PairList pairList = PairListBuilder.getPairList(criteria);
+
+        assertNotNull(pairList);
+        assertTrue(pairList.getPairList().size() > 0);
+        assertNotNull(pairList.getSuccessorList());
+        assertEquals(pairList.getPairList().size(), pairList.getPairCount());
+        assertEquals(pairList.getSuccessorList().size(), pairList.getSuccessorCount());
+        assertTrue(pairList.getAverageAgeDifference() >= 0);
+        assertTrue(pairList.getGenderRatio() >= 0);
+        assertTrue(pairList.getAverageFoodpreferenceDifference() >= 0);
+    }
+
+    @Test
+    public void testGetSuccessors() {
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
+        event.participants = participants;
+
+        PairPairingConstraints constraints = new PairPairingConstraints(criteria);
+        PairListBuilder.getGeneratedPairs(constraints);
+
+        List<Participant> successors = PairListBuilder.getSuccessors();
+
+        assertNotNull(successors);
     }
 
     private List<Participant> loadTestParticipants() {
