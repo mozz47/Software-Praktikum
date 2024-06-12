@@ -11,7 +11,7 @@ public class SpinfoodEvent {
     public List<Participant> participants;
     public Location partyLocation;
     public List<Criterion> criteria;
-    public int maxParticipants;
+    public int maxPairs;
 
     private List<Pair> pairList;  // private to manage the old pair list
     private List<Pair> pairListOld;
@@ -24,7 +24,7 @@ public class SpinfoodEvent {
      * private constructor to prevent creating instances from outside the class
      */
     private SpinfoodEvent() {
-        this.maxParticipants = 0;
+        this.maxPairs = 0;
         this.participants = null;
         this.successors = null;
         this.partyLocation = null;

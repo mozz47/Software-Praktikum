@@ -4,7 +4,6 @@ import model.SpinfoodEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class NumberSpinnerFrame extends JFrame {
@@ -30,7 +29,7 @@ public class NumberSpinnerFrame extends JFrame {
         add(numberSpinnerLabel);
 
         // spinner setup
-        spinner = new JSpinner(new SpinnerNumberModel(event.maxParticipants, 0, 9999, 9));
+        spinner = new JSpinner(new SpinnerNumberModel(event.maxPairs, 0, 9999, 9));
         add(spinner);
 
         // button setup
@@ -39,7 +38,7 @@ public class NumberSpinnerFrame extends JFrame {
 
         // when clicking the button: set maxParticipants to the value in the spinner and close the spinner window
         approveNumberButton.addActionListener(e -> {
-            event.maxParticipants = (int) spinner.getValue();
+            event.maxPairs = (int) spinner.getValue();
             dispose();
         });
 

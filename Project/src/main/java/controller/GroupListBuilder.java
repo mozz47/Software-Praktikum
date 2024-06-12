@@ -12,10 +12,12 @@ public class GroupListBuilder {
 
     private List<List<Pair>> pairLists;
     private List<Pair> pairSuccessors;
+    private int createdPairsCounter;
 
     public GroupListBuilder() {
         // reset group ids to 0
         Group.resetIdCounter();
+        createdPairsCounter = 0;
     }
 
     /**
@@ -84,7 +86,6 @@ public class GroupListBuilder {
         for (Criterion criterion : criteria) {
             switch (criterion) {
                 case Criterion_06_Food_Preference -> criterion06StrictFoodSeparation();
-                case Criterion_08_Sex_Diversity -> criterion08SexDiversity();
                 case Criterion_09_Path_Length -> criterion09PathLength();
                 // 7 and 10 are irrelevant for the group algorithm
             }
@@ -108,10 +109,6 @@ public class GroupListBuilder {
             }
         }
         pairLists = newPairLists;
-    }
-
-    private void criterion08SexDiversity() {
-        // todo
     }
 
     /**
@@ -306,13 +303,22 @@ public class GroupListBuilder {
      * @return 9 groups
      */
     List<Group> listOf9PairsToGroup(List<Pair> list) {
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
+
+        // check that list is of length 9
         if (list.size() != 9) {
             throw new IllegalArgumentException("Input list must be of length 9, you fool!");
         }
         List<Group> groups = new ArrayList<>(9);
 
+        // check that max number of pairs will not be exceeded, skip if maxPairs is 0
+        if (event.maxPairs != 0 && event.maxPairs < createdPairsCounter + 9) {
+            // if max number of pairs is exceeded, return empty list and put the rest in successors
+            pairSuccessors.addAll(list);
+            return groups;
+        }
+
         // sort pairs by distance to party location to get shorter path lengths
-        SpinfoodEvent event = SpinfoodEvent.getInstance();
         Location partyLocation = event.partyLocation;
         final int accuracy = 1000;  // sort needs int, but we have double. So we multiply by a large number to be more accurate
         list.sort((p1, p2) -> (int) ((-1) * accuracy * (p1.getDistanceToLocation(partyLocation) - p2.getDistanceToLocation(partyLocation))));
@@ -360,6 +366,9 @@ public class GroupListBuilder {
         groups.add(C1);
         groups.add(C2);
         groups.add(C3);
+
+        // increase counter
+        createdPairsCounter += 9;
 
         return groups;
     }
@@ -448,9 +457,6 @@ public class GroupListBuilder {
         return out;
     }
 
-    /**
-     * Main method for testing the group list builder
-     */
     // public static void main(String[] args) {
         // setup
         // Main.initializeWithoutFileChooser(); // load test event
