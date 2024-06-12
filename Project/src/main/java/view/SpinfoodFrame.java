@@ -195,7 +195,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             showPairMapButton.setEnabled(true);
         });
 
-        groupBuildingButton.addActionListener(e -> { //TODO set max amount of Groups as required in Crit. 8.1.3
+        groupBuildingButton.addActionListener(e -> {
             SpinfoodEvent event = SpinfoodEvent.getInstance();
 
             // pair check
@@ -203,6 +203,9 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
                 printToConsole(resourceBundle.getString("noPairsError"));
                 return;
             }
+
+            // open max number selector window
+            SwingUtilities.invokeLater(() -> new NumberSpinnerFrame(resourceBundle));
 
             // start group building algorithm
             GroupListBuilder glb = new GroupListBuilder();
