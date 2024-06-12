@@ -49,7 +49,7 @@ public class GroupListBuilder {
         event.updateGroupList(groupList);
 
         // put successors from pairSuccessors into event.successors
-        if(pairSuccessors.size() > 1) {
+        if(!pairSuccessors.isEmpty()) {
             for (Pair successor : pairSuccessors) {
                 event.getSuccessors().add(successor.participant1);
                 event.getSuccessors().add(successor.participant2);
