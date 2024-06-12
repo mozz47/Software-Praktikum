@@ -227,7 +227,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         // Add an action listener to the comboBoxLang to change the language
         comboBoxLang.addActionListener(e -> updateLanguage());
 
-        readCSVButton.addActionListener(e -> { //TODO maybe set other buttons enabled/disabled if new csv was read
+        readCSVButton.addActionListener(e -> {
             SpinfoodEvent event = SpinfoodEvent.getInstance();
             event.participants = Reader.getParticipants();
             event.partyLocation = Reader.getPartyLocation();
@@ -235,7 +235,6 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
                 displayParticipants();
 
                 printToConsole(resourceBundle.getString("infoConsoleFileRead"));
-                //TODO set change criteria button enabled false (if changed main to initialize())
 
             } else {
                 printToConsole(resourceBundle.getString("errorFileRead"));
