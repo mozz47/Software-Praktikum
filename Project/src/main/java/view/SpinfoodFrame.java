@@ -394,6 +394,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             groupBuildingButton.setText(resourceBundle.getString("groupBuildingButton"));
             loadPreviousButton.setText(resourceBundle.getString("loadPreviousButton"));
             showPairMapButton.setText(resourceBundle.getString("showMapButton"));
+            cancellationButton.setText(resourceBundle.getString("cancellationButton"));
 
             // other
             setTitle(resourceBundle.getString("title"));
