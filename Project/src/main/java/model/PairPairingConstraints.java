@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The PairPairingConstraints class represents a list of criteria used for pairing participants. This class handles
+ * relaxing constraints based on the current criterion index and generating pairs of participants.
+ */
 public class PairPairingConstraints {
 
     private List<Criterion> criterions;
@@ -16,6 +20,10 @@ public class PairPairingConstraints {
     private boolean relaxedKitchenAmountOne;
     private float successorsAllowedRate;
 
+    /**
+     * Represents a list of criteria used for pairing participants.
+     * This class handles relaxing constraints based on the current criterion index and generating pairs of participants.
+     */
     public PairPairingConstraints(List<Criterion> criterions) {
         ageGap = 0;
         relaxedFoodPreferences = false;
@@ -28,11 +36,20 @@ public class PairPairingConstraints {
         successorsAllowedRate = getAllowedSuccessorRate();
     }
 
+    /**
+     * Calculates the allowed successor rate based on the current criterion list.
+     *
+     * @return The allowed successor rate.
+     */
     private float getAllowedSuccessorRate() {
         // If GroupAmount is top priority, only allow 5% succ. rate, for each next position add 5%
         return 0.05f * (criterions.size() - criterions.indexOf(Criterion.Criterion_10_Group_Amount));
     }
 
+    /**
+     * Relaxes the constraints based on the current criterion index.
+     * Updates the state of the constraints.
+     */
     public void relaxConstraints() {
         System.out.println("Relaxing constraints at index: " + currentCriterionIndex);
         if (currentCriterionIndex == criterions.size()) {
@@ -77,6 +94,13 @@ public class PairPairingConstraints {
         return ageGap > 8 && relaxedFoodPreferences && relaxedGenderDiversity && relaxedMinimizeSuccessors && relaxedKitchenAmountOne;
     }
 
+    /**
+     * Determines if a pair of participants is valid based on current criteria.
+     *
+     * @param p1 The first participant.
+     * @param p2 The second participant.
+     * @return true if the pair is valid, false otherwise.
+     */
     public boolean isValid(Participant p1, Participant p2) {
         Pair testPair = new Pair(p1, p2, false);
 
@@ -115,6 +139,20 @@ public class PairPairingConstraints {
         return p1.hasKitchen || p1.mightHaveKitchen || p2.hasKitchen || p2.mightHaveKitchen;
     }
 
+    /**
+     * Calculates the absolute distance between the food preferences of two participants.
+     *
+     * The distance is calculated based on the following criteria:
+     * - If both participants have the same food preference, the distance is 0.
+     * - If one participant is vegan and the other is vegetarian, the distance is 1.
+     * - If one participant eats meat and the other has no preference, the distance is 0.
+     * - If one participant is vegetarian and the other has no preference, the distance is 1.
+     * - If both participants have no preference, the distance is 0.
+     *
+     * @param p1 The first participant.
+     * @param p2 The second participant.
+     * @return The absolute food distance between the two participants.
+     */
     public static int getAbsoluteFoodDistance(Participant p1, Participant p2) {
         int p1Distance = switch (p1.foodPreference) {
             case VEGAN -> 0;
