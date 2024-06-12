@@ -87,6 +87,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
     private JButton groupBuildingButton;
     private JButton changeCriteriaOrderButton;
     private JButton showPairMapButton;
+    private JButton openNumberSpinnerButton;
 
 
     public SpinfoodFrame() {
@@ -195,6 +196,10 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             showPairMapButton.setEnabled(true);
         });
 
+        openNumberSpinnerButton.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> new NumberSpinnerFrame(resourceBundle));
+        });
+
         groupBuildingButton.addActionListener(e -> {
             SpinfoodEvent event = SpinfoodEvent.getInstance();
 
@@ -203,9 +208,6 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
                 printToConsole(resourceBundle.getString("noPairsError"));
                 return;
             }
-
-            // open max number selector window
-            SwingUtilities.invokeLater(() -> new NumberSpinnerFrame(resourceBundle));
 
             // start group building algorithm
             GroupListBuilder glb = new GroupListBuilder();
