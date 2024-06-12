@@ -43,7 +43,7 @@ public class Cluster {
      * @param pair the pair to check
      * @return the meal type that the pair has to cook, or -1 if the pair does not have to cook
      */
-    public int getCookingMeal(Pair pair) { //TODO .equals in Pair
+    public int getCookingMeal(Pair pair) {
         if (groupA.pairWithKitchen.equals(pair)) {
             return 1; // Starter
         } else if (groupB.pairWithKitchen.equals(pair)) {

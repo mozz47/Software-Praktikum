@@ -79,7 +79,7 @@ public class GroupList {
             totalFoodPreferenceDifference += PairPairingConstraints.getAbsoluteFoodDistance(group.pair2.participant1, group.pair2.participant2);
             totalFoodPreferenceDifference += PairPairingConstraints.getAbsoluteFoodDistance(group.pair3.participant1, group.pair3.participant2);
         }
-        return totalFoodPreferenceDifference / (double) groupList.size(); //TODO maybe change back to not average calculation?
+        return totalFoodPreferenceDifference / (double) groupList.size();
     }
 
 }
