@@ -12,6 +12,14 @@ public class PairListBuilder {
     private static boolean[] used;
     private static List<Participant> successors;
 
+
+    /**
+     * Retrieves the list of pairs who have registered together for the SpinfoodEvent.
+     * If a participant has a partner, a pair is created with them and added to the list of pairs.
+     * Participants who registered alone are skipped.
+     *
+     * @return A list of Pair objects representing participants who have registered together.
+     */
     static List<Pair> getRegisteredTogetherPairs() {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         List<Pair> pairList = new ArrayList<>();
@@ -34,6 +42,12 @@ public class PairListBuilder {
         return pairList;
     }
 
+    /**
+     * Retrieves the list of participants who have registered alone for the SpinfoodEvent.
+     * A participant is considered to be alone if they do not have a partner associated with them.
+     *
+     * @return A list of Participant objects representing participants who have registered alone.
+     */
     static List<Participant> getRegisteredAloneParticipants() {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         List<Participant> pairList = new ArrayList<>();
@@ -46,6 +60,12 @@ public class PairListBuilder {
         return pairList;
     }
 
+    /**
+     * Generates pairs of participants based on the given order of constraints.
+     *
+     * @param constraints The constraints to be applied when generating pairs.
+     * @return A list of Pair objects representing the generated pairs of participants.
+     */
     static List<Pair> getGeneratedPairs(PairPairingConstraints constraints) {
         List<Participant> participants = getRegisteredAloneParticipants();
         List<Pair> joinedPairs = new ArrayList<>();
@@ -134,21 +154,17 @@ public class PairListBuilder {
                 }
             }
         }
-
         System.out.println((successors.isEmpty() ? "No successors left over" : "Some successors left over") + ", are constraints fully relaxed: " + constraints.areConstraintsFullyRelaxed());
         return joinedPairs;
     }
 
     public static PairList getPairList(List<Criterion> criterion) {
-        List<Pair> registeredTogetherPairs = getRegisteredTogetherPairs();
+        List<Pair> registeredTogetherPairs = getRegisteredTogetherPairs(); // get Pairs which registered together
+        //create new Pairing constraints object, which handles relaxation of constraints in given order
         PairPairingConstraints constraints = new PairPairingConstraints(criterion);
-        List<Pair> generatedPairs = getGeneratedPairs(constraints);
-        registeredTogetherPairs.addAll(generatedPairs);
-        /*
-        for (Pair pair : generatedPairs) {
-            System.out.println(pair.shortString());
-        }
-         */
+        List<Pair> generatedPairs = getGeneratedPairs(constraints); //get generated Pairs
+        registeredTogetherPairs.addAll(generatedPairs); //join Pairs which registered together and generated Pairs
+        //Return a new PairList, which contains the Pairs which registered together + generated pairs and the successors which did not find partner
         return new PairList(registeredTogetherPairs, successors);
     }
 
