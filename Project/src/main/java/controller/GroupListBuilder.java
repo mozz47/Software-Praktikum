@@ -343,6 +343,7 @@ public class GroupListBuilder {
         Group C2 = new Group(D, H, C, C, Meal.DESSERT);
         Group C3 = new Group(B, F, G, G, Meal.DESSERT);
 
+
         // add clusters
         A.cluster = new Cluster(A1, B1, C1);
         B.cluster = new Cluster(A1, B2, C3);
@@ -367,6 +368,21 @@ public class GroupListBuilder {
 
         // increase counter
         createdPairsCounter += 9;
+
+        // add NinePairFormation to Singleton
+        NinePairFormation npf = new NinePairFormation(groups, list);
+        event.ninePairFormations.add(npf);
+
+        // add NinePairFormation to pairs
+        A.ninePairFormation = npf;
+        B.ninePairFormation = npf;
+        C.ninePairFormation = npf;
+        D.ninePairFormation = npf;
+        E.ninePairFormation = npf;
+        F.ninePairFormation = npf;
+        G.ninePairFormation = npf;
+        H.ninePairFormation = npf;
+        I.ninePairFormation = npf;
 
         return groups;
     }
