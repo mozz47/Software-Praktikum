@@ -94,7 +94,7 @@ public class GroupListBuilder {
      * Uses the KMeans algorithm to cluster the pairs in pairList by Coordinates.
      */
     private void criterion09PathLength() {
-        final int k = 2;  // to be adjusted
+        final int k = 3;  // to be adjusted
         List<List<Pair>> newPairLists = new ArrayList<>();
         for (List<Pair> list : pairLists) {
             if (list.size() >= k) {  // Ensure the list has enough elements for clustering
@@ -348,7 +348,7 @@ public class GroupListBuilder {
         A.cluster = new Cluster(A1, B1, C1);
         B.cluster = new Cluster(A1, B2, C3);
         C.cluster = new Cluster(A1, B3, C2);
-        D.cluster = new Cluster(A2, B1, C3);
+        D.cluster = new Cluster(A2, B1, C2); //was C3 -> fixed
         E.cluster = new Cluster(A2, B2, C1);
         F.cluster = new Cluster(A2, B3, C3);
         G.cluster = new Cluster(A3, B1, C3);
