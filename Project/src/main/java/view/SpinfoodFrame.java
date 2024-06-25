@@ -95,7 +95,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
      * Creates a SpinfoodFrame object, which represents the main GUI window of the Spinfood application.
      * The constructor initializes all the necessary components of the GUI and sets their initial properties.
      * It also sets up event listeners for user interactions with the GUI elements.
-     *
+     * <p>
      * This method does not return any value and has no input parameters.
      *
      * @see JFrame
@@ -153,16 +153,13 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         loadPreviousButton.setEnabled(false);
         showPairMapButton.setEnabled(false);
 
-        // Initial console message
-        printToConsole(resourceBundle.getString("infoConsoleStartUp"));
-
         // Add Action Listener for the autoAssignButton, use Algorithm
         changeCriteriaOrderButton.addActionListener(e -> {
             SwingUtilities.invokeLater(() -> new CriteriaRankingFrame(resourceBundle, this));
             printToConsole(resourceBundle.getString("criteriaRankingFrameOrder"));
             groupBuildingButton.setEnabled(false);
             outputCSVButton.setEnabled(false);
-             showPairMapButton.setEnabled(false);
+            showPairMapButton.setEnabled(false);
         });
 
         showPairMapButton.addActionListener(e -> {
@@ -250,7 +247,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         readCSVButton.addActionListener(e -> {
             SpinfoodEvent event = SpinfoodEvent.getInstance();
             event.participants = Reader.getParticipants();
-            if(event.participants == null) {
+            if (event.participants == null) {
                 JOptionPane.showMessageDialog(null, resourceBundle.getString("errorFileRead"), resourceBundle.getString("cancellation"), JOptionPane.ERROR_MESSAGE);
                 printToConsole(resourceBundle.getString("errorFileRead"));
                 return;
@@ -277,7 +274,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             }
 
             boolean success = Saver.save();
-            if(success) {
+            if (success) {
                 printToConsole(resourceBundle.getString("savedConsoleText"));
             }
         });
@@ -342,9 +339,8 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
 
         // Initialize the UI with the default language texts
         updateLanguage();
-
-        // Initial display of participants
-        displayParticipants();
+        // Initial console message
+        printToConsole(resourceBundle.getString("infoConsoleStartUp"));
 
         // Set JFrame properties
         setTitle(resourceBundle.getString("title"));
