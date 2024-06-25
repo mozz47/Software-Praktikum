@@ -54,7 +54,6 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
     private JLabel groupInfoLabel;
     private JLabel successorInfoLabel;
     private JPanel mainPanel;
-    private JLabel participantKeyFiguresLabel;
     private JLabel pairKeyFiguresLabel;
     private JLabel groupKeyFiguresLabel;
     private JLabel successorsKeyFiguresLabel;
@@ -74,7 +73,6 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
     private JTextPane pairKeyFiguresTextPane;
     private JTextPane groupKeyFiguresTextPane;
     private JTextPane successorsKeyFiguresTextPane;
-    private JTextPane participantKeyFiguresTextPane;
     private JList<String> participantJList;
     private JList<String> pairJList;
     private JList<String> groupJList;
@@ -89,6 +87,9 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
     private JButton showPairMapButton;
     private JButton openNumberSpinnerButton;
     private JButton cancellationButton;
+    private JButton compareGroupsButton;
+    private JButton comparePairsButton;
+    private JLabel participantAmountLabel;
 
 
     /**
@@ -152,6 +153,8 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         outputCSVButton.setEnabled(false);
         loadPreviousButton.setEnabled(false);
         showPairMapButton.setEnabled(false);
+        cancellationButton.setEnabled(false);
+        comparePairsButton.setEnabled(false);
 
         // Add Action Listener for the autoAssignButton, use Algorithm
         changeCriteriaOrderButton.addActionListener(e -> {
@@ -202,6 +205,9 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             groupBuildingButton.setEnabled(true);
             pairBuildingButton.setEnabled(false);
             showPairMapButton.setEnabled(true);
+            if (event.hasOldPairData()) {
+                comparePairsButton.setEnabled(true);
+            }
         });
 
         openNumberSpinnerButton.addActionListener(e -> {
@@ -235,6 +241,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             outputCSVButton.setEnabled(true);
             groupBuildingButton.setEnabled(false);
             pairBuildingButton.setEnabled(false);
+            cancellationButton.setEnabled(true);
 
             if (event.hasOldData()) {
                 loadPreviousButton.setEnabled(true);
@@ -260,6 +267,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             }
 
             displayParticipants();
+            participantAmountLabel.setText(String.valueOf(event.participants.size()));
 
             printToConsole(resourceBundle.getString("infoConsoleFileRead"));
 
@@ -337,6 +345,23 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             }
         });
 
+        comparePairsButton.addActionListener(e -> {
+            final SpinfoodFrame frame = this;
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    SpinfoodEvent event = SpinfoodEvent.getInstance();
+                    if (event.hasOldData()) {
+                        new comparePairFrame(event.getPairList(), event.getOldPairList(), frame);
+                    } else throw new RuntimeException("no old pairs to show in compareFrame");
+                }
+            });
+        });
+
+        compareGroupsButton.addActionListener(e -> {
+            //TODO
+        });
+
         // Initialize the UI with the default language texts
         updateLanguage();
         // Initial console message
@@ -377,7 +402,6 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             groupInfoLabel.setText(resourceBundle.getString("groupInfoLabel"));
             successorInfoLabel.setText(resourceBundle.getString("successorInfoLabel"));
 
-            participantKeyFiguresLabel.setText(resourceBundle.getString("participantKeyFiguresLabel"));
             pairKeyFiguresLabel.setText(resourceBundle.getString("pairKeyFiguresLabel"));
             groupKeyFiguresLabel.setText(resourceBundle.getString("groupKeyFiguresLabel"));
             successorsKeyFiguresLabel.setText(resourceBundle.getString("successorsKeyFiguresLabel"));
@@ -402,8 +426,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
      * Displays the participants in the Spinfood event.
      *
      * If the participants list is null or empty, no action is taken.
-     * Otherwise, each participant's short representation is added to the participantListModel
-     * and the participant key figures are set in the participantKeyFiguresTextPane.
+     * Otherwise, each participant's short representation is added to the participantListModel.
      */
     private void displayParticipants() {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
@@ -415,7 +438,6 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             // Add all participant-Strings to the list model
             for (Participant participant : event.participants) {
                 participantListModel.addElement(participant.getShortRepresentation());
-                participantKeyFiguresTextPane.setText(event.getParticipantKeyFigures());
             }
         }
     }

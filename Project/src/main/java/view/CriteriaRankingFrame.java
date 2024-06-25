@@ -48,7 +48,7 @@ public class CriteriaRankingFrame extends JFrame {
         JScrollPane scrollPane1 = new JScrollPane(list1);
 
         // Create OK Button
-        JButton okButton = new JButton(resourceBundle.getString("startAlgo"));
+        JButton okButton = new JButton(resourceBundle.getString("startAlgo")); //TODO Rename
         okButton.addActionListener(e -> {
             startAlgorithm(criteria, callback);
             callback.enableBuildPairsButton();

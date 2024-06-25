@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Singleton class to store Spinfood Event
  */
-public class SpinfoodEvent {
+public class SpinfoodEvent { //TODO I18NIZE HARD CODED STRINGS
     private static SpinfoodEvent event;  // Singleton instance
 
     public List<Participant> participants;
@@ -159,6 +159,15 @@ public class SpinfoodEvent {
         return "Amount: " + participants.size();
     }
 
+    /**
+     * Retrieves the old pair list.
+     *
+     * @return the old pair list
+     */
+    public List<Pair> getOldPairList() {
+        return pairListOld;
+    }
+
     public String getPairKeyFigures() {
         return "Amount: " + pairList.size() + "\n" +
                 "Gender Diversity: " + String.format("%.2f", PairList.calculateGenderRatio(pairList)) + "\n" +
@@ -166,6 +175,24 @@ public class SpinfoodEvent {
                 "Preference Deviation: " + String.format("%.2f", PairList.calculateFoodPreferenceDifference(pairList)) + "\n" +
                 "Number of unmatched Participants (to Pairs): " + unmatchedParticipants() + "\n" +
                 "Average Path Length: " + String.format("%.2f", PairList.averagePathLength(pairList)) + "km\n";
+    }
+
+    public String getOldPairKeyFigures() {
+        return "Amount: " + pairListOld.size() + "\n" +
+                "Gender Diversity: " + String.format("%.2f", PairList.calculateGenderRatio(pairListOld)) + "\n" +
+                "Average Age Difference: " + String.format("%.2f", PairList.calculateAverageAgeDifference(pairListOld)) + "\n" +
+                "Preference Deviation: " + String.format("%.2f", PairList.calculateFoodPreferenceDifference(pairListOld)) + "\n" +
+                "Number of unmatched Participants (to Pairs): " + unmatchedParticipants() + "\n" +
+                "Average Path Length: " + String.format("%.2f", PairList.averagePathLength(pairListOld)) + "km\n";
+    }
+
+    public String getPairDifferenceKeyFigures() {
+        return "Amount: " + Math.abs(pairList.size() - pairListOld.size()) + "\n" +
+                "Gender Diversity: " + String.format("%.2f", Math.abs(PairList.calculateGenderRatio(pairListOld) - PairList.calculateGenderRatio(pairList))) + "\n" +
+                "Average Age Difference: " + String.format("%.2f", Math.abs(PairList.calculateAverageAgeDifference(pairListOld) - PairList.calculateAverageAgeDifference(pairList))) + "\n" +
+                "Preference Deviation: " + String.format("%.2f", Math.abs(PairList.calculateFoodPreferenceDifference(pairListOld)- PairList.calculateFoodPreferenceDifference(pairList))) + "\n" +
+                "Number of unmatched Participants (to Pairs): " + Math.abs(unmatchedParticipants() - unmatchedParticipantsOldData()) + "\n" +
+                "Average Path Length: " + String.format("%.2f", Math.abs(PairList.averagePathLength(pairListOld)-PairList.averagePathLength(pairList))) + "km\n";
     }
 
     public String getGroupKeyFigures() {
@@ -186,8 +213,21 @@ public class SpinfoodEvent {
         return this.pairListOld != null && this.groupListOld != null && this.successorsOld != null;
     }
 
+    /**
+     * Checks if the pair list from the previous event is not null.
+     *
+     * @return true if the pair list from the previous event is not null, false otherwise.
+     */
+    public boolean hasOldPairData() {
+        return this.pairListOld != null;
+    }
+
     private int unmatchedParticipants() {
         return participants.size() - 2 * pairList.size();
+    }
+
+    private int unmatchedParticipantsOldData() {
+        return participants.size() - 2 * pairListOld.size();
     }
 
     private int unmatchedPairs() {
@@ -205,6 +245,7 @@ public class SpinfoodEvent {
     public List<Criterion> getCriteria() {
         return criteria;
     }
+
 
     public void printInput() {
         System.out.println("Teilnehmer:");
