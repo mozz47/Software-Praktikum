@@ -49,14 +49,14 @@ public class CancellationHandler {
     private static void handlePairCancellation(Participant p) {
         // check if there is a pair of successors that can replace the cancelled pair
         SpinfoodEvent event = SpinfoodEvent.getInstance();
-        Pair cancelledPair = null;
+        Pair oldPair = null;
         for (Pair pair : event.getPairList()) {
             if ((pair.participant1.probablyEquals(p) && pair.participant2.probablyEquals(p.partner))
                     || (pair.participant2.probablyEquals(p) && pair.participant1.probablyEquals(p.partner))) {
-                cancelledPair = pair;
+                oldPair = pair;
             }
         }
-        if (cancelledPair == null) {
+        if (oldPair == null) {
             System.out.println("Cancelled pair not in pair list");
             return;
         }
@@ -89,22 +89,70 @@ public class CancellationHandler {
         }
 
         // try to replace cancelled pair with each joined pair
-        boolean foundValidPair = false;
         for (Pair newPair : joinedPairs) {
-            cancelledPair = newPair;
-            if (isValidCluster(cancelledPair.cluster)) {
+            if (isValidCluster(oldPair.cluster)) {
                 // found valid cluster
-                Participant participant1 = cancelledPair.participant1;
-                Participant participant2 = cancelledPair.participant2;
-                event.getSuccessors().remove(participant1);
-                event.getSuccessors().remove(participant2);
-                foundValidPair = true;
+                newPair.cluster = oldPair.cluster;
+
+                //update all groups
+                for (Group g : event.getGroupList()) {
+                    if (Objects.equals(g.pair1.participant1.name, oldPair.participant1.name) && Objects.equals(g.pair1.participant2.name, oldPair.participant2.name)) {
+                        g.pair1 = newPair;
+                    }
+                    if (Objects.equals(g.pair2.participant1.name, oldPair.participant1.name) && Objects.equals(g.pair2.participant2.name, oldPair.participant2.name)) {
+                        g.pair2 = newPair;
+                    }
+                    if (Objects.equals(g.pair3.participant1.name, oldPair.participant1.name) && Objects.equals(g.pair3.participant2.name, oldPair.participant2.name)) {
+                        g.pair3 = newPair;
+                    }
+                    if (Objects.equals(g.pairWithKitchen.participant1.name, oldPair.participant1.name) && Objects.equals(g.pairWithKitchen.participant2.name, oldPair.participant2.name)) {
+                        g.pairWithKitchen = newPair;
+                    }
+                }
+
+                //update all Clusters
+                for (Pair p2 : event.getPairList()) {
+                    if (p2.cluster != null && p2.cluster.containsPair(oldPair)) {
+                        //we have to replace oldPair in all Groups
+                        p2.cluster.replacePair(oldPair, newPair);
+                    }
+                }
+
+                // delete from participants
+                for (Participant p3 : event.participants) {
+                    if (Objects.equals(p3.name, oldPair.participant1.name)) {
+                        event.participants.remove(p3);
+                        break;
+                    }
+                }
+                for (Participant p3 : event.participants) {
+                    if (Objects.equals(p3.name, oldPair.participant2.name)) {
+                        event.participants.remove(p3);
+                        break;
+                    }
+                }
+
+                // delete new pair from successors
+                for (Participant p3 : event.getSuccessors()) {
+                    if (Objects.equals(p3.name, newPair.participant1.name)) {
+                        event.participants.remove(p3);
+                        break;
+                    }
+                }
+                for (Participant p3 : event.getSuccessors()) {
+                    if (Objects.equals(p3.name, newPair.participant2.name)) {
+                        event.participants.remove(p3);
+                        break;
+                    }
+                }
+
+                // delete from pair list
+                event.getPairList().remove(oldPair);
+                return;
             }
         }
-        if (!foundValidPair) {
-            // delete whole nine pair formation
-            cancelledPair.ninePairFormation.deleteAll();
-        }
+        // delete whole nine pair formation
+        oldPair.ninePairFormation.deleteAll();
     }
 
     private static boolean isValidCluster(Cluster cluster) {
@@ -184,10 +232,9 @@ public class CancellationHandler {
                 event.getSuccessors().remove(maybePartner);
                 return;
             }
+            // if no match is found we have to delete the whole nine pair formation
+            oldPair.ninePairFormation.deleteAll();
         }
-        // didn't find suitable partner
-        // delete whole 9-pair formation
-
     }
 
 }
