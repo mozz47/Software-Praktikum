@@ -100,6 +100,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
     private JTextArea candidate1;
     private JTextArea candidate2;
     private JLabel swapCandidatesLabel;
+    private JButton swapSelectedParticipantButton;
 
 
     /**
@@ -433,8 +434,38 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             displayGroups(event.getGroupList());
             displayPairs(event.getPairList());
             displaySuccessors(event.getSuccessors());
+        });
 
+        swapSelectedParticipantButton.addActionListener(e -> {
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
 
+            //check if swap candidate1 is selected
+            if (event.getSwapCandidate1() == null) {
+                JOptionPane.showMessageDialog(this, "You must select a successor!");
+                return;
+            }
+            if (pairJList.getSelectedValue() == null) {
+                JOptionPane.showMessageDialog(this, "You must select a pair !");
+                return;
+            }
+            String selectedPair = pairJList.getSelectedValue();
+            String[] names = selectedPair.replaceAll("\\s", "").split(",");
+
+            Pair selectedPairForSwap = null;
+            for (Pair pair : event.getPairList()) { //find right pair
+                if (pair.participant1.name.equals(names[0]) || pair.participant1.name.equals(names[1])) {
+                    selectedPairForSwap = pair;
+                    break;
+                }
+            }
+            if (selectedPairForSwap != null) {
+                ReplacePersonPopup popup = new ReplacePersonPopup();
+                popup.showReplacePersonPopup(selectedPairForSwap.participant1, selectedPairForSwap.participant2, this);
+
+            }
+
+            //update GUI
+            displaySuccAndPairs();
         });
 
         // Initialize the UI with the default language texts
@@ -447,7 +478,6 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         setSize(1200, 800);
         setLocationRelativeTo(null);
         setVisible(true);
-
 
     }
 
@@ -500,6 +530,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             clearSecondCandidateButton.setText("clear second candidate");
             chooseSuccessorButton.setText("choose successor");
             swapSelectedPairButton.setText("swap selected pair");
+            swapSelectedParticipantButton.setText("swap selected participant  (candidate 1)");
             undoSwapButton.setText("undo swap");
             redoSwapButton.setText("redo swap");
 
@@ -615,5 +646,12 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
     @Override
     public void enableBuildPairsButton() {
         pairBuildingButton.setEnabled(true);
+    }
+
+    @Override
+    public void displaySuccAndPairs() {
+        // update the GUI
+        displayPairs(SpinfoodEvent.getInstance().getPairList());
+        displaySuccessors(SpinfoodEvent.getInstance().getSuccessors());
     }
 }

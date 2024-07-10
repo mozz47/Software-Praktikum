@@ -70,4 +70,12 @@ public class CandidateSwapper {
             }
         }
     }
+
+    public static void swap(Participant oldParticipant) {
+        SpinfoodEvent event = SpinfoodEvent.getInstance();
+        if (event.getSwapCandidate1() == null) {
+            throw new RuntimeException("You need successor to swap");
+        }
+
+    }
 }
