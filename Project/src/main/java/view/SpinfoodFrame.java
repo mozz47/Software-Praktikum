@@ -550,8 +550,6 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             openNumberSpinnerButton.setText(resourceBundle.getString("openNumberSpinnerButton"));
             compareGroupsButton.setText(resourceBundle.getString("compareGroupsButton"));
             comparePairsButton.setText(resourceBundle.getString("comparePairsButton"));
-
-            // todo name with properties:
             clearFirstCandidateButton.setText(resourceBundle.getString("clearFirstCandidateButton"));
             clearSecondCandidateButton.setText(resourceBundle.getString("clearSecondCandidateButton"));
             chooseSuccessorButton.setText(resourceBundle.getString("chooseSuccessorButton"));
