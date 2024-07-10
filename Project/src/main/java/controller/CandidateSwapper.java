@@ -59,6 +59,7 @@ public class CandidateSwapper {
 
         //PairList Update
         event.getPairList().add(newPair);
+        event.getPairList().remove(oldPair);
 
         //update all groups
         for (Group g : event.getGroupList()) {
