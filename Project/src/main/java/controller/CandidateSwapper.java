@@ -24,13 +24,4 @@ public class CandidateSwapper {
         }
         // if full, do nothing
     }
-
-    public static Pair swap(Pair selected) {
-        SpinfoodEvent event = SpinfoodEvent.getInstance();
-        if (event.getSwapCandidate1() != null && event.getSwapCandidate2() != null) {
-            return new Pair(event.getSwapCandidate1(), event.getSwapCandidate2(), false);
-        }
-        // if not both swap candidates are chosen, do nothing
-        return null;
-    }
 }

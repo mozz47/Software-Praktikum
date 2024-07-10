@@ -8,6 +8,8 @@ import model.SpinfoodEvent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 
@@ -406,6 +408,35 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             event.setSwapCandidate2(null);
         });
 
+        swapSelectedPairButton.addActionListener(e -> {
+            //check if two swap candidates are selected //TODO
+            //check if swap candidates have a kitchen? //TODO
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+            //find the selected pair in Pairlist to swap
+            if (pairJList.getSelectedValue() == null) {
+                JOptionPane.showMessageDialog(this, "You must select a pair to replace!"); //check if Pair is in groups?
+            }
+
+            String selectedPair = pairJList.getSelectedValue();
+            String[] names = selectedPair.replaceAll("\\s", "").split(",");
+
+            for (Pair pair : event.getPairList()) { //find right pair, and then swap
+                if (pair.participant1.name.equals(names[0]) || pair.participant1.name.equals(names[1])) {
+                    event.swap(pair);
+                    break;
+                }
+            }
+            //remove from successors
+            event.getSuccessors().remove(event.getSwapCandidate1());
+            event.getSuccessors().remove(event.getSwapCandidate2());
+
+            displayGroups(event.getGroupList());
+            displayPairs(event.getPairList());
+            displaySuccessors(event.getSuccessors());
+
+
+        });
+
         // Initialize the UI with the default language texts
         updateLanguage();
         // Initial console message
@@ -416,6 +447,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         setSize(1200, 800);
         setLocationRelativeTo(null);
         setVisible(true);
+
 
     }
 

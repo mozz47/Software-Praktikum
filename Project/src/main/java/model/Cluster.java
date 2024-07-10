@@ -38,6 +38,41 @@ public class Cluster {
         return out;
     }
 
+    public boolean containsPair(Pair pair) {
+        if (groupA.pair1 == pair || groupA.pair2 == pair || groupA.pair3 == pair) {
+            return true;
+        }
+        if (groupB.pair1 == pair || groupB.pair2 == pair || groupB.pair3 == pair) {
+            return true;
+        }
+        if (groupC.pair1 == pair || groupC.pair2 == pair || groupC.pair3 == pair) {
+            return true;
+        }
+        return false;
+    }
+
+    public void replacePair(Pair oldPair, Pair newPair) {
+        if (groupA.pair1 == oldPair) {
+            groupA.pair1 = newPair;
+        } else if (groupA.pair2 == oldPair) {
+            groupA.pair2 = newPair;
+        } else if (groupA.pair3 == oldPair) {
+            groupA.pair3 = newPair;
+        } else if (groupB.pair1 == oldPair) {
+            groupB.pair1 = newPair;
+        } else if (groupB.pair2 == oldPair) {
+            groupB.pair2 = newPair;
+        } else if (groupB.pair3 == oldPair) {
+            groupB.pair3 = newPair;
+        } else if (groupC.pair1 == oldPair) {
+            groupC.pair1 = newPair;
+        } else if (groupC.pair2 == oldPair) {
+            groupC.pair2 = newPair;
+        } else if (groupC.pair3 == oldPair) {
+            groupC.pair3 = newPair;
+        }
+    }
+
     /**
      * Identifies the meal that the given pair has to cook in this cluster.
      * @param pair the pair to check
