@@ -554,6 +554,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             swapSelectedPairButton.setText(resourceBundle.getString("swapSelectedPairButton"));
             undoSwapButton.setText(resourceBundle.getString("undoSwapButton"));
             redoSwapButton.setText(resourceBundle.getString("redoSwapButton"));
+            swapSelectedParticipantButton.setText(resourceBundle.getString("swapSelectedParticipantButton"));
 
             // other
             setTitle(resourceBundle.getString("title"));
