@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 
-public class comparePairFrame extends JDialog {
+public class ComparePairFrame extends JDialog {
     private JPanel mainPanel;
     private JList<String> pairJList;
     private JList<String> pairs2JList;
@@ -24,7 +24,7 @@ public class comparePairFrame extends JDialog {
     private JLabel differencesLabel;
     DefaultListModel<String> pairListModel, pairListModel2;
 
-    public comparePairFrame(List<Pair> pairList, List<Pair> pairList2, Frame parent) {
+    public ComparePairFrame(List<Pair> pairList, List<Pair> pairList2, Frame parent) {
         super(parent, true); //Set modality to true
 
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.messages", Locale.getDefault());

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="view.comparePairFrame">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="view.CompareGroupFrame">
   <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
@@ -8,33 +8,49 @@
     <properties/>
     <border type="none"/>
     <children>
-      <scrollpane id="e6cce" binding="pairsPane">
+      <scrollpane id="3cb4c" binding="groupsPane">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
-          <component id="55bcc" class="javax.swing.JList" binding="pairJList">
+          <component id="f6006" class="javax.swing.JList" binding="groupJList">
             <constraints/>
             <properties/>
           </component>
         </children>
       </scrollpane>
-      <scrollpane id="5bd57" binding="pairsPane2">
+      <scrollpane id="5fb9b" binding="groupsPane2">
         <constraints>
           <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
-          <component id="bdbc2" class="javax.swing.JList" binding="pairs2JList">
+          <component id="6996a" class="javax.swing.JList" binding="group2JList">
             <constraints/>
             <properties/>
           </component>
         </children>
       </scrollpane>
-      <component id="5a950" class="javax.swing.JTextArea" binding="pair1KeyFigures">
+      <component id="f0ed6" class="javax.swing.JLabel" binding="labelCurrentGroups">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="languages/messages" key="labelCurrentGroups"/>
+        </properties>
+      </component>
+      <component id="5bb23" class="javax.swing.JLabel" binding="labelOldGroups">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="languages/messages" key="labelOldGroups"/>
+        </properties>
+      </component>
+      <component id="a4b71" class="javax.swing.JTextArea" binding="group1KeyFigures">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -42,7 +58,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="7c466" class="javax.swing.JTextArea" binding="pair2KeyFigures">
+      <component id="58089" class="javax.swing.JTextArea" binding="group2KeyFigures">
         <constraints>
           <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -50,23 +66,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="18dfa" class="javax.swing.JLabel" binding="labelCurrentPairs">
-        <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text resource-bundle="languages/messages" key="currentPairs"/>
-        </properties>
-      </component>
-      <component id="a1ff5" class="javax.swing.JLabel" binding="labelOldPairs">
-        <constraints>
-          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text resource-bundle="languages/messages" key="oldPairs"/>
-        </properties>
-      </component>
-      <component id="47b21" class="javax.swing.JTextArea" binding="textAreaDifference">
+      <component id="541d6" class="javax.swing.JTextArea" binding="textAreaDifferences">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -74,12 +74,12 @@
         </constraints>
         <properties/>
       </component>
-      <component id="15452" class="javax.swing.JLabel" binding="differencesLabel">
+      <component id="fbf99" class="javax.swing.JLabel" binding="differencesLabel">
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Differences"/>
+          <text resource-bundle="languages/messages" key="differences"/>
         </properties>
       </component>
     </children>

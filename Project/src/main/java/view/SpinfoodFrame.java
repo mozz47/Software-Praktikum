@@ -8,8 +8,6 @@ import model.SpinfoodEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 
@@ -155,6 +153,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         showPairMapButton.setEnabled(false);
         cancellationButton.setEnabled(false);
         comparePairsButton.setEnabled(false);
+        compareGroupsButton.setEnabled(false);
 
         // Add Action Listener for the autoAssignButton, use Algorithm
         changeCriteriaOrderButton.addActionListener(e -> {
@@ -245,6 +244,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
 
             if (event.hasOldData()) {
                 loadPreviousButton.setEnabled(true);
+                compareGroupsButton.setEnabled(true);
             }
         });
 
@@ -352,14 +352,23 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
                 public void run() {
                     SpinfoodEvent event = SpinfoodEvent.getInstance();
                     if (event.hasOldData()) {
-                        new comparePairFrame(event.getPairList(), event.getOldPairList(), frame);
+                        new ComparePairFrame(event.getPairList(), event.getOldPairList(), frame);
                     } else throw new RuntimeException("no old pairs to show in compareFrame");
                 }
             });
         });
 
         compareGroupsButton.addActionListener(e -> {
-            //TODO
+            final SpinfoodFrame frame = this;
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    SpinfoodEvent event = SpinfoodEvent.getInstance();
+                    if (event.hasOldData()) {
+                        new CompareGroupFrame(event.getGroupList(), event.getGroupListOld(), frame);
+                    } else throw new RuntimeException("no old groups to show in compareFrame");
+                }
+            });
         });
 
         // Initialize the UI with the default language texts

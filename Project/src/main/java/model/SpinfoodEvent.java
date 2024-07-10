@@ -203,6 +203,22 @@ public class SpinfoodEvent { //TODO I18NIZE HARD CODED STRINGS
                 "Number of unmatched Pairs (to Groups): " + unmatchedPairs();
     }
 
+    public String getOldGroupKeyFigures() {
+        return "Amount: " + groupListOld.size() + "\n" +
+                "Gender Diversity: " + String.format("%.2f", GroupList.calculateGenderRatio(groupListOld)) + "\n" +
+                "Average Age Difference: " + String.format("%.2f", GroupList.calculateAverageAgeDifference(groupListOld)) + "\n" +
+                "Preference Deviation: " + String.format("%.3f", GroupList.calculateFoodPreferenceDeviation(groupListOld)) + "\n" +
+                "Number of unmatched Pairs (to Groups): " + unmatchedPairsOldData();
+    }
+
+    public String getGroupDifferenceKeyFigures() {
+        return "Amount: " + Math.abs(groupListOld.size() - groupList.size()) + "\n" +
+                "Gender Diversity: " + String.format("%.2f", Math.abs(GroupList.calculateGenderRatio(groupListOld) - GroupList.calculateGenderRatio(groupList))) + "\n" +
+                "Average Age Difference: " + String.format("%.2f", Math.abs(GroupList.calculateAverageAgeDifference(groupListOld) - GroupList.calculateAverageAgeDifference(groupList))) + "\n" +
+                "Preference Deviation: " + String.format("%.3f", Math.abs(GroupList.calculateFoodPreferenceDeviation(groupListOld) - GroupList.calculateFoodPreferenceDeviation(groupList))) + "\n" +
+                "Number of unmatched Pairs (to Groups): " + Math.abs(unmatchedPairsOldData() - unmatchedPairs());
+    }
+
     /**
      * For integrity checks.
      * Returns true if the old pair, group and successors lists are not null, so they can be restored.
@@ -234,6 +250,10 @@ public class SpinfoodEvent { //TODO I18NIZE HARD CODED STRINGS
         return (successors.size() - unmatchedParticipants()) / 2;
     }
 
+    private int unmatchedPairsOldData() {
+        return (successorsOld.size() - unmatchedParticipantsOldData()) / 2;
+    }
+
     public String getSuccessorsKeyFigures() {
         return "Amount: " + successors.size();
     }
@@ -244,6 +264,10 @@ public class SpinfoodEvent { //TODO I18NIZE HARD CODED STRINGS
 
     public List<Criterion> getCriteria() {
         return criteria;
+    }
+
+    public List<Group> getGroupListOld() {
+        return groupListOld;
     }
 
 
