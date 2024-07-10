@@ -21,6 +21,9 @@ public class SpinfoodEvent { //TODO I18NIZE HARD CODED STRINGS
     private List<Participant> successors;  // private to manage the old successors
     private List<Participant> successorsOld;
 
+    private Participant swapCandidate1;
+    private Participant swapCandidate2;
+
     public List<NinePairFormation> ninePairFormations;
 
     /**
@@ -266,6 +269,21 @@ public class SpinfoodEvent { //TODO I18NIZE HARD CODED STRINGS
         return criteria;
     }
 
+    public Participant getSwapCandidate1() {
+        return swapCandidate1;
+    }
+
+    public void setSwapCandidate1(Participant swapCandidate1) {
+        this.swapCandidate1 = swapCandidate1;
+    }
+
+    public Participant getSwapCandidate2() {
+        return swapCandidate2;
+    }
+
+    public void setSwapCandidate2(Participant swapCandidate2) {
+        this.swapCandidate2 = swapCandidate2;
+    }
     public List<Group> getGroupListOld() {
         return groupListOld;
     }
