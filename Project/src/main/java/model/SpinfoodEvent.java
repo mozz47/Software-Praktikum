@@ -42,6 +42,7 @@ public class SpinfoodEvent { //TODO I18NIZE HARD CODED STRINGS
         this.pairListOld = null;
         this.groupListOld = null;
         this.ninePairFormations = new ArrayList<>();
+        this.pairSwapStack = new Stack<>();
     }
 
     /**
