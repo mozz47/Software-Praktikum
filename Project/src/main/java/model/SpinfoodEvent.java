@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Singleton class to store Spinfood Event
@@ -23,6 +24,8 @@ public class SpinfoodEvent { //TODO I18NIZE HARD CODED STRINGS
 
     private Participant swapCandidate1;
     private Participant swapCandidate2;
+
+    private Stack<PairSwap> pairSwapStack;
 
     public List<NinePairFormation> ninePairFormations;
 
@@ -298,45 +301,11 @@ public class SpinfoodEvent { //TODO I18NIZE HARD CODED STRINGS
         System.out.println(partyLocation);
     }
 
-    public void swap(Pair oldPair) {
-        if (this.getSwapCandidate1() == null && this.getSwapCandidate2() == null) {
-            throw new RuntimeException("You need two successors to swap");
-        }
-        Pair newPair = new Pair(this.swapCandidate1, this.swapCandidate2, false);
-        if (!newPair.isValid()) {
-            throw new RuntimeException("Pair from successors to replace is not valid"); //TODO?
-        }
+    public Stack<PairSwap> getPairSwapStack() {
+        return pairSwapStack;
+    }
 
-        //Integrity checks -> at least need to have a kitchen -> throw warning, that constellations will be broken (for example maybe meaties in vegan group)
-        //TODO
-
-        //PairList Update
-        pairList.remove(oldPair);
-        pairList.add(newPair);
-
-        //update all groups
-
-        for (Group g : groupList) {
-            if (g.pair1 == oldPair) {
-                g.pair1 = newPair;
-            }
-            if (g.pair2 == oldPair) {
-                g.pair2 = newPair;
-            }
-            if (g.pair3 == oldPair) {
-                g.pair3 = newPair;
-            }
-            if (g.pairWithKitchen == oldPair) {
-                g.pairWithKitchen = newPair;
-            }
-        }
-
-        //update all Clusters
-        for (Pair p : this.pairList) {
-            if (p.cluster != null && p.cluster.containsPair(oldPair)) {
-                //we have to replace oldPair in all Groups
-                p.cluster.replacePair(oldPair, newPair);
-            }
-        }
+    public void setPairSwapStack(Stack<PairSwap> pairSwapStack) {
+        this.pairSwapStack = pairSwapStack;
     }
 }

@@ -422,7 +422,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
 
             for (Pair pair : event.getPairList()) { //find right pair, and then swap
                 if (pair.participant1.name.equals(names[0]) || pair.participant1.name.equals(names[1])) {
-                    event.swap(pair);
+                    CandidateSwapper.swap(pair);
                     break;
                 }
             }
