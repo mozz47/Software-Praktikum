@@ -503,7 +503,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             groupKeyFiguresLabel.setText(resourceBundle.getString("groupKeyFiguresLabel"));
             successorsKeyFiguresLabel.setText(resourceBundle.getString("successorsKeyFiguresLabel"));
 
-            swapCandidatesLabel.setText("swap candidates"); // todo
+            swapCandidatesLabel.setText(resourceBundle.getString("swapCandidatesLabel"));
 
             // buttons
             readCSVButton.setText(resourceBundle.getString("readCSVButton"));
@@ -517,12 +517,12 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             openNumberSpinnerButton.setText(resourceBundle.getString("openNumberSpinnerButton"));
 
             // todo name with properties:
-            clearFirstCandidateButton.setText("clear first candidate");
-            clearSecondCandidateButton.setText("clear second candidate");
-            chooseSuccessorButton.setText("choose successor");
-            swapSelectedPairButton.setText("swap selected pair");
-            undoSwapButton.setText("undo swap");
-            redoSwapButton.setText("redo swap");
+            clearFirstCandidateButton.setText(resourceBundle.getString("clearFirstCandidateButton"));
+            clearSecondCandidateButton.setText(resourceBundle.getString("clearSecondCandidateButton"));
+            chooseSuccessorButton.setText(resourceBundle.getString("chooseSuccessorButton"));
+            swapSelectedPairButton.setText(resourceBundle.getString("swapSelectedPairButton"));
+            undoSwapButton.setText(resourceBundle.getString("undoSwapButton"));
+            redoSwapButton.setText(resourceBundle.getString("redoSwapButton"));
 
             // other
             setTitle(resourceBundle.getString("title"));
