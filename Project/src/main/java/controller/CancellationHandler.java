@@ -1,9 +1,12 @@
 package controller;
 
 import model.*;
+import view.DisplayCallback;
+import view.SpinfoodFrame;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class handles the cancellation of participants in the SpinfoodEvent.
@@ -16,7 +19,7 @@ public class CancellationHandler {
      * Main functionality method of the class, handles all the cancellations by trying to find successors that
      * can replace the cancelled participants whilst still having valid pairs and groups.
      */
-    public static void handleAllCancellations() {
+    public static void handleAllCancellations(DisplayCallback callback) {
         // read csv
         List<Participant> cancelledParticipants = Reader.getParticipants(Reader.getFilePath("Select Teilnehmer.csv"));
         // handle each cancellation
@@ -27,6 +30,7 @@ public class CancellationHandler {
         for (Participant p : cancelledParticipants) {
             handleCancellation(p);
         }
+        callback.displaySuccAndPairs();
     }
 
     private static void handleCancellation(Participant p) {
@@ -120,15 +124,15 @@ public class CancellationHandler {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         // find participant that was left behind
         Participant partnerLess = null;
-        Pair partnerLessPair = null;
+        Pair oldPair = null;
         for (Pair pair : event.getPairList()) {
             if (pair.participant1.probablyEquals(p)) {
                 partnerLess = pair.participant2;
-                partnerLessPair = pair;
+                oldPair = pair;
             }
             if (pair.participant2.probablyEquals(p)) {
                 partnerLess = pair.participant1;
-                partnerLessPair = pair;
+                oldPair = pair;
             }
         }
         if (partnerLess == null) {
@@ -137,19 +141,53 @@ public class CancellationHandler {
         }
 
         // find participant from successors that can build valid pair with partnerLess
-        boolean foundPartner = false;
         for (Participant maybePartner : event.getSuccessors()) {
             //try to match with someone from successors
-            partnerLess = maybePartner;
-            if (partnerLessPair.isValid() && isValidCluster(partnerLessPair.cluster)) {
-                foundPartner = true;
+
+            Pair newPair = new Pair(partnerLess, maybePartner, false);
+            if (newPair.isValid()) {
+                newPair.cluster = oldPair.cluster;
+
+                //update all groups
+                for (Group g : event.getGroupList()) {
+                    if (Objects.equals(g.pair1.participant1.name, oldPair.participant1.name) && Objects.equals(g.pair1.participant2.name, oldPair.participant2.name)) {
+                        g.pair1 = newPair;
+                    }
+                    if (Objects.equals(g.pair2.participant1.name, oldPair.participant1.name) && Objects.equals(g.pair2.participant2.name, oldPair.participant2.name)) {
+                        g.pair2 = newPair;
+                    }
+                    if (Objects.equals(g.pair3.participant1.name, oldPair.participant1.name) && Objects.equals(g.pair3.participant2.name, oldPair.participant2.name)) {
+                        g.pair3 = newPair;
+                    }
+                    if (Objects.equals(g.pairWithKitchen.participant1.name, oldPair.participant1.name) && Objects.equals(g.pairWithKitchen.participant2.name, oldPair.participant2.name)) {
+                        g.pairWithKitchen = newPair;
+                    }
+                }
+
+                //update all Clusters
+                for (Pair p2 : event.getPairList()) {
+                    if (p2.cluster != null && p2.cluster.containsPair(oldPair)) {
+                        //we have to replace oldPair in all Groups
+                        p2.cluster.replacePair(oldPair, newPair);
+                    }
+                }
+
+                System.out.println(p.name);
+                System.out.println("Hallo");
+                for (Participant p3 : event.participants) {
+                    if (Objects.equals(p3.name, p.name)) {
+                        event.participants.remove(p3);
+                        break;
+                    }
+                }
+                event.getPairList().remove(oldPair);
+                event.getSuccessors().remove(maybePartner);
+                return;
             }
         }
-        if (!foundPartner) {
-            // delete whole nine pair formation
-            partnerLessPair.ninePairFormation.deleteAll();
-            return;
-        }
+        // didn't find suitable partner
+        // delete whole 9-pair formation
+
     }
 
 }

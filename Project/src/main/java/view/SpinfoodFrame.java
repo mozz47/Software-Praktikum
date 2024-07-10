@@ -228,9 +228,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
 
         cancellationButton.addActionListener(e -> {
             SpinfoodEvent event = SpinfoodEvent.getInstance();
-            CancellationHandler.handleAllCancellations();
-            displayGroups(event.getGroupList());
-            displaySuccessors(event.getSuccessors());
+            CancellationHandler.handleAllCancellations(this);
         });
 
         groupBuildingButton.addActionListener(e -> {
@@ -571,14 +569,12 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
     private void displayParticipants() {
         SpinfoodEvent event = SpinfoodEvent.getInstance();
         if (event.participants == null) {
-
             return;
         }
-        if (participantListModel.isEmpty()) {
-            // Add all participant-Strings to the list model
-            for (Participant participant : event.participants) {
-                participantListModel.addElement(participant.getShortRepresentation());
-            }
+        participantListModel.clear();
+        // Add all participant-Strings to the list model
+        for (Participant participant : event.participants) {
+            participantListModel.addElement(participant.getShortRepresentation());
         }
     }
 
@@ -674,5 +670,8 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         // update the GUI
         displayPairs(SpinfoodEvent.getInstance().getPairList());
         displaySuccessors(SpinfoodEvent.getInstance().getSuccessors());
+        displayParticipants();
+
+        participantAmountLabel.setText(String.valueOf(SpinfoodEvent.getInstance().participants.size()));
     }
 }
