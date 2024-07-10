@@ -25,7 +25,8 @@ public class SpinfoodEvent { //TODO I18NIZE HARD CODED STRINGS
     private Participant swapCandidate1;
     private Participant swapCandidate2;
 
-    private Stack<PairSwap> pairSwapStack;
+    private Stack<PairSwap> pairSwapStack;  // for undo
+    private Stack<PairSwap> pairSwapRedoStack;  // for redo
 
     public List<NinePairFormation> ninePairFormations;
 
@@ -43,6 +44,7 @@ public class SpinfoodEvent { //TODO I18NIZE HARD CODED STRINGS
         this.groupListOld = null;
         this.ninePairFormations = new ArrayList<>();
         this.pairSwapStack = new Stack<>();
+        this.pairSwapRedoStack = new Stack<>();
     }
 
     /**
@@ -308,5 +310,13 @@ public class SpinfoodEvent { //TODO I18NIZE HARD CODED STRINGS
 
     public void setPairSwapStack(Stack<PairSwap> pairSwapStack) {
         this.pairSwapStack = pairSwapStack;
+    }
+
+    public Stack<PairSwap> getPairSwapRedoStack() {
+        return pairSwapRedoStack;
+    }
+
+    public void setPairSwapRedoStack(Stack<PairSwap> pairSwapRedoStack) {
+        this.pairSwapRedoStack = pairSwapRedoStack;
     }
 }

@@ -398,13 +398,13 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
 
         clearFirstCandidateButton.addActionListener(e -> {
             SpinfoodEvent event = SpinfoodEvent.getInstance();
-            candidate1.setText("<first candidate>");
+            candidate1.setText("");
             event.setSwapCandidate1(null);
         });
 
         clearSecondCandidateButton.addActionListener(e -> {
             SpinfoodEvent event = SpinfoodEvent.getInstance();
-            candidate2.setText("<second candidate>");
+            candidate2.setText("");
             event.setSwapCandidate2(null);
         });
 
@@ -422,19 +422,40 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
 
             for (Pair pair : event.getPairList()) { //find right pair, and then swap
                 if (pair.participant1.name.equals(names[0]) || pair.participant1.name.equals(names[1])) {
-                    CandidateSwapper.swap(pair);
+                    CandidateSwapper.swap(pair, false);
                     break;
                 }
             }
-            //remove from successors
-            event.getSuccessors().remove(event.getSwapCandidate1());
-            event.getSuccessors().remove(event.getSwapCandidate2());
 
             displayGroups(event.getGroupList());
             displayPairs(event.getPairList());
             displaySuccessors(event.getSuccessors());
+        });
 
+        undoSwapButton.addActionListener(e -> {
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
 
+            CandidateSwapper.undo();
+
+            candidate1.setText(event.getSwapCandidate1().getShortRepresentation());
+            candidate2.setText(event.getSwapCandidate2().getShortRepresentation());
+
+            displayGroups(event.getGroupList());
+            displayPairs(event.getPairList());
+            displaySuccessors(event.getSuccessors());
+        });
+
+        redoSwapButton.addActionListener(e -> {
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+
+            CandidateSwapper.redo();
+
+            candidate1.setText(event.getSwapCandidate1().getShortRepresentation());
+            candidate2.setText(event.getSwapCandidate2().getShortRepresentation());
+
+            displayGroups(event.getGroupList());
+            displayPairs(event.getPairList());
+            displaySuccessors(event.getSuccessors());
         });
 
         // Initialize the UI with the default language texts
@@ -504,8 +525,6 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             redoSwapButton.setText("redo swap");
 
             // other
-            candidate1.setText("candidate 1");
-            candidate2.setText("candidate 2");
             setTitle(resourceBundle.getString("title"));
         }
     }
