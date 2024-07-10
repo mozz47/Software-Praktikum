@@ -399,13 +399,13 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
 
         clearFirstCandidateButton.addActionListener(e -> {
             SpinfoodEvent event = SpinfoodEvent.getInstance();
-            candidate1.setText("<first candidate>");
+            candidate1.setText("");
             event.setSwapCandidate1(null);
         });
 
         clearSecondCandidateButton.addActionListener(e -> {
             SpinfoodEvent event = SpinfoodEvent.getInstance();
-            candidate2.setText("<second candidate>");
+            candidate2.setText("");
             event.setSwapCandidate2(null);
         });
 
@@ -423,13 +423,36 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
 
             for (Pair pair : event.getPairList()) { //find right pair, and then swap
                 if (pair.participant1.name.equals(names[0]) || pair.participant1.name.equals(names[1])) {
-                    CandidateSwapper.swap(pair);
+                    CandidateSwapper.swap(pair, false);
                     break;
                 }
             }
-            //remove from successors
-            event.getSuccessors().remove(event.getSwapCandidate1());
-            event.getSuccessors().remove(event.getSwapCandidate2());
+
+            displayGroups(event.getGroupList());
+            displayPairs(event.getPairList());
+            displaySuccessors(event.getSuccessors());
+        });
+
+        undoSwapButton.addActionListener(e -> {
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+
+            CandidateSwapper.undo();
+
+            candidate1.setText(event.getSwapCandidate1().getShortRepresentation());
+            candidate2.setText(event.getSwapCandidate2().getShortRepresentation());
+
+            displayGroups(event.getGroupList());
+            displayPairs(event.getPairList());
+            displaySuccessors(event.getSuccessors());
+        });
+
+        redoSwapButton.addActionListener(e -> {
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+
+            CandidateSwapper.redo();
+
+            candidate1.setText(event.getSwapCandidate1().getShortRepresentation());
+            candidate2.setText(event.getSwapCandidate2().getShortRepresentation());
 
             displayGroups(event.getGroupList());
             displayPairs(event.getPairList());
@@ -479,6 +502,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
         setLocationRelativeTo(null);
         setVisible(true);
 
+
     }
 
     /**
@@ -512,7 +536,7 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             groupKeyFiguresLabel.setText(resourceBundle.getString("groupKeyFiguresLabel"));
             successorsKeyFiguresLabel.setText(resourceBundle.getString("successorsKeyFiguresLabel"));
 
-            swapCandidatesLabel.setText("swap candidates"); // todo
+            swapCandidatesLabel.setText(resourceBundle.getString("swapCandidatesLabel"));
 
             // buttons
             readCSVButton.setText(resourceBundle.getString("readCSVButton"));
@@ -524,19 +548,18 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             showPairMapButton.setText(resourceBundle.getString("showMapButton"));
             cancellationButton.setText(resourceBundle.getString("cancellationButton"));
             openNumberSpinnerButton.setText(resourceBundle.getString("openNumberSpinnerButton"));
+            compareGroupsButton.setText(resourceBundle.getString("compareGroupsButton"));
+            comparePairsButton.setText(resourceBundle.getString("comparePairsButton"));
 
             // todo name with properties:
-            clearFirstCandidateButton.setText("clear first candidate");
-            clearSecondCandidateButton.setText("clear second candidate");
-            chooseSuccessorButton.setText("choose successor");
-            swapSelectedPairButton.setText("swap selected pair");
-            swapSelectedParticipantButton.setText("swap selected participant  (candidate 1)");
-            undoSwapButton.setText("undo swap");
-            redoSwapButton.setText("redo swap");
+            clearFirstCandidateButton.setText(resourceBundle.getString("clearFirstCandidateButton"));
+            clearSecondCandidateButton.setText(resourceBundle.getString("clearSecondCandidateButton"));
+            chooseSuccessorButton.setText(resourceBundle.getString("chooseSuccessorButton"));
+            swapSelectedPairButton.setText(resourceBundle.getString("swapSelectedPairButton"));
+            undoSwapButton.setText(resourceBundle.getString("undoSwapButton"));
+            redoSwapButton.setText(resourceBundle.getString("redoSwapButton"));
 
             // other
-            candidate1.setText("candidate 1");
-            candidate2.setText("candidate 2");
             setTitle(resourceBundle.getString("title"));
         }
     }
