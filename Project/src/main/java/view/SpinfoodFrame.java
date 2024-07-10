@@ -8,8 +8,6 @@ import model.SpinfoodEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 
@@ -90,6 +88,16 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
     private JButton compareGroupsButton;
     private JButton comparePairsButton;
     private JLabel participantAmountLabel;
+    private JButton chooseSuccessorButton;
+    private JButton swapSelectedPairButton;
+    private JButton redoSwapButton;
+    private JButton undoSwapButton;
+    private JPanel swapCandidatesPanel;
+    private JButton clearFirstCandidateButton;
+    private JButton clearSecondCandidateButton;
+    private JTextArea candidate1;
+    private JTextArea candidate2;
+    private JLabel swapCandidatesLabel;
 
 
     /**
@@ -362,6 +370,31 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             //TODO
         });
 
+        chooseSuccessorButton.addActionListener(e -> {
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+            CandidateSwapper.chooseSuccessor(event.getSuccessors().get(successorsJList.getSelectedIndex()));
+
+            // print to GUI
+            if (event.getSwapCandidate1() != null) {
+                candidate1.setText(event.getSwapCandidate1().getShortRepresentation());
+            }
+            if (event.getSwapCandidate2() != null) {
+                candidate2.setText(event.getSwapCandidate2().getShortRepresentation());
+            }
+        });
+
+        clearFirstCandidateButton.addActionListener(e -> {
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+            candidate1.setText("<first candidate>");
+            event.setSwapCandidate1(null);
+        });
+
+        clearSecondCandidateButton.addActionListener(e -> {
+            SpinfoodEvent event = SpinfoodEvent.getInstance();
+            candidate2.setText("<second candidate>");
+            event.setSwapCandidate2(null);
+        });
+
         // Initialize the UI with the default language texts
         updateLanguage();
         // Initial console message
@@ -406,6 +439,8 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             groupKeyFiguresLabel.setText(resourceBundle.getString("groupKeyFiguresLabel"));
             successorsKeyFiguresLabel.setText(resourceBundle.getString("successorsKeyFiguresLabel"));
 
+            swapCandidatesLabel.setText("swap candidates"); // todo
+
             // buttons
             readCSVButton.setText(resourceBundle.getString("readCSVButton"));
             outputCSVButton.setText(resourceBundle.getString("outputCSVButton"));
@@ -417,7 +452,17 @@ public class SpinfoodFrame extends JFrame implements DisplayCallback {
             cancellationButton.setText(resourceBundle.getString("cancellationButton"));
             openNumberSpinnerButton.setText(resourceBundle.getString("openNumberSpinnerButton"));
 
+            // todo name with properties:
+            clearFirstCandidateButton.setText("clear first candidate");
+            clearSecondCandidateButton.setText("clear second candidate");
+            chooseSuccessorButton.setText("choose successor");
+            swapSelectedPairButton.setText("swap selected pair");
+            undoSwapButton.setText("undo swap");
+            redoSwapButton.setText("redo swap");
+
             // other
+            candidate1.setText("candidate 1");
+            candidate2.setText("candidate 2");
             setTitle(resourceBundle.getString("title"));
         }
     }
